@@ -19,11 +19,16 @@ const Navbar = () => {
         <div className="md:flex items-center justify-between gap-5 hidden">
           {NavLinks.map((link) => (
             <div key={link.title}>
-              <Link href={link.href} className="flex items-center gap-1.5">
-                <span className="font-semibold tracking-tight text-black/70">
+              <Link
+                href={link.href}
+                className="flex items-center gap-1.5 cursor-pointer hover:bg-neutral-200/80 p-3 rounded-lg"
+              >
+                <span className="font-normal tracking-tight text-black/70 flex gap-1 items-center">
                   {link.title}
+                  {link.details && (
+                    <DropDownSvg className="w-fit h-4 shrink-0" />
+                  )}
                 </span>
-                {link.details && <DropDownSvg className="w-fit h-4 shrink-0" />}
               </Link>
             </div>
           ))}
