@@ -1,45 +1,113 @@
 "use client";
-import { motion } from "motion/react";
-const HeroSection = () => {
+import { useState } from "react";
+import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
+import Container from "./container";
+
+export default function Hero() {
+  const [text, setText] = useState<string>("Smart");
   return (
-    <section className="min-h-[50vh] flex flex-col items-center justify-center px-6 border-b border-neutral-200">
-      <div className="border px-4 py-2 mb-10 rounded-full">
-        <p className="text-xs md:text-sm tracking-tight text-black font-medium">
-          Payments with Intelligence
-        </p>
-      </div>
-      <div>
-        <h1 className="font-inter text-4xl md:text-5xl lg:text-6xl font-bold text-center max-w-7xl leading-[1.1] tracking-tight text-[#082832]">
-          Future of payments
-        </h1>
-        <h1 className="font-inter text-4xl md:text-6xl lg:text-7xl font-semibold text-[#082832] text-center max-w-7xl leading-[1.1] tracking-tighter pt-1">
-          Is not just fast... Its smart
-        </h1>
-      </div>
-      <div className="flex flex-col pt-5">
-        <p className="text-center text-neutral-500 font-inter font-normal tracking-tight md:text-xl text-xs justify-center md:w-full w-60">
-          PayIntelli is the only payment ecosystem your business will ever need.
-        </p>
+    <Container className="relative w-full border-x border-b border-neutral-200">
+      <div className="md:p-18 relative z-10">
+        {/* Corner borders */}
+        <div className="absolute top-0 left-0 h-18 w-18 border-r border-b" />
+        <div className="absolute top-0 right-0 h-18 w-18 border-l border-b" />
+        <div className="absolute bottom-0 left-0 h-18 w-18 border-r border-t" />
+        <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t" />
 
-        <div className="flex items-center gap-3 justify-center pt-12 relative">
-          <button className="group md:py-4 py-2 md:px-6 px-3 border rounded-2xl md:text-[15px] text-xs text-white bg-[#082832] tracking-tight shadow-2xl ring ring-white relative overflow-hidden transition-colors duration-300 cursor-pointer">
-            <motion.div
-              className="absolute h-50 w-4  inset-0"
-              initial={{ x: 0 }}
-              animate={{ x: 160 }}
-            >
-              <div className="absolute h-full w-full inset-0 bg-white border border-red-400"></div>
-            </motion.div>
+        {/* Tiny vertex boxes */}
+        <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border" />
+        <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border" />
+        <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border" />
+        <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border" />
 
-            <span className="relative z-10">Get Started Now</span>
-          </button>
-          <button className="md:py-4 py-2 md:px-6 px-3 border rounded-2xl md:text-[15px] text-xs hover:shadow-none transition-colors duration-300  hover:bg-neutral-100 text-black shadow-sm tracking-tight cursor-pointer">
-            Book a Free Demo
-          </button>
+        <div className="text-center border border-neutral-200 h-[50vh] w-full flex items-center flex-col justify-center relative">
+          {" "}
+          <div className="absolute inset-0 h-15 w-30 flex">
+            <div className="bg-purple-100 h-full w-full"></div>
+            <div className="bg-purple-200 h-full w-full"></div>
+          </div>
+          <div className="absolute right-0 top-0 h-15 w-15">
+            <div className="bg-blue-100 h-full w-full"></div>
+          </div>
+          <div className="absolute bottom-0 inset-x-0 h-15 w-30 flex">
+            <div className="bg-red-100 h-full w-full"></div>
+            <div className="bg-red-200 h-full w-full"></div>
+          </div>
+          <div className="absolute top-15 inset-x-0 h-15 w-30 flex">
+            <div className="bg-white h-full w-full"></div>
+            <div className="bg-purple-100 h-full w-full"></div>
+          </div>
+          <div className="absolute right-0 bottom-15  h-15 w-15">
+            <div className="bg-green-200 h-full w-full"></div>
+          </div>
+          <div className="absolute bottom-0 right-0  h-15 w-30 flex">
+            <div className="bg-green-100 h-full w-full"></div>
+            <div className="bg-white h-full w-full"></div>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1] text-[#082832] pt-10">
+            The Future of Payments <br />
+            <span className="text-3xl md:text-[51px] md:leading-[1.1] tracking-tighter">
+              Isn't Just Fast its{" "}
+              <div className="text-blue-600 relative inline-block tracking-normal">
+                Smart
+                <span className="absolute left-0 -bottom-2 w-full h-2 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:6px_6px]" />
+              </div>
+            </span>
+          </h1>
+          {/* Subtext */}
+          <p className="mt-6 text-gray-500 text-sm md:text-[16px] max-w-75 md:max-w-lg mx-auto leading-6 tracking-tighter">
+            Define your payments with precision. Seamlessly optimize routing,
+            improve approvals, reduce fraud, and unlock growth — all in one
+            place.
+          </p>
+          {/* CTA Buttons */}
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <ButtonPrimary
+              textSize="md:text-md text-sm"
+              title="Book a Demo"
+              height="md:h-[40px] h-[35px]"
+            />
+
+            <ButtonSecondary
+              textSize="md:text-md text-sm"
+              title="Get Started"
+              height="md:h-[40px] h-[35px]"
+            />
+          </div>
+          {/* ⭐ Rating */}
+          {/* <div className="mt-10 gap-10 flex items-center justify-center">
+            <img
+              src="/gdpr.svg"
+              alt="GDPR Compliant"
+              className="h-20 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/gdpr.svg"
+              alt="GDPR Compliant"
+              className="h-20 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+          </div> */}
         </div>
       </div>
-    </section>
+    </Container>
   );
-};
+}
 
-export default HeroSection;
+const cells = Array.from({ length: 10 }, (_, i) => i);
+
+function Grid() {
+  return (
+    <div className="absolute inset-0 grid grid-cols-10 w-full h-15">
+      {cells.map((_, i) => (
+        <div
+          key={i}
+          className={`
+            flex items-center justify-center
+            border-r border-b
+            ${i === 9 ? "border-r-0" : ""}
+          `}
+        ></div>
+      ))}
+    </div>
+  );
+}
