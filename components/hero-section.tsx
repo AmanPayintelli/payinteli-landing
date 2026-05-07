@@ -37,10 +37,10 @@ export default function Hero() {
         <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t border-neutral-200/70" />
 
         {/* Tiny vertex boxes */}
-        <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border" />
-        <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border" />
-        <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border" />
-        <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border" />
+        <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+        <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border border-neutral-200" />
+        <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+        <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
 
         <div className="text-center border border-neutral-200/70 h-[50vh] w-full flex items-center flex-col justify-center relative">
           {" "}
@@ -126,29 +126,3 @@ export default function Hero() {
     </Container>
   );
 }
-
-const cells = Array.from({ length: 10 }, (_, i) => i);
-
-function Grid() {
-  return (
-    <div className="absolute inset-0 grid grid-cols-10 w-full h-15">
-      {cells.map((_, i) => (
-        <div
-          key={i}
-          className={`
-            flex items-center justify-center
-            border-r border-b
-            ${i === 9 ? "border-r-0" : ""}
-          `}
-        ></div>
-      ))}
-    </div>
-  );
-}
-// Smart
-// Intelligent
-// Adaptive
-// Predictive
-// Optimized
-// Orchestrated
-// AI-Driven
