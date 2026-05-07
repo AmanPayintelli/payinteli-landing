@@ -1,6 +1,6 @@
 import { ButtonPrimary, ButtonSecondary } from "@/components/buttonPrimary";
 import HeroSection from "@/components/hero-section";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import { Cover } from "@/components/ui/cover";
 
 const Home = () => {

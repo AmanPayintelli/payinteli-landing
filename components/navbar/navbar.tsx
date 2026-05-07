@@ -1,32 +1,29 @@
 "use client";
 import Link from "next/link";
-import Container from "./container";
+import Container from "../container";
 import { cn } from "@/lib/utils";
-import { DropDownSvg } from "./icons/icons";
-import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
+import { DropDownSvg } from "../icons/icons";
+import { ButtonPrimary, ButtonSecondary } from "../buttonPrimary";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { NavLinks } from "./navLinks";
 
 const Navbar = () => {
   const [hovered, setHovered] = useState<string | null>(null);
-  const NavLinks = [
-    { title: "Products", details: true, href: "#" },
-    { title: "Resources", details: true, href: "#" },
-    { title: "Developers", details: true, href: "#" },
-    // { title: "Partners", details: false, href: "#" },
-    // { title: "ContactUs", details: false, href: "#" },
-  ];
+
   return (
-    <div className="border-b">
+    <div className="border-b border-neutral-200/70">
       <Container className="flex items-center justify-between py-2 px-4">
         <Logo />
 
-        <div className="md:flex items-center justify-between gap-2 hidden relative">
+        <div
+          className="md:flex items-center justify-between gap-2 hidden relative"
+          onMouseLeave={() => setHovered(null)}
+        >
           {NavLinks.map((link) => (
             <div
               key={link.title}
               onMouseEnter={() => setHovered(link.title)}
-              onMouseLeave={() => setHovered(null)}
               className="relative"
             >
               {" "}
@@ -44,13 +41,14 @@ const Navbar = () => {
                 <span className="text-sm flex items-center gap-1">
                   {link.title}
                   {link.details && (
-                    <DropDownSvg className="h-4 text-black/80" />
+                    <DropDownSvg className="h-4 text-black/80 hover:text-red-400" />
                   )}
                 </span>
               </Link>
             </div>
           ))}
         </div>
+
         <div className="md:flex hidden items-center justify-between gap-3">
           <ButtonPrimary
             textSize="text-sm"
