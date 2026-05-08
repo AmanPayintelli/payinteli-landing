@@ -28,43 +28,46 @@ export default function Hero() {
   }, []);
 
   return (
-    <Container className="relative w-full border-x border-b border-neutral-200/70">
+    <Container className="relative w-full border-x border-neutral-200/70">
       <div className="md:p-18 relative z-10">
         {/* Corner borders */}
-        <div className="absolute top-0 left-0 h-18 w-18 border-r border-b border-neutral-200/70" />
-        <div className="absolute top-0 right-0 h-18 w-18 border-l border-b border-neutral-200/70" />
-        <div className="absolute bottom-0 left-0 h-18 w-18 border-r border-t border-neutral-200/70" />
-        <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t border-neutral-200/70" />
+        <div className="md:block hidden">
+          <div className="absolute top-0 left-0 h-18 w-18 border-r border-b border-neutral-200/70" />
+          <div className="absolute top-0 right-0 h-18 w-18 border-l border-b border-neutral-200/70" />
+          <div className="absolute bottom-0 left-0 h-18 w-18 border-r border-t border-neutral-200/70" />
+          <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t border-neutral-200/70" />
 
-        {/* Tiny vertex boxes */}
-        <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
-        <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border border-neutral-200" />
-        <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
-        <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+          {/* Tiny vertex boxes */}
+          <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+          <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border border-neutral-200" />
+          <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+          <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+        </div>
 
-        <div className="text-center border border-neutral-200/70 h-[50vh] w-full flex items-center flex-col justify-center relative">
-          {" "}
-          <div className="absolute inset-0 h-15 w-30 flex">
-            <div className="bg-purple-100 h-full w-full"></div>
-            <div className="bg-purple-200 h-full w-full"></div>
-          </div>
-          <div className="absolute right-0 top-0 h-15 w-15">
-            <div className="bg-blue-100 h-full w-full"></div>
-          </div>
-          <div className="absolute bottom-0 inset-x-0 h-15 w-30 flex">
-            <div className="bg-red-100 h-full w-full"></div>
-            <div className="bg-red-200 h-full w-full"></div>
-          </div>
-          <div className="absolute top-15 inset-x-0 h-15 w-30 flex">
-            <div className="bg-white h-full w-full"></div>
-            <div className="bg-purple-100 h-full w-full"></div>
-          </div>
-          <div className="absolute right-0 bottom-15  h-15 w-15">
-            <div className="bg-green-200 h-full w-full"></div>
-          </div>
-          <div className="absolute bottom-0 right-0  h-15 w-30 flex">
-            <div className="bg-green-100 h-full w-full"></div>
-            <div className="bg-white h-full w-full"></div>
+        <div className="text-center border border-neutral-200/70 h-[60vh] md:h-[50vh] w-full flex items-center flex-col justify-center relative">
+          <div className="md:block hidden">
+            <div className="absolute inset-0 h-15 w-30 flex">
+              <div className="bg-purple-100 h-full w-full"></div>
+              <div className="bg-purple-200 h-full w-full"></div>
+            </div>
+            <div className="absolute right-0 top-0 h-15 w-15">
+              <div className="bg-blue-100 h-full w-full"></div>
+            </div>
+            <div className="absolute bottom-0 inset-x-0 h-15 w-30 flex">
+              <div className="bg-red-100 h-full w-full"></div>
+              <div className="bg-red-200 h-full w-full"></div>
+            </div>
+            <div className="absolute top-15 inset-x-0 h-15 w-30 flex">
+              <div className="bg-white h-full w-full"></div>
+              <div className="bg-purple-100 h-full w-full"></div>
+            </div>
+            <div className="absolute right-0 bottom-15  h-15 w-15">
+              <div className="bg-green-200 h-full w-full"></div>
+            </div>
+            <div className="absolute bottom-0 right-0  h-15 w-30 flex">
+              <div className="bg-green-100 h-full w-full"></div>
+              <div className="bg-white h-full w-full"></div>
+            </div>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1] text-[#082832] pt-10">
             The Future of Payments <br />

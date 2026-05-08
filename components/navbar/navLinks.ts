@@ -1,5 +1,5 @@
 import { BrainCircuit } from "lucide-react";
-import { Recon, Shield, Symphony } from "../icons/product-icons";
+import { DeepSearch, Recon, Shield, Symphony } from "../icons/product-icons";
 export const NavLinks = [
   {
     title: "Products",
@@ -29,7 +29,7 @@ export const NavLinks = [
         title: "Pi DeepSearch",
         href: "#",
         description: "AI Insights and analytics.",
-        icon: BrainCircuit,
+        icon: DeepSearch,
       },
     ],
   },

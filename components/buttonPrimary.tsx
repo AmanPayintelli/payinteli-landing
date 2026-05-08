@@ -1,27 +1,32 @@
 import { cn } from "@/lib/utils";
-import { MoveRightIcon } from "lucide-react";
 import React from "react";
 
 interface ButtonProps {
   textSize?: string;
   height?: string;
   title: string;
+  className?: string;
+  icon?: React.ReactNode;
 }
 
 export const ButtonSecondary = ({
   textSize = "text-base",
   height = "h-9",
   title,
+  className,
 }: ButtonProps) => {
   return (
     <div className="relative">
       <button
-        className={`bg-[#0063EE] hover:bg-[#3B82F6] transition-colors duration-300 cursor-pointer px-4 ${height} text-white rounded-md flex items-center gap-1.5  justify-center whitespace-nowrap border-[0.5px] focus-visible:ring-1 focus-visible:ring-white/30 active:scale-[0.99]`}
+        className={cn(
+          `bg-[#0063EE] hover:bg-[#3B82F6] transition-colors duration-300 cursor-pointer px-4 ${height} text-white rounded-md flex items-center gap-1.5 justify-center whitespace-nowrap border-[0.5px] focus-visible:ring-1 focus-visible:ring-white/30 active:scale-[0.99]`,
+          className,
+        )}
       >
         <span className="absolute inset-0 rounded-md border border-white/20"></span>
         <span className="absolute inset-0.5 rounded-md border border-white/10"></span>
 
-        <span className={cn(`${textSize}`)}>{title}</span>
+        <span className={cn(textSize)}>{title}</span>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -40,16 +45,46 @@ export const ButtonPrimary = ({
   textSize = "text-base",
   height = "h-9",
   title,
+  className,
 }: ButtonProps) => {
   return (
     <div className="relative">
       <button
-        className={`bg-white px-4 ${height} text-black rounded-md flex items-center gap-3 justify-center whitespace-nowrap border-[0.5px] focus-visible:ring-1 focus-visible:ring-white/30 active:scale-[0.99] cursor-pointer shadow-sm border-neutral-400/50 hover:bg-neutral-100 hover:shadow-none transition-colors duration-300`}
+        className={cn(
+          `bg-white px-4 ${height} text-black rounded-md flex items-center gap-3 justify-center whitespace-nowrap border-[0.5px] focus-visible:ring-1 focus-visible:ring-white/30 active:scale-[0.99] cursor-pointer shadow-sm border-neutral-400/50 hover:bg-neutral-100 hover:shadow-none transition-colors duration-300`,
+          className,
+        )}
       >
         <span className="absolute inset-0 rounded-md border border-white/20"></span>
         <span className="absolute inset-0.5 rounded-md border border-white/10"></span>
 
-        <span className={cn(`${textSize} text-black `)}>{title}</span>
+        <span className={cn(`${textSize} text-black`)}>{title}</span>
+      </button>
+    </div>
+  );
+};
+
+export const ButtonRounded = ({
+  textSize = "text-base",
+  height = "h-9",
+  title,
+  className,
+  icon,
+}: ButtonProps) => {
+  return (
+    <div className="relative">
+      <button
+        className={cn(
+          `bg-white px-4 ${height} text-black rounded-full flex items-center gap-2 justify-center whitespace-nowrap border-[0.5px] focus-visible:ring-1 focus-visible:ring-white/30 active:scale-[0.99] cursor-pointer border-gray-200  transition-colors duration-200 hover:border-gray-300 hover:bg-gray-50`,
+          className,
+        )}
+      >
+        <span className="absolute inset-0 rounded-full border border-white/20"></span>
+        <span className="absolute inset-0.5 rounded-full border border-white/10"></span>
+
+        {icon && <span className="shrink-0">{icon}</span>}
+
+        <span className={cn(`${textSize} text-black`)}>{title}</span>
       </button>
     </div>
   );

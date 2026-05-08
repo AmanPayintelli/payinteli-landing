@@ -11,7 +11,6 @@ import { NavLinks } from "./navLinks";
 const Navbar = () => {
   const [hovered, setHovered] = useState<string | null>("Products");
   const [productHovered, setProductHovered] = useState<string | null>(null);
-  console.log(productHovered);
 
   return (
     <div className="border-b border-neutral-200/70">
@@ -48,7 +47,17 @@ const Navbar = () => {
                 </span>
               </Link>
               {link.details && hovered === link.title && (
-                <div className="absolute top-full left-0 mt-1 z-50 border rounded-lg bg-white border-neutral-200 shadow-sm p-1">
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                  }}
+                  className="absolute top-full left-0 mt-1 z-50 border rounded-lg bg-white border-neutral-200 shadow-sm p-1"
+                >
                   <div className="flex items-center gap-2">
                     <div className="bg-white border border-neutral-200 rounded-md  p-1 h-auto w-fit">
                       <div className="flex flex-col items-start justify-start">
@@ -86,7 +95,7 @@ const Navbar = () => {
                                 </div>
 
                                 <Link href={item.href}>
-                                  <span className="text-sm font-heading font-semibold">
+                                  <span className="text-sm font-heading font-medium">
                                     {item.title}
                                   </span>
 
@@ -100,39 +109,8 @@ const Navbar = () => {
                         </div>
                       </div>
                     </div>
-
-                    <div className="bg-white border border-neutral-200 rounded-md  p-1 h-auto w-fit">
-                      <div className="flex flex-col items-start justify-start">
-                        <p className="text-xs text-neutral-400 px-2 py-1">
-                          Our Products
-                        </p>
-
-                        <div className="flex flex-col items-start justify-start">
-                          {link.subLinks.map((item) => (
-                            <div className="" key={item.title}>
-                              <motion.div className="flex items-center justify-center gap-3 mb-1 hover:bg-neutral-200/70 rounded-lg py-1 px-2">
-                                <div className="min-h-9 min-w-9 border border-neutral-200 rounded-sm bg-neutral-50 flex items-center justify-center shrink-0">
-                                  {" "}
-                                  {item.icon && (
-                                    <item.icon className="h-4 w-4 text-blue-500" />
-                                  )}
-                                </div>
-                                <Link href={item.href} key={item.title}>
-                                  <span className="text-sm font-inter">
-                                    {item.title}
-                                  </span>
-                                  <p className="text-[10px] truncate w-40 text-neutral-500 tracking-wide">
-                                    {item.description}
-                                  </p>
-                                </Link>
-                              </motion.div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
                   </div>
-                </div>
+                </motion.div>
               )}
             </div>
           ))}
