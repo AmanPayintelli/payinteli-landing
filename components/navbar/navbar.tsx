@@ -10,6 +10,8 @@ import { NavLinks } from "./navLinks";
 
 const Navbar = () => {
   const [hovered, setHovered] = useState<string | null>("Products");
+  const [productHovered, setProductHovered] = useState<string | null>(null);
+  console.log(productHovered);
 
   return (
     <div className="border-b border-neutral-200/70">
@@ -54,20 +56,40 @@ const Navbar = () => {
                           Our Products
                         </p>
 
-                        <div className="flex flex-col items-start justify-start">
+                        <div
+                          className="flex flex-col items-start justify-start"
+                          onMouseLeave={() => setProductHovered(null)}
+                        >
                           {link.subLinks.map((item) => (
-                            <div className="" key={item.title}>
-                              <div className="flex items-center justify-center gap-3 mb-1 hover:bg-neutral-200/70 rounded-lg py-1 px-2">
+                            <div
+                              key={item.title}
+                              className="relative"
+                              onMouseEnter={() => setProductHovered(item.title)}
+                            >
+                              {productHovered === item.title && (
+                                <motion.div
+                                  layoutId="product-hover"
+                                  className="absolute inset-0 bg-neutral-200/80 rounded-lg"
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 25,
+                                  }}
+                                />
+                              )}
+
+                              <div className="relative z-10 flex items-center gap-3 mb-1 rounded-lg py-1 px-2">
                                 <div className="min-h-9 min-w-9 border border-neutral-200 rounded-sm bg-neutral-50 flex items-center justify-center shrink-0">
-                                  {" "}
                                   {item.icon && (
                                     <item.icon className="h-4 w-4 text-blue-500" />
                                   )}
                                 </div>
-                                <Link href={item.href} key={item.title}>
+
+                                <Link href={item.href}>
                                   <span className="text-sm font-heading font-semibold">
                                     {item.title}
                                   </span>
+
                                   <p className="text-[10px] truncate w-40 text-neutral-500 tracking-wide">
                                     {item.description}
                                   </p>
@@ -88,7 +110,7 @@ const Navbar = () => {
                         <div className="flex flex-col items-start justify-start">
                           {link.subLinks.map((item) => (
                             <div className="" key={item.title}>
-                              <div className="flex items-center justify-center gap-3 mb-1 hover:bg-neutral-200/70 rounded-lg py-1 px-2">
+                              <motion.div className="flex items-center justify-center gap-3 mb-1 hover:bg-neutral-200/70 rounded-lg py-1 px-2">
                                 <div className="min-h-9 min-w-9 border border-neutral-200 rounded-sm bg-neutral-50 flex items-center justify-center shrink-0">
                                   {" "}
                                   {item.icon && (
@@ -103,7 +125,7 @@ const Navbar = () => {
                                     {item.description}
                                   </p>
                                 </Link>
-                              </div>
+                              </motion.div>
                             </div>
                           ))}
                         </div>
