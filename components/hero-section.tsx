@@ -28,7 +28,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <Container className="relative w-full border-x border-neutral-200/70">
+    <Container className="relative w-full border-x border-b border-neutral-200/70">
       <div className="md:p-18 relative z-10">
         {/* Corner borders */}
         <div className="md:block hidden">
@@ -38,13 +38,13 @@ export default function Hero() {
           <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t border-neutral-200/70" />
 
           {/* Tiny vertex boxes */}
-          <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
-          <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-white border border-neutral-200" />
-          <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
-          <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-white border border-neutral-200" />
+          <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
+          <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
+          <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
+          <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
         </div>
 
-        <div className="text-center border border-neutral-200/70 h-[60vh] md:h-[50vh] w-full flex items-center flex-col justify-center relative">
+        <div className="text-center border border-neutral-200/70 h-[70vh] md:h-[50vh] w-full flex items-center flex-col justify-center relative">
           <div className="md:block hidden">
             <div className="absolute inset-0 h-15 w-30 flex">
               <div className="bg-purple-100 h-full w-full"></div>

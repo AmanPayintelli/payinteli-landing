@@ -23,10 +23,10 @@ const Products = () => {
     <Seperator>
       <Container className="relative flex h-full w-full flex-col items-center justify-center border-x border-neutral-200/70 px-4 py-8 sm:px-6 md:px-10">
         {/* Corner Boxes */}
-        <div className="absolute -top-1 -left-1 size-2 border border-neutral-300 bg-white" />
-        <div className="absolute -top-1 -right-1 size-2 border border-neutral-300 bg-white" />
-        <div className="absolute -bottom-1 -left-1 size-2 border border-neutral-300 bg-white" />
-        <div className="absolute -bottom-1 -right-1 size-2 border border-neutral-300 bg-white" />
+        <div className="absolute -top-1 -left-1 size-2 border border-neutral-200 bg-gray-50 rounded-full" />
+        <div className="absolute -top-1 -right-1 size-2 border border-neutral-200 bg-gray-50 rounded-full" />
+        <div className="absolute -bottom-1 -left-1 size-2 border border-neutral-200 bg-gray-50 rounded-full" />
+        <div className="absolute -bottom-1 -right-1 size-2 border border-neutral-200 bg-gray-50 rounded-full" />
 
         {/* Products */}
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">

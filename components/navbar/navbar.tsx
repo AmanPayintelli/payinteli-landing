@@ -9,7 +9,7 @@ import { useState } from "react";
 import { NavLinks } from "./navLinks";
 
 const Navbar = () => {
-  const [hovered, setHovered] = useState<string | null>("Products");
+  const [hovered, setHovered] = useState<string | null>(null);
   const [productHovered, setProductHovered] = useState<string | null>(null);
 
   return (
