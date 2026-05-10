@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import Container from "./container";
 import ProductsDashboard from "./products-dashboard";
 import { motion } from "motion/react";

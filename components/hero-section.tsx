@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
-import Container from "./container";
 import { AnimatePresence, motion } from "motion/react";
 
 export default function Hero() {
@@ -28,55 +27,36 @@ export default function Hero() {
   }, []);
 
   return (
-    <Container className="relative w-full border-x border-b border-neutral-200/70">
-      <div className="md:p-18 relative z-10">
-        {/* Corner borders */}
-        <div className="md:block hidden">
-          <div className="absolute top-0 left-0 h-18 w-18 border-r border-b border-neutral-200/70" />
-          <div className="absolute top-0 right-0 h-18 w-18 border-l border-b border-neutral-200/70" />
-          <div className="absolute bottom-0 left-0 h-18 w-18 border-r border-t border-neutral-200/70" />
-          <div className="absolute bottom-0 right-0 h-18 w-18 border-l border-t border-neutral-200/70" />
-
-          {/* Tiny vertex boxes */}
-          <div className="absolute top-17 left-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
-          <div className="absolute top-17 z-10 right-17 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
-          <div className="absolute bottom-17 left-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
-          <div className="absolute bottom-17 right-17 z-10 h-2 w-2 bg-gray-50 border border-neutral-200 rounded-full" />
-        </div>
-
-        <div className="text-center border border-neutral-200/70 h-[70vh] md:h-[50vh] w-full flex items-center flex-col justify-center relative">
-          <div className="md:block hidden">
-            <div className="absolute inset-0 h-15 w-30 flex">
-              <div className="bg-purple-100 h-full w-full"></div>
-              <div className="bg-purple-200 h-full w-full"></div>
-            </div>
-            <div className="absolute right-0 top-0 h-15 w-15">
-              <div className="bg-blue-100 h-full w-full"></div>
-            </div>
-            <div className="absolute bottom-0 inset-x-0 h-15 w-30 flex">
-              <div className="bg-red-100 h-full w-full"></div>
-              <div className="bg-red-200 h-full w-full"></div>
-            </div>
-            <div className="absolute top-15 inset-x-0 h-15 w-30 flex">
-              <div className="bg-white h-full w-full"></div>
-              <div className="bg-purple-100 h-full w-full"></div>
-            </div>
-            <div className="absolute right-0 bottom-15  h-15 w-15">
-              <div className="bg-green-200 h-full w-full"></div>
-            </div>
-            <div className="absolute bottom-0 right-0  h-15 w-30 flex">
-              <div className="bg-green-100 h-full w-full"></div>
-              <div className="bg-white h-full w-full"></div>
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1] text-[#082832] pt-10">
+    <div
+      className="relative w-full border border-neutral-200/70"
+      style={{
+        background: `
+    radial-gradient(
+      circle at top right,
+      rgba(84, 222, 209, 0.75) 0%,
+      rgba(84, 222, 209, 0.35) 25%,
+      rgba(255,255,255,0) 55%
+    ),
+    linear-gradient(
+      135deg,
+      #ffff 0%,
+      rgb(241, 237, 234) 45%,
+      rgb(228, 247, 245) 75%,
+      rgb(165, 232, 226) 100%
+    )
+  `,
+      }}
+    >
+      <div className=" relative z-10">
+        <div className="text-center h-[70vh] md:h-[50vh] w-full flex items-center flex-col justify-center relative">
+          <h1 className="text-4xl md:text-7xl font-bold tracking-tighter leading-[1.1] text-[#082832] pt-10 z-10">
             The Future of Payments <br />
             <span className="text-3xl md:text-[50px] md:leading-[1.1] tracking-tighter">
               Isn't Just Fast its
               <span className="relative inline-flex min-w-65 ml-2">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    className="text-blue-600 relative inline-block tracking-normal bg-white text-left"
+                    className="text-blue-600 relative inline-block tracking-normal  text-left"
                     initial="hidden"
                     animate="visible"
                     exit="hidden"
@@ -100,12 +80,11 @@ export default function Hero() {
                     ))}
                   </motion.div>
                 </AnimatePresence>
-                <span className="absolute left-0 -bottom-2 w-65 h-2 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] bg-size-[6px_6px]" />
               </span>
             </span>
           </h1>
           {/* Subtext */}
-          <p className="mt-6 text-gray-500 text-sm md:text-[16px] max-w-75 md:max-w-lg mx-auto leading-6 tracking-tighter">
+          <p className="mt-6 text-gray-500 text-sm md:text-[16px] max-w-75 md:max-w-lg mx-auto leading-6 tracking-tighter z-10">
             Define your payments with precision. Seamlessly optimize routing,
             improve approvals, reduce fraud, and unlock growth — all in one
             place.
@@ -126,6 +105,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }

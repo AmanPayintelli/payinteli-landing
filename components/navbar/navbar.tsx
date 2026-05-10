@@ -13,12 +13,12 @@ const Navbar = () => {
   const [productHovered, setProductHovered] = useState<string | null>(null);
 
   return (
-    <div className="border-b border-neutral-200/70">
+    <div className="border-b border-neutral-200/70 z-50 backdrop-blur-3xl sticky top-0 bg-white">
       <Container className="flex items-center justify-between py-2 px-4">
         <Logo />
 
         <div
-          className="md:flex items-center justify-between gap-2 hidden relative"
+          className="hidden md:flex items-center gap-1 relative rounded-2xl border border-neutral-200/60 bg-white/40 px-2 py-1 shadow-[0px_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl"
           onMouseLeave={() => setHovered(null)}
         >
           {NavLinks.map((link) => (
@@ -37,12 +37,20 @@ const Navbar = () => {
               )}
               <Link
                 href={link.href}
-                className="relative z-10 flex items-center gap-1 px-4 py-2 text-black/60 hover:text-black"
+                className="relative z-10 flex items-center gap-1.5 rounded-xl px-4 py-2 text-[14px] font-medium text-neutral-500 transition-all duration-200 hover:text-neutral-900"
               >
-                <span className="group text-sm flex items-center gap-1 transition-colors">
+                <span className="flex items-center gap-1.5">
                   {link.title}
+
                   {link.details && (
-                    <DropDownSvg className="h-4 transition-transform duration-200 group-hover:rotate-180" />
+                    <DropDownSvg
+                      className={cn(
+                        "h-3.5 w-3.5 transition-all duration-300",
+                        hovered === link.title
+                          ? "rotate-180 text-neutral-900"
+                          : "text-neutral-400",
+                      )}
+                    />
                   )}
                 </span>
               </Link>
