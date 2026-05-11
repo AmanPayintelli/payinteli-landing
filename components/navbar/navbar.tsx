@@ -13,12 +13,12 @@ const Navbar = () => {
   const [productHovered, setProductHovered] = useState<string | null>(null);
 
   return (
-    <div className="border-b border-neutral-200/70 z-50 backdrop-blur-3xl sticky top-0 bg-white">
-      <Container className="flex items-center justify-between py-2 px-4">
+    <div className="absolute top-0 left-0 w-full z-50 bg-white">
+      <Container className="flex items-center justify-between py-3.5  px-4">
         <Logo />
 
         <div
-          className="hidden md:flex items-center gap-1 relative rounded-2xl border border-neutral-200/60 bg-white/40 px-2 py-1 shadow-[0px_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+          className="hidden md:flex items-center gap-1 relative rounded-2xl border border-neutral-200/60  px-2 py-1 shadow-[0px_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl"
           onMouseLeave={() => setHovered(null)}
         >
           {NavLinks.map((link) => (
@@ -31,7 +31,7 @@ const Navbar = () => {
               {hovered === link.title && (
                 <motion.div
                   layoutId="nav-hover"
-                  className="absolute inset-0 bg-neutral-200/80 rounded-lg -z-10"
+                  className="absolute inset-0  rounded-lg -z-10"
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 />
               )}
@@ -67,7 +67,7 @@ const Navbar = () => {
                   className="absolute top-full left-0 mt-1 z-50 border rounded-lg bg-white border-neutral-200 shadow-sm p-1"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="bg-white border border-neutral-200 rounded-md  p-1 h-auto w-fit">
+                    <div className="bg-white border border-neutral-200/70 rounded-md  p-1 h-auto w-fit">
                       <div className="flex flex-col items-start justify-start">
                         <p className="text-xs text-neutral-400 px-2 py-1">
                           Our Products
@@ -86,7 +86,7 @@ const Navbar = () => {
                               {productHovered === item.title && (
                                 <motion.div
                                   layoutId="product-hover"
-                                  className="absolute inset-0 bg-neutral-200/80 rounded-lg"
+                                  className="absolute inset-0 bg-neutral-100/80 rounded-lg"
                                   transition={{
                                     type: "spring",
                                     stiffness: 300,
@@ -98,7 +98,7 @@ const Navbar = () => {
                               <div className="relative z-10 flex items-center gap-3 mb-1 rounded-lg py-1 px-2">
                                 <div className="min-h-9 min-w-9 border border-neutral-200 rounded-sm bg-neutral-50 flex items-center justify-center shrink-0">
                                   {item.icon && (
-                                    <item.icon className="h-4 w-4 text-blue-500" />
+                                    <item.icon className="h-4 w-4 text-foreground" />
                                   )}
                                 </div>
 
@@ -146,9 +146,9 @@ export default Navbar;
 const Logo = ({ className }: { className?: string }) => {
   return (
     <img
-      src="/Logo/Pi-Logo.svg"
+      src="/Logo/Pi-Logo.png"
       alt="Payintelli"
-      className={cn("md:h-15 h-10 w-auto object-contain", className)}
+      className={cn("md:h-9 h-5 w-auto object-contain", className)}
     />
   );
 };

@@ -1,32 +1,19 @@
 "use client";
-import Container from "./container";
+
 import ProductsDashboard from "./products-dashboard";
 import { motion } from "motion/react";
 
 const ProductsShowCase = () => {
   return (
-    <Container className="border-x border-neutral-200/70 w-full h-[60vh] p-1 overflow-hidden">
-      <div className="border h-full w-full rounded-[3px] border-neutral-200/70 relative overflow-hidden">
-        <img
-          src="/products-bg.png"
-          alt="Products Background"
-          className="h-full w-full rounded-[3px] object-cover"
-        />
+    <motion.div className="relative h-[520px] w-full sm:h-[580px] lg:h-[650px]">
+      {/* Glow */}
+      <div className="absolute -inset-10 rounded-full bg-blue-500/10 blur-3xl" />
 
-        {/* Dashboard Overlay */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="absolute inset-0 flex items-end justify-center"
-        >
-          <div className="h-[90%] w-[90%] rounded-t-sm overflow-hidden shadow-2xl">
-            <ProductsDashboard />
-          </div>
-        </motion.div>
+      {/* Dashboard */}
+      <div className="relative z-10 h-full w-full">
+        <ProductsDashboard />
       </div>
-    </Container>
+    </motion.div>
   );
 };
 
