@@ -51,10 +51,10 @@ export default function Hero() {
       </div>
 
       {/* Soft overlays for readability */}
-      <div className="absolute inset-0 bg-white/30 sm:bg-white/30 md:bg-white/20" />
+      <div className="absolute inset-0 bg-emerad-400/10  md:bg-emerad-400/10 " />
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-[620px] w-full items-center justify-center px-4 py-20 text-center sm:min-h-[680px] sm:px-6 md:h-full md:min-h-[640px] md:px-8">
+      <div className="relative z-10 flex min-h-155 w-full items-center justify-center px-4 py-20 text-center sm:min-h-170 sm:px-6 md:h-full md:min-h-160 md:px-8">
         <div className="mx-auto w-full max-w-6xl">
           <h1 className="mx-auto max-w-5xl text-[42px] font-bold leading-[0.98] tracking-[-0.06em] text-foreground sm:text-6xl md:text-7xl lg:text-[88px]">
             The Future of Payments
@@ -62,7 +62,7 @@ export default function Hero() {
             <span className="mt-4 block text-[28px] leading-[1.12] tracking-[-0.055em] sm:text-4xl md:text-[48px] lg:text-[56px]">
               Isn&apos;t Just Fast,
               <br className="sm:hidden" /> it&apos;s{" "}
-              <span className="mt-3 inline-flex min-w-[180px] justify-center sm:mt-0 sm:min-w-[230px] md:min-w-[270px]">
+              <span className="mt-3 inline-flex min-w-45 justify-center sm:mt-0 sm:min-w-57.5 md:min-w-67.5">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={text}

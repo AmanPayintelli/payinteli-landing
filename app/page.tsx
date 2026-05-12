@@ -13,7 +13,7 @@ const Home = () => {
       {/* <ProductsShowCase /> */}
       <Seperator />
 
-      <div className="mt-40"></div>
+      <div className="mt-500"></div>
     </>
   );
 };

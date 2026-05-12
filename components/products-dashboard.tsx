@@ -126,7 +126,7 @@ const ProductsDashboard = () => {
         <div
           className={cn(
             "overflow-hidden border-r border-neutral-200 bg-white transition-all duration-300 ease-in-out",
-            sidebarOpen ? "w-[115px] p-2" : "w-0 p-0 border-r-0",
+            sidebarOpen ? "w-28.75 p-2" : "w-0 p-0 border-r-0",
           )}
         >
           <div className="flex flex-col gap-1">
