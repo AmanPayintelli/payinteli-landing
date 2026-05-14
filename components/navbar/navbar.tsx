@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <motion.div
       ref={ref}
-      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-neutral-200/70"
+      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-neutral-200/70 "
       style={{
         width: isBigScreen ? navWidthMotion : "100%",
         top: isBigScreen ? navTopMotion : "0px",
@@ -132,7 +132,7 @@ const Navbar = () => {
                                   {productHovered === item.title && (
                                     <motion.div
                                       layoutId="product-hover"
-                                      className="absolute inset-0 rounded-lg bg-neutral-100/80"
+                                      className="absolute inset-0 rounded-lg bg-[#E5E5FF]"
                                       transition={{
                                         type: "spring",
                                         stiffness: 300,
@@ -144,7 +144,7 @@ const Navbar = () => {
                                   <div className="relative z-10 mb-1 flex items-center gap-2 rounded-lg px-2 py-1">
                                     <div className="flex min-h-8 min-w-8 shrink-0 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50">
                                       {item.icon && (
-                                        <item.icon className="h-3.5 w-3.5 text-[#0600FF]" />
+                                        <item.icon className="h-3.5 w-3.5 text-[#5B61D1]" />
                                       )}
                                     </div>
 
@@ -172,7 +172,7 @@ const Navbar = () => {
                           <Link
                             key={study.title}
                             href={study.href ?? "#"}
-                            className="group relative h-[240px] w-[280px] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
+                            className="group relative h-60 w-70 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
                           >
                             <img
                               src={study.background}
@@ -192,7 +192,7 @@ const Navbar = () => {
                                 <img
                                   src={study.logo}
                                   alt={`${study.title} logo`}
-                                  className="max-h-12 max-w-[140px] object-contain"
+                                  className="max-h-12 max-w-35 object-contain"
                                   draggable={false}
                                 />
                               </div>
@@ -213,16 +213,16 @@ const Navbar = () => {
         </div>
 
         <div className="hidden items-center justify-between gap-2.5 md:flex">
-          <ButtonPrimary
-            textSize="text-xs"
-            title="Book a Demo"
-            height="h-[32px]"
+          <ButtonSecondary
+            title="Get Started"
+            textSize="text-sm font-medium"
+            className="w-full sm:w-auto"
           />
 
-          <ButtonSecondary
-            textSize="text-xs"
+          <ButtonPrimary
             title="Book a Demo"
-            height="h-[32px]"
+            textSize="text-sm font-medium"
+            className="w-full sm:w-auto"
           />
         </div>
       </Container>

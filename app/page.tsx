@@ -11,7 +11,7 @@ const Home = () => {
       <HeroSection />
       {/* <OurClients /> */}
       <Features />
-      <Seperator />
+      {/* <Seperator /> */}
       <div className="mt-500"></div>
     </>
   );

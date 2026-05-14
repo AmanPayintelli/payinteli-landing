@@ -2,84 +2,93 @@
 @import "tw-animate-css";
 
 :root {
-  /* Colors */
-  --background: #ffffff;
-  --foreground: #082832;
+  /* Fonts */
+  --font-sans: "Inter", sans-serif;
 
-  --primary: #000000;
+  /* Base */
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Brand */
+  --primary: #673bf6;
+  --primary-muted: #5b61d1;
+  --primary-soft: #e5e5ff;
   --primary-foreground: #ffffff;
 
-  --secondary: #e5e5e5;
-  --secondary-foreground: #111111;
+  /* Borders */
+  --border: #f0f0f0;
 
-  --muted: #d4d4d4;
-  --muted-foreground: #666666;
+  /* Text */
+  --text-normal: #000000;
+  --text-heading: #000000;
+  --text-primary: var(--primary);
+  --text-muted: #737373;
+  --text-brand: #082832;
 
-  --border: #a3a3a3;
-  --border-neutral: #8f8f8f;
+  /* Buttons */
+  --button-primary-bg: var(--primary);
+  --button-primary-text: var(--primary-foreground);
+  --button-primary-hover: var(--primary-dark);
+
+  --button-secondary-bg: var(--primary-soft);
+  --button-secondary-text: var(--primary);
+  --button-secondary-hover: var(--primary-soft-hover);
 
   /* Radius */
-  --radius: 12px;
-
-  /* Fonts */
-  --font-inter: "Inter";
-  --font-sans: "Inter";
-
-  /* Optional shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
-
-  /* Optional spacing */
-  --container-padding: 1rem;
-
-  /* Optional transitions */
-  --transition-default: 0.2s ease;
+  --radius-button: 0.5rem;
 }
 
 @theme inline {
+  --font-sans: var(--font-sans);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
   --color-primary: var(--primary);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-soft: var(--primary-soft);
   --color-primary-foreground: var(--primary-foreground);
 
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
   --color-border: var(--border);
-  --color-border-neutral: var(--border-neutral);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --color-text-normal: var(--text-normal);
+  --color-text-heading: var(--text-heading);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-brand: var(--text-brand);
+}
 
-  --font-inter: var(--font-inter);
-  --font-heading: var(--font-heading);
-  --font-sans: var(--font-sans);
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-inter), sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
-@layer utilities {
-  .font-inter {
-    font-family: var(--font-inter), sans-serif;
-  }
-
-  .font-heading {
-    font-family: var(--font-heading), sans-serif;
-  }
+/* Text Variants */
+.text-normal {
+  color: var(--text-normal);
+  font-weight: 400;
 }
 
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+.text-heading {
+  color: var(--text-heading);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.text-primary-variant {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.text-muted {
+  color: var(--text-muted);
 }

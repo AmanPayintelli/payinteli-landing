@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 import React from "react";
 
 interface ButtonProps {
@@ -19,14 +20,19 @@ export const ButtonPrimary = ({
   return (
     <button
       className={cn(
-        "inline-flex items-center rounded-md justify-center gap-2 bg-black px-6 font-medium text-white transition-all duration-300 hover:bg-[#082832]/90",
+        "bg-primary-soft border px-4  group",
         textSize,
         height,
         className,
       )}
     >
-      {title}
-      {icon && <span className="flex items-center">{icon}</span>}
+      <span>{title}</span>
+
+      {icon && (
+        <span className="flex items-center transition-transform duration-300 group-hover:translate-x-0.5">
+          {icon}
+        </span>
+      )}
     </button>
   );
 };
@@ -41,14 +47,17 @@ export const ButtonSecondary = ({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-md gap-2 bg-[#0000EE]  border border-neutral-200 text-black px-6 font-medium text-white transition-all duration-300 hover:bg-neutral-50",
+        "flex items-center justify-center gap-2 border px-4 bg-primary-muted text-white group",
         textSize,
         height,
         className,
       )}
     >
-      {title}
-      {icon && <span className="flex items-center">{icon}</span>}
+      <span>{title}</span>
+
+      {icon ?? (
+        <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+      )}
     </button>
   );
 };

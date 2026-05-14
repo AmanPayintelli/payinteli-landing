@@ -37,13 +37,13 @@ export const NavLinks = [
       {
         logo: "/entain-logo.svg",
         title: "How Entain find gaps",
-        background: "/entain.png",
+        background: "/case-stiudy-1.png",
         href: "#",
       },
       {
         logo: "/pxp-logo.svg",
         title: "Payintelli Helped PXP from BankKrupt",
-        background: "/pxp.webp",
+        background: "/case-study2.png",
         href: "#",
       },
     ],
