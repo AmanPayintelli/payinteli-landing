@@ -1,5 +1,5 @@
 import { Calculator, BookOpenText, Mail, Building2, Code2 } from "lucide-react";
-import { DeepSearch, Recon, Shield, Symphony } from "../icons/product-icons";
+import { DeepSearch, Recon, Shield, Symphony } from "../ui/icons/product-icons";
 export const NavLinks = [
   {
     title: "Products",

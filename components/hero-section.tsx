@@ -1,6 +1,6 @@
-import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
+import { ButtonPrimary, ButtonSecondary } from "./ui/buttonPrimary";
 import Container from "./container";
-import AnimatedWords from "./animated-words";
+import AnimatedWords from "./ui/animated-words";
 
 export default function Hero() {
   const words = [

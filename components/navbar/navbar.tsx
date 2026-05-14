@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Container from "../container";
 import { cn } from "@/lib/utils";
-import { DropDownSvg } from "../icons/icons";
-import { ButtonPrimary, ButtonSecondary } from "../buttonPrimary";
+import { DropDownSvg } from "../ui/icons/icons";
+import { ButtonPrimary, ButtonSecondary } from "../ui/buttonPrimary";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { NavLinks } from "./navLinks";
@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <motion.div
       ref={ref}
-      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-neutral-200/70 "
+      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-border "
       style={{
         width: isBigScreen ? navWidthMotion : "100%",
         top: isBigScreen ? navTopMotion : "0px",
@@ -54,7 +54,7 @@ const Navbar = () => {
         <Logo />
 
         <div
-          className="relative hidden items-center gap-1 rounded-2xl border border-neutral-200/60 px-2 py-1 shadow-[0px_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl md:flex"
+          className="relative hidden items-center gap-1 rounded-2xl border border-border/60 px-2 py-1 shadow-[0px_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-xl md:flex"
           onMouseLeave={() => setHovered(null)}
         >
           {NavLinks.map((link) => (
@@ -66,7 +66,7 @@ const Navbar = () => {
               {hovered === link.title && (
                 <motion.div
                   layoutId="nav-hover"
-                  className="absolute inset-0 -z-10 rounded-lg bg-neutral-100/70"
+                  className="absolute inset-0 -z-10 rounded-lg bg-primary-soft"
                   transition={{
                     type: "spring",
                     stiffness: 300,
@@ -105,11 +105,11 @@ const Navbar = () => {
                     stiffness: 260,
                     damping: 20,
                   }}
-                  className="absolute top-full left-0 z-50 mt-1 rounded-lg border border-neutral-200 bg-white p-1 shadow-sm"
+                  className="absolute top-full left-0 z-50 mt-1 rounded-lg border border-border bg-white p-1 shadow-sm"
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="h-auto w-fit rounded-md border border-neutral-200/70 bg-white p-1">
+                      <div className="h-auto w-fit rounded-md border border-border bg-white p-1">
                         <div className="flex flex-col items-start justify-start">
                           {link.subTitle && (
                             <p className="px-2 py-1 text-[11px] text-neutral-400">
@@ -142,7 +142,7 @@ const Navbar = () => {
                                   )}
 
                                   <div className="relative z-10 mb-1 flex items-center gap-2 rounded-lg px-2 py-1">
-                                    <div className="flex min-h-8 min-w-8 shrink-0 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50">
+                                    <div className="flex min-h-8 min-w-8 shrink-0 items-center justify-center rounded-sm border border-border bg-neutral-50">
                                       {item.icon && (
                                         <item.icon className="h-3.5 w-3.5 text-[#5B61D1]" />
                                       )}
@@ -172,7 +172,7 @@ const Navbar = () => {
                           <Link
                             key={study.title}
                             href={study.href ?? "#"}
-                            className="group relative h-60 w-70 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
+                            className="group relative h-60 w-70 overflow-hidden rounded-xl border border-border bg-neutral-100"
                           >
                             <img
                               src={study.background}
