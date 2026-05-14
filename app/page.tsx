@@ -1,17 +1,14 @@
-import Features from "@/components/features";
+import Container from "@/components/container";
+import Features from "@/components/features/features";
 import HeroSection from "@/components/hero-section";
 import Navbar from "@/components/navbar/navbar";
-import OurClients from "@/components/our-clients";
-import Seperator from "@/components/seperator";
+import SectionHeader from "@/components/section-header";
 
 const Home = () => {
   return (
     <>
-      <Navbar />
       <HeroSection />
-      {/* <OurClients /> */}
       <Features />
-      {/* <Seperator /> */}
       <div className="mt-500"></div>
     </>
   );

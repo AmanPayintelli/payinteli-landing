@@ -54,7 +54,9 @@ export default function Hero() {
       </section>
 
       {/* Right Visual */}
-      <section className="relative hidden h-full overflow-hidden bg-primary-soft/30 md:block"></section>
+      <section className="relative hidden h-full overflow-hidden bg-primary-soft/30 md:block">
+        <img src="/heroSection-img2.png" className="w-full h-full" />
+      </section>
     </Container>
   );
 }
