@@ -400,7 +400,7 @@ export function GlobeDemo() {
 
       <div className="pointer-events-none absolute inset-x-8 top-6 z-0 h-24 rounded-full bg-primary/10 blur-3xl" />
 
-      <div className="absolute inset-x-0 -bottom-16 z-10 h-[115%]">
+      <div className="absolute left-1/2 -bottom-16 z-10 h-[115%] w-[115%] -translate-x-1/2">
         <World data={sampleArcs} globeConfig={globeConfig} />
       </div>
     </div>

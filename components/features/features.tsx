@@ -28,7 +28,7 @@ const Features = () => {
             {featureDetails.map((item) => (
               <div
                 key={item.title}
-                className="flex min-h-105 flex-col border-b p-4 md:min-h-[50vh] md:border-r md:p-7"
+                className="flex min-h-105 flex-col border-b p-4 md:min-h-[4vh] md:border-r md:p-7"
               >
                 <div className="text-xl font-medium tracking-tight">
                   {item.title}

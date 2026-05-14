@@ -1,4 +1,5 @@
 import { StackCards } from "../ui/stack-cards";
+import { ConversionChartCard } from "./conversion-uplift";
 import { GlobeDemo } from "./globe-demo";
 
 export const featureDetails = [
@@ -28,7 +29,7 @@ export const featureDetails = [
       "Increase approvals and reduce checkout drop-offs with smarter payment routing.",
     feature: (
       <div>
-        <StackCards />
+        <ConversionChartCard />
       </div>
     ),
   },
