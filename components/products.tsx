@@ -1,7 +1,7 @@
 import React from "react";
 import Seperator from "./seperator";
 import Container from "./container";
-import { ButtonRounded } from "./buttonPrimary";
+
 import {
   Checkout,
   DeepSearch,
@@ -29,7 +29,7 @@ const Products = () => {
         <div className="absolute -bottom-1 -right-1 size-2 border border-neutral-200 bg-gray-50 rounded-full" />
 
         {/* Products */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        {/* <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           {productOptions.map((option) => (
             <ButtonRounded
               key={option.title}
@@ -44,7 +44,7 @@ const Products = () => {
               textSize="text-xs sm:text-sm"
             />
           ))}
-        </div>
+        </div> */}
       </Container>
     </Seperator>
   );

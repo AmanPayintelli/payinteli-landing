@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { DitherShader } from "./dither-shader";
 import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
+import Container from "./container";
 
 export default function Hero() {
-  const img = "/hero-img.png";
-
   const words = [
     "Smart.",
     "Adaptive.",
@@ -32,41 +30,27 @@ export default function Hero() {
   const letters = text.split("");
 
   return (
-    <section className="relative min-h-155 w-full overflow-hidden border border-neutral-200/70 sm:min-h-170 md:h-[70vh] md:min-h-160">
-      {/* Background */}
-      <div className="absolute inset-0 bg-transparent">
-        <DitherShader
-          src={img}
-          gridSize={2}
-          ditherMode="bayer"
-          colorMode="original"
-          invert={false}
-          animated={false}
-          animationSpeed={0.02}
-          primaryColor="#000000"
-          secondaryColor="#f5f5f5"
-          threshold={0.6}
-          className="h-full w-full object-cover"
-        />
-      </div>
+    <Container className="grid min-h-155 w-full overflow-hidden border-x border-b border-neutral-200/70 bg-white md:h-[70vh] md:grid-cols-[60fr_40fr]">
+      {/* Left Content */}
 
-      {/* Soft overlays for readability */}
-      <div className="absolute inset-0 bg-emerad-400/10  md:bg-emerad-400/10 " />
+      <section className="flex h-full border-neutral-200/70 px-5 py-16 md:border-r md:px-0 md:py-0 md:pl-12 relative">
+        <div className="flex h-full w-full flex-col items-start justify-center border-neutral-200/70 md:border-l md:border-dashed ">
+          <div className="max-w-2xl">
+            <span className="mb-5 inline-block font-mono text-[11px] font-light tracking-normal text-neutral-500 md:text-xs">
+              [ We handle payments, so you can handle growth... ]
+            </span>
 
-      {/* Content */}
-      <div className="relative z-10 flex min-h-155 w-full items-center justify-center px-4 py-20 text-center sm:min-h-170 sm:px-6 md:h-full md:min-h-160 md:px-8">
-        <div className="mx-auto w-full max-w-6xl">
-          <h1 className="mx-auto max-w-5xl text-[42px] font-bold leading-[0.98] tracking-[-0.06em] text-foreground sm:text-6xl md:text-7xl lg:text-[88px]">
-            The Future of Payments
-            <br />
-            <span className="mt-4 block text-[28px] leading-[1.12] tracking-[-0.055em] sm:text-4xl md:text-[48px] lg:text-[56px]">
-              Isn&apos;t Just Fast,
-              <br className="sm:hidden" /> it&apos;s{" "}
-              <span className="mt-3 inline-flex min-w-45 justify-center sm:mt-0 sm:min-w-57.5 md:min-w-67.5">
+            <h1 className="text-[39px] font-bold leading-[1.08] tracking-tight text-black sm:text-[46px] md:text-[48px] lg:text-[54px]">
+              <span className="block">The Future of Payments</span>
+
+              <span className="block">Isn&apos;t Just Fast.</span>
+
+              <span className="block">
+                It&apos;s{" "}
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={text}
-                    className="inline-flex rounded-xl bg-emerald-50 px-3 py-1.5 text-left text-foreground shadow-sm sm:px-4 md:py-1"
+                    className="inline-flex text-[#0600FF]"
                     initial="hidden"
                     animate="visible"
                     exit="hidden"
@@ -82,11 +66,10 @@ export default function Hero() {
                     {letters.map((char, index) => (
                       <motion.span
                         key={`${char}-${index}`}
-                        className="inline-block"
                         variants={{
                           hidden: {
                             opacity: 0,
-                            y: 10,
+                            y: 6,
                           },
                           visible: {
                             opacity: 1,
@@ -94,7 +77,8 @@ export default function Hero() {
                           },
                         }}
                         transition={{
-                          duration: 0.3,
+                          duration: 0.25,
+                          ease: "easeOut",
                         }}
                       >
                         {char === " " ? "\u00A0" : char}
@@ -103,31 +87,33 @@ export default function Hero() {
                   </motion.span>
                 </AnimatePresence>
               </span>
-            </span>
-          </h1>
+            </h1>
 
-          <p className="mx-auto mt-6 max-w-[92%] text-sm font-semibold leading-6 tracking-tight text-black/80 sm:max-w-2xl sm:text-base sm:leading-7 md:max-w-3xl md:text-[17px]">
-            Define your payments with precision. Seamlessly optimize routing,
-            improve approvals, reduce fraud, and unlock growth — all in one
-            place.
-          </p>
+            <p className="mt-6 max-w-[95%] text-sm leading-6 tracking-tight text-neutral-600 sm:text-base sm:leading-7 md:text-[16px]">
+              Define your payments with precision. Seamlessly optimize routing,
+              improve approvals, reduce fraud, and unlock growth — all in one
+              place.
+            </p>
 
-          {/* Buttons */}
-          <div className="mx-auto mt-8 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
-            <ButtonSecondary
-              title="Get Started"
-              textSize="text-sm font-medium"
-              className="w-full sm:w-auto"
-            />
+            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+              <ButtonSecondary
+                title="Get Started"
+                textSize="text-sm font-medium"
+                className="w-full sm:w-auto"
+              />
 
-            <ButtonPrimary
-              title="Book a Demo"
-              textSize="text-sm font-medium"
-              className="w-full sm:w-auto"
-            />
+              <ButtonPrimary
+                title="Book a Demo"
+                textSize="text-sm font-medium"
+                className="w-full sm:w-auto"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Right Visual */}
+      <section className="relative hidden h-full overflow-hidden bg-neutral-50/60 md:block"></section>
+    </Container>
   );
 }

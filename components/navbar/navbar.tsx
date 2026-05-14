@@ -17,7 +17,7 @@ const Navbar = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
-  const navWidthMotion = useTransform(scrollY, [0, 100], ["100%", "72%"]);
+  const navWidthMotion = useTransform(scrollY, [0, 100], ["100%", "65%"]);
   const navTopMotion = useTransform(scrollY, [0, 100], ["0px", "10px"]);
   const navRadiusMotion = useTransform(scrollY, [0, 20], ["0px", "16px"]);
   const navShadowMotion = useTransform(
@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <motion.div
       ref={ref}
-      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white"
+      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-neutral-200/70"
       style={{
         width: isBigScreen ? navWidthMotion : "100%",
         top: isBigScreen ? navTopMotion : "0px",
@@ -107,57 +107,104 @@ const Navbar = () => {
                   }}
                   className="absolute top-full left-0 z-50 mt-1 rounded-lg border border-neutral-200 bg-white p-1 shadow-sm"
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="h-auto w-fit rounded-md border border-neutral-200/70 bg-white p-1">
-                      <div className="flex flex-col items-start justify-start">
-                        <p className="px-2 py-1 text-[11px] text-neutral-400">
-                          Our Products
-                        </p>
-
-                        <div
-                          className="flex flex-col items-start justify-start"
-                          onMouseLeave={() => setProductHovered(null)}
-                        >
-                          {link.subLinks.map((item) => (
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <div className="h-auto w-fit rounded-md border border-neutral-200/70 bg-white p-1">
+                        <div className="flex flex-col items-start justify-start">
+                          {link.subTitle && (
+                            <p className="px-2 py-1 text-[11px] text-neutral-400">
+                              {link.subTitle}
+                            </p>
+                          )}
+                          <div>
                             <div
-                              key={item.title}
-                              className="relative"
-                              onMouseEnter={() => setProductHovered(item.title)}
+                              className="flex flex-col items-start justify-start"
+                              onMouseLeave={() => setProductHovered(null)}
                             >
-                              {productHovered === item.title && (
-                                <motion.div
-                                  layoutId="product-hover"
-                                  className="absolute inset-0 rounded-lg bg-neutral-100/80"
-                                  transition={{
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 25,
-                                  }}
-                                />
-                              )}
-
-                              <div className="relative z-10 mb-1 flex items-center gap-2 rounded-lg px-2 py-1">
-                                <div className="flex min-h-8 min-w-8 shrink-0 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50">
-                                  {item.icon && (
-                                    <item.icon className="h-3.5 w-3.5 text-foreground" />
+                              {link.subLinks.map((item) => (
+                                <div
+                                  key={item.title}
+                                  className="relative"
+                                  onMouseEnter={() =>
+                                    setProductHovered(item.title)
+                                  }
+                                >
+                                  {productHovered === item.title && (
+                                    <motion.div
+                                      layoutId="product-hover"
+                                      className="absolute inset-0 rounded-lg bg-neutral-100/80"
+                                      transition={{
+                                        type: "spring",
+                                        stiffness: 300,
+                                        damping: 25,
+                                      }}
+                                    />
                                   )}
+
+                                  <div className="relative z-10 mb-1 flex items-center gap-2 rounded-lg px-2 py-1">
+                                    <div className="flex min-h-8 min-w-8 shrink-0 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50">
+                                      {item.icon && (
+                                        <item.icon className="h-3.5 w-3.5 text-[#0600FF]" />
+                                      )}
+                                    </div>
+
+                                    <Link href={item.href}>
+                                      <span className="font-heading text-[13px] font-medium">
+                                        {item.title}
+                                      </span>
+
+                                      <p className="w-40 truncate text-[10px] tracking-wide text-neutral-500">
+                                        {item.description}
+                                      </p>
+                                    </Link>
+                                  </div>
                                 </div>
-
-                                <Link href={item.href}>
-                                  <span className="font-heading text-[13px] font-medium">
-                                    {item.title}
-                                  </span>
-
-                                  <p className="w-40 truncate text-[10px] tracking-wide text-neutral-500">
-                                    {item.description}
-                                  </p>
-                                </Link>
-                              </div>
+                              ))}
                             </div>
-                          ))}
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    {link.case_studies && link.case_studies.length > 0 && (
+                      <div className="flex gap-2">
+                        {link.case_studies.map((study) => (
+                          <Link
+                            key={study.title}
+                            href={study.href ?? "#"}
+                            className="group relative h-[240px] w-[280px] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
+                          >
+                            <img
+                              src={study.background}
+                              alt={study.title}
+                              className="absolute inset-0 h-full w-full scale-105 object-cover object-center blur-[3px] transition-transform duration-500 group-hover:scale-110"
+                              draggable={false}
+                            />
+
+                            <div className="absolute inset-0 bg-black/35" />
+
+                            <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-white/20 px-3 py-1 text-[11px] font-medium text-white backdrop-blur-md">
+                              Case study
+                            </div>
+
+                            {study.logo && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <img
+                                  src={study.logo}
+                                  alt={`${study.title} logo`}
+                                  className="max-h-12 max-w-[140px] object-contain"
+                                  draggable={false}
+                                />
+                              </div>
+                            )}
+
+                            <p className="absolute bottom-4 left-4 right-4 text-[15px] font-medium leading-5 text-white">
+                              {study.title}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -167,14 +214,14 @@ const Navbar = () => {
 
         <div className="hidden items-center justify-between gap-2.5 md:flex">
           <ButtonPrimary
-            textSize="text-[13px]"
+            textSize="text-xs"
             title="Book a Demo"
             height="h-[32px]"
           />
 
           <ButtonSecondary
-            title="Get Started"
-            textSize="text-[13px]"
+            textSize="text-xs"
+            title="Book a Demo"
             height="h-[32px]"
           />
         </div>

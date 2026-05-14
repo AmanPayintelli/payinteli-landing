@@ -1,7 +1,7 @@
+import Features from "@/components/features";
 import HeroSection from "@/components/hero-section";
 import Navbar from "@/components/navbar/navbar";
-import Products from "@/components/products";
-import ProductsShowCase from "@/components/products-showCase";
+import OurClients from "@/components/our-clients";
 import Seperator from "@/components/seperator";
 
 const Home = () => {
@@ -9,10 +9,9 @@ const Home = () => {
     <>
       <Navbar />
       <HeroSection />
-      {/* <Products /> */}
-      {/* <ProductsShowCase /> */}
+      {/* <OurClients /> */}
+      <Features />
       <Seperator />
-
       <div className="mt-500"></div>
     </>
   );
