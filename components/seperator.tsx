@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import Container from "./container";
+import React from "react";
 
-const Seperator = ({
+const Separator = ({
   className,
   children,
 }: {
@@ -9,10 +9,15 @@ const Seperator = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div className={cn("w-full md:h-20 h-35 border border-neutral-200/70")}>
+    <div
+      className={cn(
+        "w-full border border-neutral-200/70 md:h-20 h-35",
+        className,
+      )}
+    >
       {children}
     </div>
   );
 };
 
-export default Seperator;
+export default Separator;

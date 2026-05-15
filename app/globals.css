@@ -55,7 +55,6 @@
   --color-text-heading: var(--text-heading);
   --color-text-primary: var(--text-primary);
   --color-text-muted: var(--text-muted);
-  --color-text-brand: var(--text-brand);
 }
 
 * {
@@ -91,4 +90,30 @@ body {
 
 .text-muted {
   color: var(--text-muted);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 14s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 14s linear infinite;
 }

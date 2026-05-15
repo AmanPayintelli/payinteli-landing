@@ -12,7 +12,7 @@ export default function Hero() {
   ];
 
   return (
-    <Container className="grid min-h-155 w-full overflow-hidden border-x border-b border-border bg-background md:h-[70vh] md:grid-cols-[60fr_40fr]">
+    <Container className="grid min-h-155 w-full overflow-hidden border-x border-border bg-background md:h-[70vh] md:grid-cols-[60fr_40fr]">
       {/* Left Content */}
       <section className="relative flex h-full border-border px-5 py-16 md:border-r md:px-0 md:py-0 md:pl-12">
         <div className="flex h-full w-full flex-col items-start justify-center border-border md:border-l md:border-dashed">

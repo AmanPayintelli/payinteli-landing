@@ -17,7 +17,7 @@ const Navbar = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
-  const navWidthMotion = useTransform(scrollY, [0, 100], ["100%", "65%"]);
+  const navWidthMotion = useTransform(scrollY, [0, 100], ["100%", "67.5%"]);
   const navTopMotion = useTransform(scrollY, [0, 100], ["0px", "10px"]);
   const navRadiusMotion = useTransform(scrollY, [0, 20], ["0px", "16px"]);
   const navShadowMotion = useTransform(
@@ -39,16 +39,14 @@ const Navbar = () => {
   }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      className="fixed top-0 left-1/2 z-50 w-full overflow-visible bg-white border-b border-border "
-      style={{
-        width: isBigScreen ? navWidthMotion : "100%",
-        top: isBigScreen ? navTopMotion : "0px",
-        borderRadius: isBigScreen ? navRadiusMotion : "0px",
-        boxShadow: isBigScreen ? navShadowMotion : "none",
-        x: "-50%",
-      }}
+      className="fixed  z-50 w-full overflow-visible bg-white border-b border-border "
+      // style={{
+      //   width: isBigScreen ? navWidthMotion : "100%",
+      //   boxShadow: isBigScreen ? navShadowMotion : "none",
+      //   x: "-50%",
+      // }}
     >
       <Container className="flex items-center justify-between px-4 py-3">
         <Logo />
@@ -226,7 +224,7 @@ const Navbar = () => {
           />
         </div>
       </Container>
-    </motion.div>
+    </div>
   );
 };
 

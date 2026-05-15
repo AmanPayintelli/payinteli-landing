@@ -1,6 +1,7 @@
 import { StackCards } from "../ui/stack-cards";
 import { ConversionChartCard } from "./conversion-uplift";
 import { GlobeDemo } from "./globe-demo";
+import MultiAquirer from "./multi-aquirer";
 
 export const featureDetails = [
   {
@@ -40,7 +41,7 @@ export const featureDetails = [
       "Connect multiple acquirers and route payments through the best-performing provider.",
     feature: (
       <div>
-        <StackCards />
+        <MultiAquirer />
       </div>
     ),
   },
