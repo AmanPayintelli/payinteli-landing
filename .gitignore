@@ -40,3 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 public/ai/Codex.dmg
+public/ai/Codex.dmg
