@@ -1,5 +1,8 @@
+import PiInsightsCard from "../fyingmascot";
 import { StackCards } from "../ui/stack-cards";
+import StackMovingCards from "../ui/stack-moving-cards";
 import { ConversionChartCard } from "./conversion-uplift";
+import DeepInsightsCard from "./deepInsights";
 import { GlobeDemo } from "./globe-demo";
 import MultiAquirer from "./multi-aquirer";
 
@@ -51,17 +54,17 @@ export const featureDetails = [
       "Automatically route every payment through the smartest, fastest, and safest path.",
     feature: (
       <div>
-        <StackCards />
+        <StackMovingCards />
       </div>
     ),
   },
   {
     title: "Deep Insights",
     description:
-      "Automatically route every payment through the smartest, fastest, and safest path.",
+      "Track key payment metrics, trends, and alerts in one clear view.",
     feature: (
       <div>
-        <StackCards />
+        <DeepInsightsCard />
       </div>
     ),
   },

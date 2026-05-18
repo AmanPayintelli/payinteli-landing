@@ -33,7 +33,7 @@ const OurClients = () => {
       <Container className="border-x border-neutral-200/70">
         <div className="flex min-h-16 items-center justify-center border-b border-neutral-200/70 px-4 py-5 text-center sm:min-h-20">
           <p className="max-w-[90%] text-sm leading-6 text-text-muted sm:text-base md:max-w-none">
-            Join 8,530+ brands and agencies using Promptwatch
+            Join 8,530+ brands and agencies using Payintelli
           </p>
         </div>
 

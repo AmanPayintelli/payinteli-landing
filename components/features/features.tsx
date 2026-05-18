@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "../container";
+import FlyingOwlMascot from "../fyingmascot";
 import SectionHeader from "../section-header";
 import { featureDetails } from "./featuresDetails";
 
@@ -19,13 +20,14 @@ const Features = () => {
           description="PayIntelli helps you track, analyze, and optimize your complete payment flow — from checkout to reconciliation — with intelligent automation."
         />
       </Container>
+      {/* <FlyingOwlMascot /> */}
 
       <Container className="border-x">
         <div className="grid grid-cols-1 md:grid-cols-3">
           {featureDetails.map((item) => (
             <div
               key={item.title}
-              className="flex min-h-85 flex-col p-4 sm:min-h-90 sm:p-5 md:min-h-95 md:p-6 lg:min-h-100 lg:p-7 md:not-nth-[3n]:border-r"
+              className="flex min-h-85 flex-col p-4 sm:min-h-90 sm:p-5 md:min-h-95 md:p-6 lg:min-h-100 lg:p-7 md:not-nth-[3n]:border-r border-b"
             >
               <div className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
                 {item.title}
