@@ -1,6 +1,5 @@
-import PiInsightsCard from "../fyingmascot";
 import { StackCards } from "../ui/stack-cards";
-import StackMovingCards from "../ui/stack-moving-cards";
+import AiOrchestration from "./ai-orchestration";
 import { ConversionChartCard } from "./conversion-uplift";
 import DeepInsightsCard from "./deepInsights";
 import { GlobeDemo } from "./globe-demo";
@@ -37,7 +36,6 @@ export const featureDetails = [
       </div>
     ),
   },
-
   {
     title: "Seamless Multi-Acquirer Integration",
     description:
@@ -54,7 +52,7 @@ export const featureDetails = [
       "Automatically route every payment through the smartest, fastest, and safest path.",
     feature: (
       <div>
-        <StackMovingCards />
+        <AiOrchestration />
       </div>
     ),
   },

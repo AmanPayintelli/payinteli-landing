@@ -6,7 +6,7 @@ const acquirers = [
   { src: "/aquirer/world-pay.png", alt: "Worldpay" },
   { src: "/aquirer/shift4.png", alt: "Shift4" },
   { src: "/aquirer/stripe.svg", alt: "Stripe" },
-  { src: "/aquirer/stripe.svg", alt: "Stripe" },
+  { src: "/aquirer/elavon.jpeg", alt: "Elavon" },
 ];
 
 const MultiAquirer = () => {
