@@ -1,3 +1,4 @@
+import DashboardCta from "@/components/dashboard-cta";
 import Features from "@/components/features/features";
 import HeroSection from "@/components/hero-section";
 import ImageCta from "@/components/image-cta";
@@ -9,7 +10,9 @@ const Home = () => {
   return (
     <>
       <HeroSection />
-      <OurCients />
+      <SeparatorContainer />
+      <DashboardCta />
+      {/* <OurCients /> */}
       <Features />
       <SeparatorContainer />
       <PiDeepsearch />
