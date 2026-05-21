@@ -2,20 +2,24 @@ import DashboardCta from "@/components/dashboard-cta";
 import Features from "@/components/features/features";
 import HeroSection from "@/components/hero-section";
 import ImageCta from "@/components/image-cta";
-import OurCients from "@/components/our-clients";
+import { MarqueeShowCase } from "@/components/marquee-showcase";
 import PiDeepsearch from "@/components/products/deepsearch/pi-deepsearch";
 import SeparatorContainer from "@/components/separator-container";
+import Separator from "@/components/seperator";
+import Symphony from "@/components/symphony";
+import WhyUs from "@/components/whyChoosePayintelli";
 
 const Home = () => {
   return (
     <>
       <HeroSection />
-      <SeparatorContainer />
-      <DashboardCta />
-      {/* <OurCients /> */}
+      <SeparatorContainer height="h-16 md:h-20" />
       <Features />
-      <SeparatorContainer />
-      <PiDeepsearch />
+      <SeparatorContainer height="h-16 md:h-20" />
+      <DashboardCta />
+
+      <SeparatorContainer height="h-16 md:h-20" />
+      <WhyUs />
       <SeparatorContainer />
       <ImageCta />
       <SeparatorContainer />
@@ -25,3 +29,4 @@ const Home = () => {
 };
 
 export default Home;
+// Blurr all the things in dashboard expect pi insights

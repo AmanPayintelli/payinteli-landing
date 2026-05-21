@@ -21,7 +21,7 @@ const ImageCta = () => {
 
           <h2 className="max-w-xs text-3xl font-semibold leading-[1.08] tracking-tight sm:max-w-md sm:text-4xl md:max-w-lg md:text-5xl">
             See Payintelli <br />
-            in Action
+            In Action
           </h2>
         </div>
 

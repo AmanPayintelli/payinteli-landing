@@ -7,7 +7,7 @@ import Container from "./container";
 
 const DashboardCta = () => {
   return (
-    <section className="overflow-hidden border-b bg-white">
+    <section className="overflow-hidden bg-white">
       <Container className="relative min-h-140 overflow-hidden border-x bg-white">
         {/* Background glows */}
         <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[#E5E5FF]/70 blur-3xl" />
@@ -52,13 +52,13 @@ const DashboardCta = () => {
               </div>
 
               {/* Image */}
-              <div className="relative aspect-video w-full bg-white">
+              <div className="relative aspect-video w-full overflow-hidden bg-white">
                 <Image
                   src="/dashboard.png"
                   alt="Payintelli dashboard"
                   fill
                   priority
-                  className="object-cover object-top-left"
+                  className="object-cover object-top-left blur-xs"
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ const DashboardCta = () => {
                 <path
                   d="M100 570 L740 570 C780 570 800 550 800 510 L800 330"
                   stroke="#5b61d1"
-                  strokeWidth="1"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   fill="none"
                   opacity="0.25"
@@ -91,7 +91,7 @@ const DashboardCta = () => {
                 <motion.path
                   d="M100 570 L740 570 C780 570 800 550 800 510 L800 330"
                   stroke="url(#lineGradient)"
-                  strokeWidth="0.8"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   fill="none"
                   strokeDasharray="100 900"
@@ -149,6 +149,33 @@ const DashboardCta = () => {
                       improved: the success rate rose to 83.05% from 81.49%
                       (+1.56 pp, +1.91%)
                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute bottom-60 right-2 hidden w-50 rounded-2xl bg-linear-to-r from-[#3B82F6] via-[#B855F7] to-[#FF4FCB] p-px  lg:block">
+              <div className="relative h-20 overflow-hidden rounded-2xl bg-white">
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-[#60B5FF]/8 via-white to-[#FF4FCB]/8" />
+
+                <div className="relative flex h-full flex-col justify-between px-3.5 py-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="text-[12px] font-semibold leading-none tracking-[-0.03em] text-[#082832]">
+                        Pi Insights
+                      </h3>
+
+                      <p className="mt-1 truncate text-[9px] font-medium leading-none text-[#A0A0A0]">
+                        Yesterday&apos;s Key Takeaways
+                      </p>
+                    </div>
+
+                    <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#A855F7]" />
+                  </div>
+
+                  <div className="flex items-center justify-center">
+                    <h4 className="text-[13px] font-bold leading-none tracking-[-0.04em] text-[#60B5FF]">
+                      4 AI Insights Today
+                    </h4>
                   </div>
                 </div>
               </div>
