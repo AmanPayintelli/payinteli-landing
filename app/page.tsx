@@ -4,6 +4,7 @@ import HeroSection from "@/components/hero-section";
 import ImageCta from "@/components/image-cta";
 import { MarqueeShowCase } from "@/components/marquee-showcase";
 import PiDeepsearch from "@/components/products/deepsearch/pi-deepsearch";
+import Security from "@/components/security";
 import SeparatorContainer from "@/components/separator-container";
 import Separator from "@/components/seperator";
 import Symphony from "@/components/symphony";
@@ -25,6 +26,9 @@ const Home = () => {
       <ImageCta />
       <SeparatorContainer />
       <Testimonials />
+      <SeparatorContainer />
+      <Security />
+      <SeparatorContainer />
       <div className="mt-500"></div>
     </>
   );
