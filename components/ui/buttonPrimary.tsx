@@ -20,7 +20,7 @@ export const ButtonPrimary = ({
   return (
     <button
       className={cn(
-        "bg-primary-soft border px-4  group",
+        "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary-soft bg-white px-5 font-semibold text-primary shadow-sm transition-all duration-300 hover:bg-primary-soft hover:shadow-md",
         textSize,
         height,
         className,
@@ -28,10 +28,8 @@ export const ButtonPrimary = ({
     >
       <span>{title}</span>
 
-      {icon && (
-        <span className="flex items-center transition-transform duration-300 group-hover:translate-x-0.5">
-          {icon}
-        </span>
+      {icon ?? (
+        <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
       )}
     </button>
   );
@@ -47,7 +45,7 @@ export const ButtonSecondary = ({
   return (
     <button
       className={cn(
-        "flex items-center justify-center gap-2 border px-4 bg-primary-muted text-white group",
+        "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-5 font-semibold text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary-muted hover:shadow-md",
         textSize,
         height,
         className,

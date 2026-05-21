@@ -39,14 +39,16 @@ export default function Hero() {
             <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
               <ButtonSecondary
                 title="Get Started"
-                textSize="text-sm font-medium"
-                className="w-full sm:w-auto"
+                textSize="text-sm font-semibold"
+                height="h-11"
+                className="w-full rounded-lg px-5 shadow-sm hover:shadow-md sm:w-auto"
               />
 
               <ButtonPrimary
                 title="Book a Demo"
-                textSize="text-sm font-medium"
-                className="w-full sm:w-auto"
+                textSize="text-sm font-semibold"
+                height="h-11"
+                className="w-full rounded-lg bg-white px-5 shadow-sm hover:bg-primary-soft hover:shadow-md sm:w-auto"
               />
             </div>
           </div>

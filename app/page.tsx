@@ -1,5 +1,6 @@
 import Features from "@/components/features/features";
 import HeroSection from "@/components/hero-section";
+import ImageCta from "@/components/image-cta";
 import OurCients from "@/components/our-clients";
 import PiDeepsearch from "@/components/products/deepsearch/pi-deepsearch";
 import SeparatorContainer from "@/components/separator-container";
@@ -12,6 +13,8 @@ const Home = () => {
       <Features />
       <SeparatorContainer />
       <PiDeepsearch />
+      <SeparatorContainer />
+      <ImageCta />
       <SeparatorContainer />
       <div className="mt-500"></div>
     </>

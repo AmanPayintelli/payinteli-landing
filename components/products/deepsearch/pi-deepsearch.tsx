@@ -88,7 +88,7 @@ const PiDeepsearch = () => {
                     <div className="min-w-0 flex-1">
                       <p
                         className={[
-                          "text-[15px] font-semibold leading-snug tracking-tight",
+                          "text-[15px] font-medium leading-snug tracking-tight",
                           isActive ? "text-neutral-950" : "text-neutral-800",
                         ].join(" ")}
                       >

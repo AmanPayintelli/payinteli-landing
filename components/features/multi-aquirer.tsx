@@ -1,5 +1,3 @@
-import React from "react";
-
 const acquirers = [
   { src: "/aquirer/adyen.svg", alt: "Adyen" },
   { src: "/aquirer/paypal.png", alt: "PayPal" },
