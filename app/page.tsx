@@ -1,5 +1,6 @@
 import DashboardCta from "@/components/dashboard-cta";
 import Features from "@/components/features/features";
+import Footer from "@/components/footer";
 import HeroSection from "@/components/hero-section";
 import ImageCta from "@/components/image-cta";
 import { MarqueeShowCase } from "@/components/marquee-showcase";
@@ -29,10 +30,8 @@ const Home = () => {
       <SeparatorContainer />
       <Security />
       <SeparatorContainer />
-      <div className="mt-500"></div>
     </>
   );
 };
 
 export default Home;
-// Blurr all the things in dashboard expect pi insights
