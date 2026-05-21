@@ -19,18 +19,19 @@ const DashboardCta = () => {
           {/* Left copy */}
           <div className="max-w-sm">
             <span className="mb-4 inline-flex rounded-full border border-[#E5EAF1] bg-white px-3 py-1 text-xs font-medium text-[#627188] shadow-sm">
-              Embedded payments
+              Pi Insights
             </span>
 
             <h2 className="text-[34px] font-medium leading-[1.05] tracking-[-0.045em] text-[#082832] md:text-[44px]">
-              Embed payments
+              AI-powered
               <br />
-              in your platform
+              payment insights
             </h2>
 
             <p className="mt-5 max-w-xs text-sm leading-6 text-[#627188]">
-              Manage transactions, approvals, insights, and payment operations
-              from one intelligent dashboard.
+              {" "}
+              Turn daily payment activity into clear insights your team can act
+              on.
             </p>
           </div>
 
@@ -106,7 +107,7 @@ const DashboardCta = () => {
             </div>
 
             {/* Floating Pi Insights Card */}
-            <div className="absolute -bottom-10 -left-30 hidden w-65 rounded-2xl bg-linear-to-br from-[#7C5CFF] via-[#FF4FCB] to-[#60B5FF] p-px shadow-[0_20px_60px_rgba(8,40,50,0.15)] lg:block">
+            <div className="absolute -bottom-10 -left-28 hidden w-65 rounded-2xl bg-linear-to-br from-[#7C5CFF] via-[#FF4FCB] to-[#60B5FF] p-px shadow-[0_20px_60px_rgba(8,40,50,0.15)] lg:block">
               <div className="relative overflow-hidden rounded-2xl bg-white">
                 <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-[#CFB9F8]/20 via-transparent to-[#60B5FF]/15" />
 
