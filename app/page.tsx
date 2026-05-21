@@ -7,6 +7,7 @@ import PiDeepsearch from "@/components/products/deepsearch/pi-deepsearch";
 import SeparatorContainer from "@/components/separator-container";
 import Separator from "@/components/seperator";
 import Symphony from "@/components/symphony";
+import Testimonials from "@/components/testimonials";
 import WhyUs from "@/components/whyChoosePayintelli";
 
 const Home = () => {
@@ -23,6 +24,7 @@ const Home = () => {
       <SeparatorContainer />
       <ImageCta />
       <SeparatorContainer />
+      <Testimonials />
       <div className="mt-500"></div>
     </>
   );
