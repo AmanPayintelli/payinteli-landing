@@ -9,26 +9,26 @@ export const NavLinks = [
     subLinks: [
       {
         title: "Pi Shield",
-        href: "#",
+        href: "/pi-shield",
         description: "Fraud detection and security.",
         icon: Shield,
       },
 
       {
         title: "Pi Symphony",
-        href: "#",
+        href: "/pi-symphony",
         description: "Payment orchestration.",
         icon: Symphony,
       },
       {
         title: "Pi Recon",
-        href: "#",
+        href: "/pi-recon",
         description: "Automated reconciliation and transaction matching.",
         icon: Recon,
       },
       {
         title: "Pi DeepSearch",
-        href: "#",
+        href: "pi-deepsearch",
         description: "AI Insights and analytics.",
         icon: DeepSearch,
       },

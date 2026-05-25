@@ -4,14 +4,14 @@ export const testimonial = [
     message:
       "“PayIntelli made it simple for us to accept payments, track revenue, and understand what was happening across our business.”",
     profile_pic: "/testimonial/profile-pic/pic-1.jpg",
-    position: "Founder of Preloop",
+    position: "Yet to be founder of soemthing",
   },
   {
-    name: "Riya Sharma",
+    name: "Aditya Singh",
     message:
       "“Before PayIntelli, our payment operations were scattered across tools. Now our team has one clean place to monitor transactions, refunds, failures, and revenue movement without chasing data manually.”",
     profile_pic: "/testimonial/profile-pic/pic-2.jpg",
-    position: "Co-founder at NovaCart",
+    position: "Immediate Nahi soche hain...",
   },
   {
     name: "Arjun Mehta",
