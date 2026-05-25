@@ -72,12 +72,6 @@ export const NavLinks = [
         description: "Talk to our team directly.",
         icon: Mail,
       },
-      {
-        title: "About Us",
-        href: "#",
-        description: "Learn more about PayIntelli.",
-        icon: Building2,
-      },
     ],
   },
   {
