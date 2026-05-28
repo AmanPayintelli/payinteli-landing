@@ -18,8 +18,7 @@
   /* Borders */
   --border: #f0f0f0;
 
-  /* Text */
-  --text-normal: #000000;
+  --border-laptop: "#0000" /* Text */ --text-normal: #000000;
   --text-heading: #000000;
   --text-primary: var(--primary);
   --text-muted: #737373;
@@ -48,6 +47,7 @@
   --color-primary-muted: var(--primary-muted);
   --color-primary-soft: var(--primary-soft);
   --color-primary-foreground: var(--primary-foreground);
+  --color-border-laptop: var(--border-laptop);
 
   --color-border: var(--border);
 

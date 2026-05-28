@@ -2,7 +2,7 @@ import DashboardCta from "@/components/dashboard-cta";
 import Features from "@/components/features/features";
 import Footer from "@/components/footer";
 import HeroSection from "@/components/hero-section";
-import ImageCta from "@/components/image-cta";
+import ImageCta from "@/components/ui/image-cta";
 import { MarqueeShowCase } from "@/components/marquee-showcase";
 import PiDeepsearch from "@/components/products/deepsearch/pi-deepsearch";
 import Security from "@/components/security";

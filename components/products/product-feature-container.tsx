@@ -43,9 +43,9 @@ const ProductFeatureContainer = ({
           }`}
         >
           <div className="max-w-xl">
-            <span className="mb-5 inline-block font-mono text-sm font-light tracking-normal text-text-muted md:text-[11px]">
+            {/* <span className="mb-5 inline-block font-mono text-sm font-light tracking-normal text-text-muted md:text-[11px]">
               {eyebrow}
-            </span>
+            </span> */}
 
             <h2 className="text-[32px] font-medium leading-[1.12] tracking-tighter text-text-brand sm:text-[38px] md:text-[42px]">
               {title}
@@ -92,7 +92,7 @@ const ProductFeatureContainer = ({
 
       {/* Visual */}
       <section
-        className={`relative min-h-105 overflow-hidden bg-primary-soft/30 ${
+        className={`relative min-h-105 overflow-hidden bg-primary-soft/10 ${
           reverse ? "md:col-start-1 md:row-start-1" : "md:col-start-2"
         }`}
       >

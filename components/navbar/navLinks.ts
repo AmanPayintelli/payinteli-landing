@@ -1,6 +1,7 @@
 import { Calculator, BookOpenText, Mail, Building2, Code2 } from "lucide-react";
 import { DeepSearch, Recon, Shield, Symphony } from "../ui/icons/product-icons";
 export const NavLinks = [
+  { title: "Home", href: "/" },
   {
     title: "Products",
     details: true,
@@ -8,18 +9,18 @@ export const NavLinks = [
     href: "#",
     subLinks: [
       {
+        title: "Pi Symphony",
+        href: "/pi-symphony",
+        description: "Payment orchestration.",
+        icon: Symphony,
+      },
+      {
         title: "Pi Shield",
         href: "/pi-shield",
         description: "Fraud detection and security.",
         icon: Shield,
       },
 
-      {
-        title: "Pi Symphony",
-        href: "/pi-symphony",
-        description: "Payment orchestration.",
-        icon: Symphony,
-      },
       {
         title: "Pi Recon",
         href: "/pi-recon",
@@ -66,14 +67,9 @@ export const NavLinks = [
         description: "Guides, blogs, and insights.",
         icon: BookOpenText,
       },
-      {
-        title: "Contact Us",
-        href: "#",
-        description: "Talk to our team directly.",
-        icon: Mail,
-      },
     ],
   },
+
   {
     title: "Developers",
     details: true,
