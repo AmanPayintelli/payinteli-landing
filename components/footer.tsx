@@ -47,11 +47,7 @@ const socialLinks = [
     href: "#",
     image: "/linkedin.svg",
   },
-  {
-    label: "Twitter",
-    href: "#",
-    image: "/twitter.svg",
-  },
+
   {
     label: "YouTube",
     href: "#",

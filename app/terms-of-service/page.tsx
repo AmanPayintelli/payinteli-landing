@@ -115,8 +115,8 @@ const TermsOfService = () => {
               </div>
             </header>
 
-            <div className="rounded-[2rem] border border-border bg-white px-6 py-10 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
-              <section className="border-b border-border pb-10">
+            <div className="rounded-[2rem] border border-border bg-white px-6 py-8 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
+              {/* <section className="border-b border-border pb-10">
                 <h2 className="text-heading text-2xl">Contents</h2>
 
                 <ol className="mt-5 grid gap-x-10 gap-y-2 text-sm leading-7 text-muted md:grid-cols-2">
@@ -124,7 +124,7 @@ const TermsOfService = () => {
                     <li key={item}>{item}</li>
                   ))}
                 </ol>
-              </section>
+              </section> */}
 
               <PolicySection
                 id="definitions"

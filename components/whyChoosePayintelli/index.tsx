@@ -2,6 +2,7 @@
 
 import Container from "../container";
 import SectionHeader from "../section-header";
+import { AssemblyLine } from "../ui/assembly-line";
 
 const WhyUs = () => {
   return (
@@ -21,20 +22,20 @@ const WhyUs = () => {
       <Container className="border-x">
         <div className="grid grid-cols-1 overflow-hidden border-t md:grid-cols-3">
           {/* Top Left - Large Card */}
-          <div className="flex min-h-[360px] flex-col border-b p-4 sm:min-h-[400px] sm:p-5 md:col-span-2 md:min-h-[430px] md:border-r md:p-6 lg:min-h-[460px] lg:p-7">
+          <div className="flex min-h-90 flex-col border-b p-4 sm:min-h-100 sm:p-5 md:col-span-2 md:min-h-107.5 md:border-r md:p-6 lg:min-h-115 lg:p-7">
             <h3 className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
-              First large card title
+              AI Integrated at every step
             </h3>
 
             <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-dashed border-neutral-200 bg-neutral-50 sm:mt-5 md:mt-6">
-              {/* Add your component here */}
+              <AssemblyLine />
             </div>
           </div>
 
           {/* Top Right */}
-          <div className="flex min-h-[340px] flex-col border-b p-4 sm:min-h-[380px] sm:p-5 md:min-h-[430px] md:p-6 lg:min-h-[460px] lg:p-7">
+          <div className="flex min-h-85 flex-col border-b p-4 sm:min-h-95 sm:p-5 md:min-h-107.5 md:p-6 lg:min-h-115 lg:p-7">
             <h3 className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
-              Second card title
+              Built for Scale
             </h3>
 
             <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-dashed border-neutral-200 bg-neutral-50 sm:mt-5 md:mt-6">
@@ -43,9 +44,9 @@ const WhyUs = () => {
           </div>
 
           {/* Bottom Left */}
-          <div className="flex min-h-[320px] flex-col border-b p-4 sm:min-h-[350px] sm:p-5 md:border-r md:border-b-0 md:p-6 lg:min-h-[380px] lg:p-7">
+          <div className="flex min-h-80 flex-col border-b p-4 sm:min-h-87.5 sm:p-5 md:border-r md:border-b-0 md:p-6 lg:min-h-95 lg:p-7">
             <h3 className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
-              Third card title
+              Frictionless Integration
             </h3>
 
             <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-dashed border-neutral-200 bg-neutral-50 sm:mt-5 md:mt-6">
@@ -53,21 +54,10 @@ const WhyUs = () => {
             </div>
           </div>
 
-          {/* Bottom Middle */}
-          <div className="flex min-h-[320px] flex-col border-b p-4 sm:min-h-[350px] sm:p-5 md:border-r md:border-b-0 md:p-6 lg:min-h-[380px] lg:p-7">
+          {/* Bottom Full Width */}
+          <div className="flex min-h-80 flex-col border-b p-4 sm:min-h-87.5 sm:p-5 md:col-span-2 md:border-b-0 md:p-6 lg:min-h-95 lg:p-7">
             <h3 className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
-              Fourth card title
-            </h3>
-
-            <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-dashed border-neutral-200 bg-neutral-50 sm:mt-5 md:mt-6">
-              {/* Add your component here */}
-            </div>
-          </div>
-
-          {/* Bottom Right */}
-          <div className="flex min-h-[320px] flex-col p-4 sm:min-h-[350px] sm:p-5 md:p-6 lg:min-h-[380px] lg:p-7">
-            <h3 className="text-lg font-medium tracking-tight text-text-brand sm:text-xl">
-              Fifth card title
+              All-in-One Ecosystem
             </h3>
 
             <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden rounded-xl border border-dashed border-neutral-200 bg-neutral-50 sm:mt-5 md:mt-6">

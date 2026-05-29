@@ -82,7 +82,7 @@ const PrivacyPolicy = () => {
             </header>
 
             <div className="rounded-[2rem] border border-border bg-white px-6 py-10 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
-              <section className="border-b border-border pb-10">
+              {/* <section className="border-b border-border pb-10">
                 <h2 className="text-heading text-2xl">Contents</h2>
                 <ol className="mt-5 space-y-2 text-muted">
                   {[
@@ -102,7 +102,7 @@ const PrivacyPolicy = () => {
                     <li key={item}>{item}</li>
                   ))}
                 </ol>
-              </section>
+              </section> */}
 
               <PolicySection
                 id="who-we-are"
