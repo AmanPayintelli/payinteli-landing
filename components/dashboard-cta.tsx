@@ -68,18 +68,31 @@ const DashboardCta = () => {
                 <defs>
                   <linearGradient
                     id="lineGradient"
-                    x1="0%"
+                    x1="100%"
                     y1="0%"
-                    x2="100%"
-                    y2="0%"
+                    x2="0%"
+                    y2="100%"
                   >
-                    <stop offset="120%" stopColor="#BF00FF" />
+                    <stop offset="0%" stopColor="#BF00FF" />
+                    <stop offset="100%" stopColor="#60B5FF" />
                   </linearGradient>
+
+                  <marker
+                    id="beamArrow"
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="9"
+                    refY="5"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <path d="M0 0 L10 5 L0 10 Z" fill="#BF00FF" />
+                  </marker>
                 </defs>
 
                 {/* base line */}
                 <path
-                  d="M100 570 L740 570 C780 570 800 550 800 510 L800 330"
+                  d="M800 330 L800 510 C800 550 780 570 740 570 L100 570"
                   stroke="#5b61d1"
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -87,18 +100,19 @@ const DashboardCta = () => {
                   opacity="0.25"
                 />
 
-                {/* moving glowing part */}
+                {/* back to back beams */}
                 <motion.path
-                  d="M100 570 L740 570 C780 570 800 550 800 510 L800 330"
+                  d="M800 330 L800 510 C800 550 780 570 740 570 L100 570"
                   stroke="url(#lineGradient)"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   fill="none"
-                  strokeDasharray="100 900"
-                  initial={{ strokeDashoffset: 990 }}
+                  strokeDasharray="90 170"
+                  markerEnd="url(#beamArrow)"
+                  initial={{ strokeDashoffset: 260 }}
                   animate={{ strokeDashoffset: 0 }}
                   transition={{
-                    duration: 2.4,
+                    duration: 2,
                     repeat: Infinity,
                     ease: "linear",
                   }}

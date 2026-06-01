@@ -99,7 +99,7 @@ const ResourceHub = () => {
             return (
               <article
                 key={item.title}
-                className="group grid min-h-[360px] grid-rows-[auto_auto_1fr_auto] border-b border-r border-border bg-white p-7 transition hover:bg-primary-soft/20 md:p-8 lg:min-h-[390px]"
+                className="group grid min-h-90 grid-rows-[auto_auto_1fr_auto] border-b border-r border-border bg-white p-7 transition hover:bg-primary-soft/20 md:p-8 lg:min-h-97.5"
               >
                 <div className="mb-10 grid grid-cols-[auto_1fr] items-center gap-4">
                   <div className="grid h-12 w-12 place-items-center border border-border bg-primary-soft text-primary transition group-hover:bg-white">

@@ -2,7 +2,6 @@
 
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
-import HeroContainer from "@/components/ui/hero-container";
 import {
   ArrowUpRight,
   BadgeDollarSign,
@@ -89,7 +88,7 @@ export default function RoiCalculator() {
 
       <SeparatorContainer />
 
-      <Container className="mx-auto border-x border-border bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:32px_32px] p-4 md:p-6 lg:p-8">
+      <Container className="mx-auto border-x border-border bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-size-[32px_32px] p-4 md:p-6 lg:p-8">
         <section className="grid grid-cols-1 border border-border bg-background shadow-sm md:grid-cols-[42fr_58fr]">
           <div className="border-b border-border p-5 md:border-b-0 md:border-r md:p-8">
             <div className="h-full border border-dashed border-border bg-white p-5 md:p-6">

@@ -1,8 +1,10 @@
-import React from "react";
+"use client"
 import { ChevronRight } from "lucide-react";
 import Container from "../container";
+import { useRouter } from "next/navigation";
 
 const ImageCta = () => {
+  const router = useRouter();
   return (
     <Container className="relative h-80 w-full overflow-hidden sm:h-96 md:h-120">
       <img
@@ -25,7 +27,7 @@ const ImageCta = () => {
           </h2>
         </div>
 
-        <button className="flex w-fit items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-primary shadow-sm transition hover:bg-primary-soft hover:shadow-md sm:px-5 sm:py-3 cursor-pointer">
+        <button className="flex w-fit items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-primary shadow-sm transition hover:bg-primary-soft hover:shadow-md sm:px-5 sm:py-3 cursor-pointer" onClick={() => router.push("/talk-to-us")}>
           Book a Demo
           <ChevronRight className="h-4 w-4" />
         </button>

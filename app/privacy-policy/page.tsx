@@ -82,28 +82,6 @@ const PrivacyPolicy = () => {
             </header>
 
             <div className="rounded-[2rem] border border-border bg-white px-6 py-10 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
-              {/* <section className="border-b border-border pb-10">
-                <h2 className="text-heading text-2xl">Contents</h2>
-                <ol className="mt-5 space-y-2 text-muted">
-                  {[
-                    "1. Who We Are and How to Contact Us",
-                    "2. Who This Policy Applies To",
-                    "3. What Data We Collect and Why",
-                    "4. Automated Decision-Making and Fraud Scoring",
-                    "5. Who We Share Your Data With",
-                    "6. International Data Transfers",
-                    "7. How Long We Keep Your Data",
-                    "8. Your Rights Under GDPR",
-                    "9. Cookies and Tracking",
-                    "10. Machine Learning and Model Training",
-                    "11. Changes to This Policy",
-                    "12. How to Make a Complaint",
-                  ].map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ol>
-              </section> */}
-
               <PolicySection
                 id="who-we-are"
                 title="1. Who We Are and How to Contact Us"

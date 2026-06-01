@@ -98,7 +98,7 @@ const ScaleGraph = () => {
         </div>
       </div>
 
-      <div className="absolute right-4 top-4 z-30 w-[150px] rounded-xl border bg-white/85 p-3 shadow-sm backdrop-blur-md sm:right-5 sm:top-5 sm:w-[170px]">
+      <div className="absolute right-4 top-4 z-30 w-37.5 rounded-xl border bg-white/85 p-3 shadow-sm backdrop-blur-md sm:right-5 sm:top-5 sm:w-42.5">
         <AnimatePresence mode="wait">
           <motion.div
             key={client.name}

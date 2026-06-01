@@ -8,6 +8,7 @@ interface ButtonProps {
   title: string;
   className?: string;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const ButtonPrimary = ({
@@ -16,9 +17,11 @@ export const ButtonPrimary = ({
   textSize = "text-sm",
   height = "h-11",
   className,
+  onClick,
 }: ButtonProps) => {
   return (
     <button
+      onClick={onClick}
       className={cn(
         "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary-soft bg-white px-5 font-semibold text-primary shadow-sm transition-all duration-300 hover:bg-primary-soft hover:shadow-md",
         textSize,
@@ -41,9 +44,11 @@ export const ButtonSecondary = ({
   textSize = "text-sm",
   height = "h-11",
   className,
+  onClick,
 }: ButtonProps) => {
   return (
     <button
+      onClick={onClick}
       className={cn(
         "group inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-5 font-semibold text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary-muted hover:shadow-md",
         textSize,

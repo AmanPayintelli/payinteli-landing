@@ -75,5 +75,5 @@ export const NavLinks = [
       },
     ],
   },
-  { title: "Partners", href: "#" },
+  { title: "Partners", href: "/partners" },
 ];

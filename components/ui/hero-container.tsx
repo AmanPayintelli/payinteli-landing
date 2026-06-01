@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import Container from "../container";
 import AnimatedWords from "./animated-words";
 import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
@@ -11,6 +13,8 @@ interface HeroContainerProps {
   description: string;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
+  primaryButtonOnClick?: () => void;
+  secondaryButtonOnClick?: () => void;
   imageSrc: string;
   imageAlt?: string;
 }
@@ -24,9 +28,19 @@ export default function HeroContainer({
   description,
   primaryButtonTitle = "Book a Demo",
   secondaryButtonTitle = "Get Started",
+
   imageSrc,
   imageAlt = "Hero visual",
 }: HeroContainerProps) {
+  const router = useRouter();
+
+  const secondaryButtonOnClick = () => {
+    router.push("/get-started");
+  };
+
+  const primaryButtonOnClick = () => {
+    router.push("/talk-to-us");
+  };
   const hasAnimatedWords = animatedWords.length > 0;
 
   return (
@@ -62,6 +76,7 @@ export default function HeroContainer({
             <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
               <ButtonSecondary
                 title={secondaryButtonTitle}
+                onClick={secondaryButtonOnClick}
                 textSize="text-sm font-semibold"
                 height="h-11"
                 className="w-full rounded-lg px-5 shadow-sm hover:shadow-md sm:w-auto"
@@ -69,6 +84,7 @@ export default function HeroContainer({
 
               <ButtonPrimary
                 title={primaryButtonTitle}
+                onClick={primaryButtonOnClick}
                 textSize="text-sm font-semibold"
                 height="h-11"
                 className="w-full rounded-lg bg-white px-5 shadow-sm hover:bg-primary-soft hover:shadow-md sm:w-auto"

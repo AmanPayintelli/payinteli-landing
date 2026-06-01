@@ -15,6 +15,8 @@ export default function Hero() {
       description="Define your payments with precision. Seamlessly optimize routing, improve approvals, reduce fraud, and unlock growth — all in one place."
       imageSrc="/heroSection-img2.png"
       imageAlt="Payments platform visual"
+      primaryButtonTitle="Request your Free Assesment"
+      secondaryButtonTitle="Get Started"
     />
   );
 }

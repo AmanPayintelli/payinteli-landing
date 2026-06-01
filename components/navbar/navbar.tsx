@@ -6,12 +6,21 @@ import { cn } from "@/lib/utils";
 import { DropDownSvg } from "../ui/icons/icons";
 import { ButtonPrimary, ButtonSecondary } from "../ui/buttonPrimary";
 import { motion } from "motion/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { NavLinks } from "./navLinks";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [productHovered, setProductHovered] = useState<string | null>(null);
+  const router = useRouter();
+  const getStarted = () => {
+    router.push("/get-started");
+  };
+
+  const contactUs = () => {
+    router.push("/contact-us");
+  };
 
   return (
     <div className="fixed  z-50 w-full overflow-visible bg-white border-b border-border ">
@@ -131,7 +140,7 @@ const Navbar = () => {
                       </div>
                     </div>
 
-                    {link.case_studies && link.case_studies.length > 0 && (
+                    {/* {link.case_studies && link.case_studies.length > 0 && (
                       <div className="flex gap-2">
                         {link.case_studies.map((study) => (
                           <Link
@@ -169,7 +178,7 @@ const Navbar = () => {
                           </Link>
                         ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </motion.div>
               )}
@@ -180,12 +189,14 @@ const Navbar = () => {
         <div className="hidden items-center justify-between gap-2.5 md:flex">
           <ButtonSecondary
             title="Get Started"
+            onClick={getStarted}
             textSize="text-sm font-medium"
             className="w-full sm:w-auto"
           />
 
           <ButtonPrimary
-            title="Book a Demo"
+            title="Contact Us"
+            onClick={contactUs}
             textSize="text-sm font-medium"
             className="w-full sm:w-auto"
           />

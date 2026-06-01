@@ -10,32 +10,32 @@ const footerColumns = [
     links: [
       { label: "About Us", href: "/about" },
       { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "/contact" },
+      { label: "Partners", href: "/partners" },
     ],
   },
   {
     title: "Products",
     links: [
-      { label: "Pi Shield", href: "/products/pi-shield" },
-      { label: "Pi Symphony", href: "/products/pi-symphony" },
-      { label: "Pi Deepsearch", href: "/products/pi-deepsearch" },
-      { label: "Pi Recon", href: "/products/pi-recon" },
+      { label: "Pi Shield", href: "/pi-shield" },
+      { label: "Pi Symphony", href: "/pi-symphony" },
+      { label: "Pi Deepsearch", href: "/pi-deepsearch" },
+      { label: "Pi Recon", href: "/pi-recon" },
     ],
   },
   {
     title: "Compliance",
     links: [
-      { label: "PCI DSS", href: "/compliance/pci-dss" },
-      { label: "GDPR", href: "/compliance/gdpr" },
-      { label: "ISO 27001", href: "/compliance/iso-27001" },
-      { label: "PSD2", href: "/compliance/psd2" },
+      { label: "Security & Compliance", href: "/compliance" },
+      { label: "PCI DSS", href: "/compliance#pci" },
+      { label: "GDPR", href: "/compliance#gdpr" },
+      { label: "ISO 27001", href: "/compliance#iso" },
+      { label: "PSD2", href: "/compliance#psd2" },
     ],
   },
   {
     title: "Contact",
     links: [
       { label: "Netherlands", href: "/contact" },
-      { label: "Serving Globally", href: "/contact" },
       { label: "www.payintelli.com", href: "https://www.payintelli.com" },
     ],
   },
@@ -146,12 +146,8 @@ const Footer = () => {
               Terms of Service
             </Link>
             <span>·</span>
-            <Link href="/contact" className="transition hover:text-primary">
+            <Link href="/contact-us" className="transition hover:text-primary">
               Contact Us
-            </Link>
-            <span>·</span>
-            <Link href="/about" className="transition hover:text-primary">
-              About
             </Link>
           </div>
 

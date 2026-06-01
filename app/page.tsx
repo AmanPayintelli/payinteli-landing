@@ -21,15 +21,13 @@ const Home = () => {
       <SeparatorContainer height="h-16 md:h-20" />
       <DashboardCta />
       <SeparatorContainer height="h-16 md:h-20" />
+      <WhyUs />
+      <SeparatorContainer height="h-16 md:h-20" />
       <ImageCta />
       <SeparatorContainer height="h-16 md:h-20" />
-      <WhyUs />
-      <SeparatorContainer />
       <Security />
       <SeparatorContainer />
       <Testimonials />
-      <SeparatorContainer />
-
       <SeparatorContainer />
     </>
   );

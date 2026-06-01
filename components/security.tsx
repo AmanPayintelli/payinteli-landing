@@ -8,12 +8,16 @@ const securityItems = [
     image: "/gdpr.svg",
   },
   {
-    title: "CCPA",
-    image: "/ccpa.svg",
+    title: "ISO 27001",
+    image: "/ISO.svg",
   },
   {
     title: "PCI DSS",
     image: "/pci.png",
+  },
+  {
+    title: "PSD2",
+    image: "/psd2.png",
   },
 ];
 
@@ -34,7 +38,7 @@ const Security = () => {
           </div>
 
           {/* Right Certifications */}
-          <div className="grid grid-cols-3 border-t lg:border-l lg:border-t-0">
+          <div className="grid grid-cols-4 border-t lg:border-l lg:border-t-0">
             {securityItems.map((item) => (
               <div
                 key={item.title}
