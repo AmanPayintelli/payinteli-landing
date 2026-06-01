@@ -19,8 +19,8 @@ const SymphonyHero = () => {
       />
 
       {/* White text side + darker owl side */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-l from-black/60 via-black/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-background via-background/85 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-l from-black/60 via-black/15 to-transparent" />
 
       {/* Left Content */}
       <section className="relative z-10 flex min-h-155 w-full px-5 py-16 md:h-full md:w-[58%] md:px-0 md:py-0 md:pl-12">
@@ -40,9 +40,9 @@ const SymphonyHero = () => {
             </motion.span>
 
             <h1 className="text-[39px] font-bold leading-[1.08] tracking-tight text-text-brand sm:text-[46px] md:text-[48px] lg:text-[54px]">
-              <span className="block">Orchestrating</span>
-              <span className="block">Intelligent Payments</span>
-              <span className="block text-primary">
+              <span className="block">Orchestrating Intelligent Payments.</span>
+
+              <span className="block whitespace-nowrap text-primary">
                 Built to Maximize Conversion.
               </span>
             </h1>

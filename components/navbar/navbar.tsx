@@ -5,49 +5,16 @@ import Container from "../container";
 import { cn } from "@/lib/utils";
 import { DropDownSvg } from "../ui/icons/icons";
 import { ButtonPrimary, ButtonSecondary } from "../ui/buttonPrimary";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import { useRef, useState } from "react";
 import { NavLinks } from "./navLinks";
 
 const Navbar = () => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [productHovered, setProductHovered] = useState<string | null>(null);
-  const [isBigScreen, setIsBigScreen] = useState(false);
-
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-
-  const navWidthMotion = useTransform(scrollY, [0, 100], ["100%", "67.5%"]);
-  const navTopMotion = useTransform(scrollY, [0, 100], ["0px", "10px"]);
-  const navRadiusMotion = useTransform(scrollY, [0, 20], ["0px", "16px"]);
-  const navShadowMotion = useTransform(
-    scrollY,
-    [0, 100],
-    ["0px 0px 0px rgba(0,0,0,0)", "0px 10px 30px rgba(0,0,0,0.08)"],
-  );
-
-  useEffect(() => {
-    const checkScreen = () => {
-      setIsBigScreen(window.innerWidth >= 1024);
-    };
-
-    checkScreen();
-
-    window.addEventListener("resize", checkScreen);
-
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
 
   return (
-    <div
-      ref={ref}
-      className="fixed  z-50 w-full overflow-visible bg-white border-b border-border "
-      // style={{
-      //   width: isBigScreen ? navWidthMotion : "100%",
-      //   boxShadow: isBigScreen ? navShadowMotion : "none",
-      //   x: "-50%",
-      // }}
-    >
+    <div className="fixed  z-50 w-full overflow-visible bg-white border-b border-border ">
       <Container className="flex items-center justify-between px-4 py-3">
         <Logo />
 

@@ -262,15 +262,6 @@ const Box = ({
           >
             {step.metric}
           </div>
-
-          <div
-            className="flex h-7 w-7 items-center justify-center rounded-full border bg-white shadow-sm"
-            style={{
-              boxShadow: active ? `0 0 16px ${step.color}66` : undefined,
-            }}
-          >
-            <img src={step.ai} alt="" className="h-4 w-4 object-contain" />
-          </div>
         </div>
 
         <div className="mt-5">

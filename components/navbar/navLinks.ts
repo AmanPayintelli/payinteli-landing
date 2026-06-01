@@ -57,37 +57,23 @@ export const NavLinks = [
     subLinks: [
       {
         title: "ROI Calculator",
-        href: "#",
+        href: "/roi-calculator",
         description: "Estimate your payment savings.",
         icon: Calculator,
       },
       {
         title: "Resource Hub",
-        href: "#",
+        href: "/resource-hub",
         description: "Guides, blogs, and insights.",
         icon: BookOpenText,
       },
-    ],
-  },
-
-  {
-    title: "Developers",
-    details: true,
-    href: "#",
-    subTitle: "Developers",
-    subLinks: [
       {
         title: "Documentation",
-        href: "#",
+        href: "https://docs.payintelli.com/docs",
         description: "Explore guides and setup docs.",
         icon: BookOpenText,
       },
-      {
-        title: "API Reference",
-        href: "#",
-        description: "View endpoints and integrations.",
-        icon: Code2,
-      },
     ],
   },
+  { title: "Partners", href: "#" },
 ];

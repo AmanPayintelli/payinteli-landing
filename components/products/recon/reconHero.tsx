@@ -4,9 +4,9 @@ const ReconHero = () => {
   return (
     <HeroContainer
       eyebrow="[ Pi Recon ]"
-      titleLines={["AI-Powered", "Reconciliation"]}
-      bottomTitle="Flawless Books. Zero Chaos."
-      description="Automate reconciliation across banks, PSPs, and ledgers with AI-powered precision. Spot anomalies instantly, generate audit-ready reports, and give your finance team time back."
+      titleLines={["Reconcile Smarter"]}
+      bottomTitle="Close Books Faster."
+      description="AI-powered reconciliation across banks, PSPs, and ledgers. Detect mismatches instantly, generate audit-ready reports, and reduce manual finance work."
       secondaryButtonTitle="Get Started"
       primaryButtonTitle="Book a Demo"
       imageSrc="/recon-hero.png"

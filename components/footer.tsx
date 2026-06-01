@@ -44,7 +44,7 @@ const footerColumns = [
 const socialLinks = [
   {
     label: "LinkedIn",
-    href: "#",
+    href: "https://www.linkedin.com/company/payintelli/",
     image: "/linkedin.svg",
   },
 
