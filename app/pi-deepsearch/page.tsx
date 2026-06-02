@@ -14,7 +14,7 @@ const DeepSearch = () => {
       <SeparatorContainer height="h-16 md:h-20" />
       <DeepSearchProductFeatures />
       <SeparatorContainer height="h-16 md:h-20" />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <SeparatorContainer height="h-16 md:h-20" />
     </>
   );

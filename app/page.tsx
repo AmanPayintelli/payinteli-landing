@@ -26,9 +26,9 @@ const Home = () => {
       <ImageCta />
       <SeparatorContainer height="h-16 md:h-20" />
       <Security />
-      <SeparatorContainer />
+      {/* <SeparatorContainer />
       <Testimonials />
-      <SeparatorContainer />
+      <SeparatorContainer /> */}
     </>
   );
 };

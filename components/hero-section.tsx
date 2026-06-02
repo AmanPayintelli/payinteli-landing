@@ -16,7 +16,7 @@ export default function Hero() {
       imageSrc="/heroSection-img2.png"
       imageAlt="Payments platform visual"
       primaryButtonTitle="Request your Free Assesment"
-      secondaryButtonTitle="Get Started"
+      showSecondaryButton={false}
     />
   );
 }

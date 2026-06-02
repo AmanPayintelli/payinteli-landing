@@ -13,8 +13,8 @@ interface HeroContainerProps {
   description: string;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
-  primaryButtonOnClick?: () => void;
-  secondaryButtonOnClick?: () => void;
+  showPrimaryButton?: boolean;
+  showSecondaryButton?: boolean;
   imageSrc: string;
   imageAlt?: string;
 }
@@ -28,20 +28,15 @@ export default function HeroContainer({
   description,
   primaryButtonTitle = "Book a Demo",
   secondaryButtonTitle = "Get Started",
-
+  showPrimaryButton = true,
+  showSecondaryButton = true,
   imageSrc,
   imageAlt = "Hero visual",
 }: HeroContainerProps) {
   const router = useRouter();
 
-  const secondaryButtonOnClick = () => {
-    router.push("/get-started");
-  };
-
-  const primaryButtonOnClick = () => {
-    router.push("/talk-to-us");
-  };
   const hasAnimatedWords = animatedWords.length > 0;
+  const hasButtons = showPrimaryButton || showSecondaryButton;
 
   return (
     <Container className="grid min-h-155 w-full overflow-hidden border-x border-border bg-background md:h-[70vh] md:grid-cols-[60fr_40fr]">
@@ -73,23 +68,29 @@ export default function HeroContainer({
               {description}
             </p>
 
-            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <ButtonSecondary
-                title={secondaryButtonTitle}
-                onClick={secondaryButtonOnClick}
-                textSize="text-sm font-semibold"
-                height="h-11"
-                className="w-full rounded-lg px-5 shadow-sm hover:shadow-md sm:w-auto"
-              />
+            {hasButtons && (
+              <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+                {showSecondaryButton && (
+                  <ButtonSecondary
+                    title={secondaryButtonTitle}
+                    onClick={() => router.push("/get-started")}
+                    textSize="text-sm font-semibold"
+                    height="h-11"
+                    className="w-full rounded-lg px-5 shadow-sm hover:shadow-md sm:w-auto"
+                  />
+                )}
 
-              <ButtonPrimary
-                title={primaryButtonTitle}
-                onClick={primaryButtonOnClick}
-                textSize="text-sm font-semibold"
-                height="h-11"
-                className="w-full rounded-lg bg-white px-5 shadow-sm hover:bg-primary-soft hover:shadow-md sm:w-auto"
-              />
-            </div>
+                {showPrimaryButton && (
+                  <ButtonPrimary
+                    title={primaryButtonTitle}
+                    onClick={() => router.push("/talk-to-us")}
+                    textSize="text-sm font-semibold"
+                    height="h-11"
+                    className="w-full rounded-lg bg-white px-5 shadow-sm hover:bg-primary-soft hover:shadow-md sm:w-auto"
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
