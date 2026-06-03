@@ -1,12 +1,95 @@
-import React from "react";
-import { ArrowRight, CheckCircle2, Phone, Sparkles } from "lucide-react";
+"use client";
+
+import React, { useState } from "react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Phone,
+  Sparkles,
+} from "lucide-react";
 import SeparatorContainer from "@/components/separator-container";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const SEND_MAIL_URL =
+  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/send-mail";
+
+const assessmentSchema = z.object({
+  name: z.string().min(1, "Full name is required"),
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  company: z.string().min(1, "Company name is required"),
+  role: z.string().min(1, "Role is required"),
+  phone: z.string().optional(),
+  message: z.string().min(1, "Message is required"),
+});
+
+type AssessmentFormData = z.infer<typeof assessmentSchema>;
 
 const FreeAssesment = () => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const [apiError, setApiError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<AssessmentFormData>({
+    resolver: zodResolver(assessmentSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      company: "",
+      role: "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data: AssessmentFormData) => {
+    try {
+      setApiError("");
+      setSuccessMessage("");
+
+      const response = await fetch(SEND_MAIL_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          role: data.role,
+          phone: data.phone || "",
+          message: data.message,
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(result?.message || "Failed to submit form");
+      }
+
+      setSuccessMessage("Thanks! Our team will reach out within 24 hours.");
+      reset();
+    } catch (error) {
+      console.error(error);
+      setApiError("Something went wrong. Please try again.");
+    }
+  };
+
+  const inputClass =
+    "h-12 rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary";
+
+  const errorClass = "mt-1 text-xs font-medium text-red-500";
+
   return (
     <section className="w-full bg-background">
       <div className="mx-auto max-w-7xl border-x border-border px-4 py-10 md:px-8 md:py-14">
-        {/* Hero / Info */}
         <div className="relative overflow-hidden border border-border bg-background">
           <div className="pointer-events-none absolute right-0 top-0 h-full w-[55%] bg-[radial-gradient(circle_at_80%_35%,rgba(103,59,246,0.14),transparent_45%),linear-gradient(to_left,rgba(229,229,255,0.55),transparent)]" />
 
@@ -27,9 +110,7 @@ const FreeAssesment = () => {
           </div>
         </div>
 
-        {/* Content + Form */}
         <div className="grid border-x border-b border-border lg:grid-cols-[1fr_1.05fr]">
-          {/* Left Info */}
           <div className="border-b border-border p-6 md:p-8 lg:border-b-0 lg:border-r">
             <div className="max-w-xl">
               <h2 className="text-2xl font-semibold tracking-tight text-text-brand md:text-3xl">
@@ -60,7 +141,6 @@ const FreeAssesment = () => {
             </div>
           </div>
 
-          {/* Form */}
           <div className="bg-[linear-gradient(135deg,rgba(229,229,255,0.35),transparent_45%)] p-4 md:p-8">
             <div className="mx-auto max-w-xl rounded-2xl border border-border bg-white p-6 shadow-[0_20px_60px_rgba(8,40,50,0.08)] md:p-8">
               <div className="text-center">
@@ -77,54 +157,112 @@ const FreeAssesment = () => {
                 </p>
               </div>
 
-              <form className="mt-8 space-y-4">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-8 space-y-4"
+              >
                 <div className="grid gap-4 md:grid-cols-2">
-                  <input
-                    type="text"
-                    placeholder="Full Name *"
-                    className="h-12 rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Full Name *"
+                      {...register("name")}
+                      className={`${inputClass} w-full`}
+                    />
+                    {errors.name?.message && (
+                      <p className={errorClass}>{errors.name.message}</p>
+                    )}
+                  </div>
 
-                  <input
-                    type="email"
-                    placeholder="Work Email *"
-                    className="h-12 rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
-                  />
+                  <div>
+                    <input
+                      type="email"
+                      placeholder="Work Email *"
+                      {...register("email")}
+                      className={`${inputClass} w-full`}
+                    />
+                    {errors.email?.message && (
+                      <p className={errorClass}>{errors.email.message}</p>
+                    )}
+                  </div>
 
-                  <input
-                    type="text"
-                    placeholder="Company Name *"
-                    className="h-12 rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Company Name *"
+                      {...register("company")}
+                      className={`${inputClass} w-full`}
+                    />
+                    {errors.company?.message && (
+                      <p className={errorClass}>{errors.company.message}</p>
+                    )}
+                  </div>
 
-                  <select className="h-12 rounded-lg border border-border bg-white px-4 text-sm text-text-muted outline-none transition focus:border-primary">
-                    <option>Select Role *</option>
-                    <option>Founder / CEO</option>
-                    <option>Finance</option>
-                    <option>Operations</option>
-                    <option>Product</option>
-                    <option>Technology</option>
-                  </select>
+                  <div>
+                    <select
+                      {...register("role")}
+                      className={`${inputClass} w-full text-text-muted`}
+                    >
+                      <option value="">Select Role *</option>
+                      <option value="Founder / CEO">Founder / CEO</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Operations">Operations</option>
+                      <option value="Product">Product</option>
+                      <option value="Technology">Technology</option>
+                    </select>
+                    {errors.role?.message && (
+                      <p className={errorClass}>{errors.role.message}</p>
+                    )}
+                  </div>
                 </div>
 
                 <input
                   type="tel"
                   placeholder="Phone Number (Optional)"
-                  className="h-12 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
+                  {...register("phone")}
+                  className={`${inputClass} w-full`}
                 />
 
-                <textarea
-                  placeholder="Tell us about your payment challenges... *"
-                  rows={5}
-                  className="w-full resize-none rounded-lg border border-border bg-white px-4 py-4 text-sm outline-none transition focus:border-primary"
-                />
+                <div>
+                  <textarea
+                    placeholder="Tell us about your payment challenges... *"
+                    rows={5}
+                    {...register("message")}
+                    className="w-full resize-none rounded-lg border border-border bg-white px-4 py-4 text-sm outline-none transition focus:border-primary"
+                  />
+                  {errors.message?.message && (
+                    <p className={errorClass}>{errors.message.message}</p>
+                  )}
+                </div>
+
+                {apiError && (
+                  <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+                    {apiError}
+                  </p>
+                )}
+
+                {successMessage && (
+                  <p className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                    {successMessage}
+                  </p>
+                )}
 
                 <button
                   type="submit"
-                  className="group flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-text-brand px-5 font-semibold  shadow-lg shadow-text-brand/10 transition hover:-translate-y-0.5 hover:bg-primary text-black hover:text-white cursor-pointer border"
+                  disabled={isSubmitting}
+                  className="group flex h-13 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border bg-text-brand px-5 font-semibold text-black shadow-lg shadow-text-brand/10 transition hover:-translate-y-0.5 hover:bg-primary hover:text-white disabled:pointer-events-none disabled:opacity-60"
                 >
-                  <Sparkles className="size-5" />
-                  Get Expert Consultation
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="size-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="size-5" />
+                      Get Expert Consultation
+                    </>
+                  )}
                 </button>
 
                 <p className="flex items-center justify-center gap-2 pt-2 text-sm text-text-muted">
@@ -136,6 +274,7 @@ const FreeAssesment = () => {
           </div>
         </div>
       </div>
+
       <SeparatorContainer />
     </section>
   );

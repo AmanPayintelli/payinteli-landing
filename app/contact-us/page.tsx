@@ -3,8 +3,14 @@
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
-import { APP_CONFIG } from "@/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const SEND_MAIL_URL =
+  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/send-mail";
 
 const transactionOptions = [
   "< 10,000",
@@ -20,86 +26,118 @@ const solutionOptions = [
   "Reconciliation and reporting",
 ];
 
+const contactSchema = z
+  .object({
+    email: z.string().min(1, "Email is required").email("Enter a valid email"),
+    fullName: z.string().min(1, "Full name is required"),
+    company: z.string().min(1, "Company name is required"),
+    website: z.string().min(1, "Company website is required"),
+    transactions: z.string().min(1, "Please select monthly transactions"),
+    solutions: z
+      .array(z.string())
+      .min(1, "Please select at least one solution"),
+    otherSolution: z.string().optional(),
+    challenge: z.string().min(1, "Payment challenge is required"),
+  })
+  .refine(
+    (data) =>
+      !data.solutions.includes("Other") || Boolean(data.otherSolution?.trim()),
+    {
+      message: "Please specify your other solution",
+      path: ["otherSolution"],
+    },
+  );
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
 const ContactUs = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    fullName: "",
-    company: "",
-    website: "",
-    transactions: "",
-    solutions: [] as string[],
-    otherSolution: "",
-    challenge: "",
+  const [successMessage, setSuccessMessage] = useState("");
+  const [apiError, setApiError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      email: "",
+      fullName: "",
+      company: "",
+      website: "",
+      transactions: "",
+      solutions: [],
+      otherSolution: "",
+      challenge: "",
+    },
   });
 
-  const [submitStatus, setSubmitStatus] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const selectedSolutions = watch("solutions");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value, type } = e.target;
+  const errorClass =
+    "mt-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600";
 
-    if (type === "checkbox") {
-      setFormData((prev) => {
-        const updatedSolutions = prev.solutions.includes(value)
-          ? prev.solutions.filter((item) => item !== value)
-          : [...prev.solutions, value];
+  const inputClass = (hasError?: boolean) =>
+    `h-12 w-full rounded-2xl border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)] ${
+      hasError ? "border-red-400 bg-red-50/40" : "border-border"
+    }`;
 
-        return {
-          ...prev,
-          solutions: updatedSolutions,
-          ...(value === "Other" && prev.solutions.includes("Other")
-            ? { otherSolution: "" }
-            : {}),
-        };
-      });
+  const textareaClass = (hasError?: boolean) =>
+    `w-full resize-none rounded-3xl border bg-white px-4 py-3 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)] ${
+      hasError ? "border-red-400 bg-red-50/40" : "border-border"
+    }`;
 
-      return;
+  const handleSolutionChange = (item: string) => {
+    const updatedSolutions = selectedSolutions.includes(item)
+      ? selectedSolutions.filter((solution) => solution !== item)
+      : [...selectedSolutions, item];
+
+    setValue("solutions", updatedSolutions, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+
+    if (item === "Other" && selectedSolutions.includes("Other")) {
+      setValue("otherSolution", "");
     }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setSubmitStatus(null);
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: ContactFormData) => {
     try {
-      const response = await fetch(`${APP_CONFIG.API_BASE_URL}/send-mail`, {
+      setApiError("");
+      setSuccessMessage("");
+
+      const response = await fetch(SEND_MAIL_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          challenge: data.challenge,
+          company: data.company,
+          email: data.email,
+          fullName: data.fullName,
+          otherSolution: data.otherSolution || "",
+          solutions: data.solutions,
+          transactions: data.transactions,
+          website: data.website,
+        }),
       });
 
-      const data = await response.json();
+      const result = await response.json().catch(() => null);
 
-      if (response.ok) {
-        setSubmitStatus("success");
-        setFormData({
-          email: "",
-          fullName: "",
-          company: "",
-          website: "",
-          transactions: "",
-          solutions: [],
-          otherSolution: "",
-          challenge: "",
-        });
-      } else {
-        setSubmitStatus(data?.error || "error");
+      if (!response.ok) {
+        throw new Error(result?.message || "Failed to submit form");
       }
-    } catch {
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
+
+      setSuccessMessage(result?.message || "Form submitted successfully");
+      reset();
+    } catch (error) {
+      console.error(error);
+      setApiError("Something went wrong. Please try again.");
     }
   };
 
@@ -109,7 +147,6 @@ const ContactUs = () => {
 
       <Container className="relative h-full overflow-hidden border-x bg-white">
         <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
-          {/* Left Form */}
           <div className="p-5 md:p-6">
             <div className="max-w-xl">
               <span className="font-mono text-xs uppercase tracking-wide text-primary">
@@ -122,7 +159,7 @@ const ContactUs = () => {
             </div>
 
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
               className="mt-8 grid gap-5 rounded-lg border border-border bg-white/90 p-4 shadow-[0_24px_70px_rgba(8,40,50,0.08)] backdrop-blur-xl md:p-5"
             >
@@ -133,16 +170,17 @@ const ContactUs = () => {
                   </label>
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
                     placeholder="you@company.com"
-                    required
-                    className="h-12 w-full rounded-2xl border border-border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
+                    {...register("email")}
+                    className={inputClass(Boolean(errors.email))}
                   />
-                  <p className="mt-1.5 text-xs text-text-muted">
-                    Please provide a professional email
-                  </p>
+                  {errors.email?.message ? (
+                    <p className={errorClass}>{errors.email.message}</p>
+                  ) : (
+                    <p className="mt-1.5 text-xs text-text-muted">
+                      Please provide a professional email
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -151,13 +189,13 @@ const ContactUs = () => {
                   </label>
                   <input
                     type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
                     placeholder="John Doe"
-                    required
-                    className="h-12 w-full rounded-2xl border border-border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
+                    {...register("fullName")}
+                    className={inputClass(Boolean(errors.fullName))}
                   />
+                  {errors.fullName?.message && (
+                    <p className={errorClass}>{errors.fullName.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -168,13 +206,13 @@ const ContactUs = () => {
                   </label>
                   <input
                     type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
                     placeholder="Your Company"
-                    required
-                    className="h-12 w-full rounded-2xl border border-border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
+                    {...register("company")}
+                    className={inputClass(Boolean(errors.company))}
                   />
+                  {errors.company?.message && (
+                    <p className={errorClass}>{errors.company.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -183,17 +221,23 @@ const ContactUs = () => {
                   </label>
                   <input
                     type="text"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleChange}
                     placeholder="company.com"
-                    required
-                    className="h-12 w-full rounded-2xl border border-border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
+                    {...register("website")}
+                    className={inputClass(Boolean(errors.website))}
                   />
+                  {errors.website?.message && (
+                    <p className={errorClass}>{errors.website.message}</p>
+                  )}
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-primary-soft bg-primary-soft/45 p-4">
+              <div
+                className={`rounded-3xl border p-4 ${
+                  errors.transactions
+                    ? "border-red-300 bg-red-50/40"
+                    : "border-primary-soft bg-primary-soft/45"
+                }`}
+              >
                 <label className="mb-4 block text-sm font-semibold text-text-brand">
                   Monthly Transactions
                 </label>
@@ -206,62 +250,68 @@ const ContactUs = () => {
                     >
                       <input
                         type="radio"
-                        name="transactions"
                         value={item}
-                        checked={formData.transactions === item}
-                        onChange={handleChange}
+                        {...register("transactions")}
                         className="accent-primary"
                       />
                       <span>{item}</span>
                     </label>
                   ))}
                 </div>
+
+                {errors.transactions?.message && (
+                  <p className={errorClass}>{errors.transactions.message}</p>
+                )}
               </div>
 
-              <div className="rounded-3xl border border-border bg-white p-4">
+              <div
+                className={`rounded-3xl border bg-white p-4 ${
+                  errors.solutions || errors.otherSolution
+                    ? "border-red-300"
+                    : "border-border"
+                }`}
+              >
                 <label className="mb-4 block text-sm font-semibold text-text-brand">
                   What solutions are you most interested in?
                 </label>
 
                 <div className="grid gap-3">
-                  {solutionOptions.map((item) => (
+                  {[...solutionOptions, "Other"].map((item) => (
                     <label
                       key={item}
                       className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-text-brand transition hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary-soft/50 hover:shadow-sm"
                     >
                       <input
                         type="checkbox"
-                        name="solutions"
                         value={item}
-                        checked={formData.solutions.includes(item)}
-                        onChange={handleChange}
+                        checked={selectedSolutions.includes(item)}
+                        onChange={() => handleSolutionChange(item)}
                         className="accent-primary"
                       />
-                      <span>{item}</span>
+                      <span>
+                        {item === "Other" ? "Other (please specify)" : item}
+                      </span>
                     </label>
                   ))}
 
-                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-text-brand transition hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary-soft/50 hover:shadow-sm">
-                    <input
-                      type="checkbox"
-                      name="solutions"
-                      value="Other"
-                      checked={formData.solutions.includes("Other")}
-                      onChange={handleChange}
-                      className="accent-primary"
-                    />
-                    <span>Other (please specify)</span>
-                  </label>
+                  {selectedSolutions.includes("Other") && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Your solution"
+                        {...register("otherSolution")}
+                        className={inputClass(Boolean(errors.otherSolution))}
+                      />
+                      {errors.otherSolution?.message && (
+                        <p className={errorClass}>
+                          {errors.otherSolution.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
-                  {formData.solutions.includes("Other") && (
-                    <input
-                      type="text"
-                      name="otherSolution"
-                      value={formData.otherSolution}
-                      onChange={handleChange}
-                      placeholder="Your solution"
-                      className="h-12 w-full rounded-2xl border border-border bg-white px-4 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
-                    />
+                  {errors.solutions?.message && (
+                    <p className={errorClass}>{errors.solutions.message}</p>
                   )}
                 </div>
               </div>
@@ -271,42 +321,44 @@ const ContactUs = () => {
                   What’s your biggest payment challenge today?
                 </label>
                 <textarea
-                  name="challenge"
-                  value={formData.challenge}
-                  onChange={handleChange}
                   rows={5}
                   placeholder="Type your response here..."
-                  className="w-full resize-none rounded-3xl border border-border bg-white px-4 py-3 text-sm text-text-brand outline-none transition placeholder:text-text-muted/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(103,59,246,0.08)]"
+                  {...register("challenge")}
+                  className={textareaClass(Boolean(errors.challenge))}
                 />
+                {errors.challenge?.message && (
+                  <p className={errorClass}>{errors.challenge.message}</p>
+                )}
               </div>
 
               <ButtonSecondary
-                title={
-                  isSubmitting
-                    ? "Submitting..."
-                    : submitStatus === "success"
-                      ? "Submitted"
-                      : "Submit"
-                }
+                title={isSubmitting ? "Submitting..." : "Submit"}
                 height="h-12"
                 className="w-full px-6 disabled:pointer-events-none disabled:opacity-70"
               />
 
-              {submitStatus === "success" && (
-                <div className="rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-600">
-                  Your message has been sent successfully!
+              {successMessage && (
+                <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-4">
+                  <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-green-600" />
+                  <div>
+                    <p className="text-sm font-semibold text-green-700">
+                      Submitted successfully
+                    </p>
+                    <p className="mt-1 text-xs text-green-600">
+                      {successMessage}
+                    </p>
+                  </div>
                 </div>
               )}
 
-              {submitStatus && submitStatus !== "success" && (
-                <div className="rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-                  There was a problem sending your message. Please try again.
+              {apiError && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+                  {apiError}
                 </div>
               )}
             </form>
           </div>
 
-          {/* Right Visual */}
           <div className="relative min-h-155 overflow-hidden border-t border-border bg-text-brand lg:border-l lg:border-t-0">
             <img
               src="/new-york-city.jpg"

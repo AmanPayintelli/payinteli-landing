@@ -1,6 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, ExternalLink } from "lucide-react";
+import { MapPin, ExternalLink, Mail } from "lucide-react";
 
 import Container from "./container";
 
@@ -47,7 +50,6 @@ const socialLinks = [
     href: "https://www.linkedin.com/company/payintelli/",
     image: "/linkedin.svg",
   },
-
   {
     label: "YouTube",
     href: "#",
@@ -55,7 +57,112 @@ const socialLinks = [
   },
 ];
 
+type SubscriptionType = "BOTH" | "BLOG" | "NEWSLETTER";
+
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [subscriptionType, setSubscriptionType] =
+    useState<SubscriptionType>("BOTH");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const isBlogChecked =
+    subscriptionType === "BLOG" || subscriptionType === "BOTH";
+
+  const isNewsletterChecked =
+    subscriptionType === "NEWSLETTER" || subscriptionType === "BOTH";
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldownSeconds((prev) => Math.max(prev - 1, 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldownSeconds]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleBlogChange = (checked: boolean) => {
+    if (checked && isNewsletterChecked) setSubscriptionType("BOTH");
+    else if (checked) setSubscriptionType("BLOG");
+    else if (isNewsletterChecked) setSubscriptionType("NEWSLETTER");
+    else setSubscriptionType("BOTH");
+  };
+
+  const handleNewsletterChange = (checked: boolean) => {
+    if (checked && isBlogChecked) setSubscriptionType("BOTH");
+    else if (checked) setSubscriptionType("NEWSLETTER");
+    else if (isBlogChecked) setSubscriptionType("BLOG");
+    else setSubscriptionType("BOTH");
+  };
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setMessage("");
+    setError("");
+
+    if (cooldownSeconds > 0) {
+      setError(
+        `Please wait ${formatTime(cooldownSeconds)} before subscribing again.`,
+      );
+      return;
+    }
+
+    if (!email.trim()) {
+      setError("Email is required");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const res = await fetch(
+        "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/newsletter/subscribe",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            is_internal: false,
+            source: "payintelli.com/resources/hub",
+            subscription_type: subscriptionType,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.message || "Something went wrong");
+      }
+
+      setMessage(data?.message || "Subscribed successfully");
+      setEmail("");
+      setSubscriptionType("BOTH");
+      setCooldownSeconds(5 * 60);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to subscribe. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-white">
       <Container className="w-full border-x">
@@ -128,6 +235,83 @@ const Footer = () => {
               </ul>
             </div>
           ))}
+        </div>
+
+        <div className="border-b px-8 py-7">
+          <div className="grid gap-5 lg:grid-cols-[1fr_1.35fr] lg:items-center">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-text-heading">
+                <span className="flex size-8 items-center justify-center rounded-lg border bg-primary-soft text-primary">
+                  <Mail className="size-4" />
+                </span>
+                Subscribe to PayIntelli updates
+              </div>
+
+              <p className="mt-2 max-w-xl text-sm leading-6 text-text-heading/55">
+                Be the first one to know about our new products, releases, and
+                payment intelligence updates.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubscribe} className="space-y-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={cooldownSeconds > 0}
+                  placeholder="Email address"
+                  className="h-11 flex-1 rounded-lg border border-border bg-white px-4 text-sm text-text-heading outline-none transition placeholder:text-text-heading/35 focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:cursor-not-allowed disabled:bg-gray-50"
+                />
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting || cooldownSeconds > 0}
+                  className="h-11 rounded-lg bg-primary px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-muted disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSubmitting
+                    ? "Subscribing..."
+                    : cooldownSeconds > 0
+                      ? `Try again in ${formatTime(cooldownSeconds)}`
+                      : "Subscribe"}
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-5">
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-text-heading/60">
+                  <input
+                    type="checkbox"
+                    checked={isBlogChecked}
+                    disabled={cooldownSeconds > 0}
+                    onChange={(e) => handleBlogChange(e.target.checked)}
+                    className="size-4 rounded border-border accent-primary disabled:cursor-not-allowed"
+                  />
+                  Blog
+                </label>
+
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-text-heading/60">
+                  <input
+                    type="checkbox"
+                    checked={isNewsletterChecked}
+                    disabled={cooldownSeconds > 0}
+                    onChange={(e) => handleNewsletterChange(e.target.checked)}
+                    className="size-4 rounded border-border accent-primary disabled:cursor-not-allowed"
+                  />
+                  Newsletter
+                </label>
+              </div>
+
+              {message && (
+                <p className="text-sm font-medium text-emerald-600">
+                  {message}
+                </p>
+              )}
+
+              {error && (
+                <p className="text-sm font-medium text-red-500">{error}</p>
+              )}
+            </form>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4 border-b px-8 py-5 md:flex-row md:items-center md:justify-between">

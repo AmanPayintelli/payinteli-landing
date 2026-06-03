@@ -56,7 +56,7 @@ const StartOnboarding = () => {
               "grid w-full max-w-6xl overflow-hidden rounded-lg border border-border bg-white shadow-[0_24px_90px_rgba(8,40,50,0.09)]",
               isFinalStep
                 ? "grid-cols-1"
-                : "min-h-[720px] lg:grid-cols-[0.9fr_1.1fr]",
+                : "min-h-180 lg:grid-cols-[0.9fr_1.1fr]",
             )}
           >
             {!isFinalStep && <OnboardingSideCard />}
