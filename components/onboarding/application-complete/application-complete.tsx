@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -12,8 +11,24 @@ import {
 } from "lucide-react";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
 import { cn } from "@/lib/utils";
+import { useNewsletterSubscribe } from "@/hooks/use-newsletter-subscribe";
 
 const ApplicationComplete = () => {
+  const {
+    email,
+    setEmail,
+    isSubmitting,
+    cooldownSeconds,
+    message,
+    error,
+    isBlogChecked,
+    isNewsletterChecked,
+    formatTime,
+    handleBlogChange,
+    handleNewsletterChange,
+    handleSubscribe,
+  } = useNewsletterSubscribe();
+
   const handleDownload = () => {
     console.log("Download application copy");
   };
@@ -66,7 +81,7 @@ const ApplicationComplete = () => {
             View Products
           </Link>
 
-          <a
+          <Link
             href="https://docs.payintelli.com"
             target="_blank"
             rel="noreferrer"
@@ -74,7 +89,7 @@ const ApplicationComplete = () => {
           >
             <BookOpen className="size-4" />
             Read API Docs
-          </a>
+          </Link>
 
           <Link
             href="/"
@@ -86,7 +101,10 @@ const ApplicationComplete = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-white p-4">
+      <form
+        onSubmit={handleSubscribe}
+        className="rounded-lg border border-border bg-white p-4"
+      >
         <p className="text-sm text-text-muted">
           Get important product updates, new resources, documentation and
           insights.
@@ -97,30 +115,63 @@ const ApplicationComplete = () => {
             <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={cooldownSeconds > 0}
               placeholder="Email address"
-              className="h-11 w-full rounded-lg border border-border bg-white pl-10 pr-3 text-sm outline-none transition-all placeholder:text-text-muted/60 focus:border-primary focus:ring-4 focus:ring-primary-soft"
+              className="h-11 w-full rounded-lg border border-border bg-white pl-10 pr-3 text-sm outline-none transition-all placeholder:text-text-muted/60 focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:cursor-not-allowed disabled:bg-gray-50"
             />
           </div>
 
           <ButtonSecondary
-            title="Subscribe"
+            title={
+              isSubmitting
+                ? "Subscribing..."
+                : cooldownSeconds > 0
+                  ? `Try again in ${formatTime(cooldownSeconds)}`
+                  : "Subscribe"
+            }
             height="h-11"
-            className="rounded-lg bg-primary text-white hover:bg-primary hover:opacity-90"
+            className={cn(
+              "rounded-lg bg-primary text-white hover:bg-primary hover:opacity-90",
+              (isSubmitting || cooldownSeconds > 0) &&
+                "pointer-events-none opacity-60",
+            )}
           />
         </div>
 
         <div className="mt-3 flex items-center gap-5 text-sm text-text-brand">
           <label className="flex items-center gap-2">
-            <input type="checkbox" defaultChecked className="accent-primary" />
+            <input
+              type="checkbox"
+              checked={isBlogChecked}
+              disabled={cooldownSeconds > 0}
+              onChange={(e) => handleBlogChange(e.target.checked)}
+              className="accent-primary disabled:cursor-not-allowed"
+            />
             Blog
           </label>
 
           <label className="flex items-center gap-2">
-            <input type="checkbox" defaultChecked className="accent-primary" />
+            <input
+              type="checkbox"
+              checked={isNewsletterChecked}
+              disabled={cooldownSeconds > 0}
+              onChange={(e) => handleNewsletterChange(e.target.checked)}
+              className="accent-primary disabled:cursor-not-allowed"
+            />
             Newsletter
           </label>
         </div>
-      </div>
+
+        {message && (
+          <p className="mt-3 text-sm font-medium text-emerald-600">{message}</p>
+        )}
+
+        {error && (
+          <p className="mt-3 text-sm font-medium text-red-500">{error}</p>
+        )}
+      </form>
 
       <div>
         <h2 className="text-lg font-semibold text-text-brand">

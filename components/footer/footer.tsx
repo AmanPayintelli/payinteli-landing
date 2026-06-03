@@ -1,167 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, ExternalLink, Mail } from "lucide-react";
 
-import Container from "./container";
-
-const footerColumns = [
-  {
-    title: "Company",
-    links: [
-      { label: "About Us", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Partners", href: "/partners" },
-    ],
-  },
-  {
-    title: "Products",
-    links: [
-      { label: "Pi Shield", href: "/pi-shield" },
-      { label: "Pi Symphony", href: "/pi-symphony" },
-      { label: "Pi Deepsearch", href: "/pi-deepsearch" },
-      { label: "Pi Recon", href: "/pi-recon" },
-    ],
-  },
-  {
-    title: "Compliance",
-    links: [
-      { label: "Security & Compliance", href: "/compliance" },
-      { label: "PCI DSS", href: "/compliance#pci" },
-      { label: "GDPR", href: "/compliance#gdpr" },
-      { label: "ISO 27001", href: "/compliance#iso" },
-      { label: "PSD2", href: "/compliance#psd2" },
-    ],
-  },
-  {
-    title: "Contact",
-    links: [
-      { label: "Netherlands", href: "/contact" },
-      { label: "www.payintelli.com", href: "https://www.payintelli.com" },
-    ],
-  },
-];
-
-const socialLinks = [
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/payintelli/",
-    image: "/linkedin.svg",
-  },
-  {
-    label: "YouTube",
-    href: "#",
-    image: "/youtube.svg",
-  },
-];
-
-type SubscriptionType = "BOTH" | "BLOG" | "NEWSLETTER";
+import Container from "../container";
+import { useNewsletterSubscribe } from "@/hooks/use-newsletter-subscribe";
+import { footerColumns, socialLinks } from "./footer-inks";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [subscriptionType, setSubscriptionType] =
-    useState<SubscriptionType>("BOTH");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cooldownSeconds, setCooldownSeconds] = useState(0);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  const isBlogChecked =
-    subscriptionType === "BLOG" || subscriptionType === "BOTH";
-
-  const isNewsletterChecked =
-    subscriptionType === "NEWSLETTER" || subscriptionType === "BOTH";
-
-  useEffect(() => {
-    if (cooldownSeconds <= 0) return;
-
-    const timer = setInterval(() => {
-      setCooldownSeconds((prev) => Math.max(prev - 1, 0));
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [cooldownSeconds]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  const handleBlogChange = (checked: boolean) => {
-    if (checked && isNewsletterChecked) setSubscriptionType("BOTH");
-    else if (checked) setSubscriptionType("BLOG");
-    else if (isNewsletterChecked) setSubscriptionType("NEWSLETTER");
-    else setSubscriptionType("BOTH");
-  };
-
-  const handleNewsletterChange = (checked: boolean) => {
-    if (checked && isBlogChecked) setSubscriptionType("BOTH");
-    else if (checked) setSubscriptionType("NEWSLETTER");
-    else if (isBlogChecked) setSubscriptionType("BLOG");
-    else setSubscriptionType("BOTH");
-  };
-
-  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setMessage("");
-    setError("");
-
-    if (cooldownSeconds > 0) {
-      setError(
-        `Please wait ${formatTime(cooldownSeconds)} before subscribing again.`,
-      );
-      return;
-    }
-
-    if (!email.trim()) {
-      setError("Email is required");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      const res = await fetch(
-        "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/newsletter/subscribe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-            is_internal: false,
-            source: "payintelli.com/resources/hub",
-            subscription_type: subscriptionType,
-          }),
-        },
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data?.message || "Something went wrong");
-      }
-
-      setMessage(data?.message || "Subscribed successfully");
-      setEmail("");
-      setSubscriptionType("BOTH");
-      setCooldownSeconds(5 * 60);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to subscribe. Please try again.",
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const {
+    email,
+    setEmail,
+    isSubmitting,
+    cooldownSeconds,
+    message,
+    error,
+    isBlogChecked,
+    isNewsletterChecked,
+    formatTime,
+    handleBlogChange,
+    handleNewsletterChange,
+    handleSubscribe,
+  } = useNewsletterSubscribe();
 
   return (
     <footer className="bg-white">

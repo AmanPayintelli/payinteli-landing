@@ -79,7 +79,7 @@ const TermsOfService = () => {
       <Container className="border-x border-border bg-background">
         <main className="grid gap-12 px-4 py-16 md:grid-cols-[1fr_280px] md:px-8 md:py-4">
           <article className="max-w-4xl">
-            <header className="mb-10 rounded-[2rem] border border-border bg-primary-soft/40 p-8 md:p-10">
+            <header className="mb-10 rounded-4xl border border-border bg-primary-soft/40 p-8 md:p-10">
               <p className="mb-4 text-sm font-medium text-primary">
                 PIRESEARCH LABS PVT. LTD.
               </p>
@@ -115,7 +115,7 @@ const TermsOfService = () => {
               </div>
             </header>
 
-            <div className="rounded-[2rem] border border-border bg-white px-6 py-8 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
+            <div className="rounded-4xl border border-border bg-white px-6 py-8 shadow-[0_24px_100px_rgba(8,40,50,0.04)] md:px-10">
               {/* <section className="border-b border-border pb-10">
                 <h2 className="text-heading text-2xl">Contents</h2>
 
@@ -998,7 +998,7 @@ const TermsOfService = () => {
           </article>
 
           <aside className="relative hidden md:block">
-            <div className="sticky top-24 rounded-[1.5rem] border border-border bg-white p-5 shadow-[0_20px_80px_rgba(8,40,50,0.04)]">
+            <div className="sticky top-24 rounded-3xl border border-border bg-white p-5 shadow-[0_20px_80px_rgba(8,40,50,0.04)]">
               <div className="absolute left-5 top-6 h-[calc(100%-3rem)] w-px bg-primary-soft">
                 <motion.div
                   style={{ scaleY: beamScale }}

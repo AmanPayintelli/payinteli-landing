@@ -1,5 +1,7 @@
 "use client";
 
+import { SEND_MAIL_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
@@ -8,9 +10,6 @@ import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const SEND_MAIL_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/send-mail";
 
 const transactionOptions = [
   "< 10,000",
@@ -110,12 +109,10 @@ const ContactUs = () => {
       setApiError("");
       setSuccessMessage("");
 
-      const response = await fetch(SEND_MAIL_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const result = await apiRequest<{ message?: string }>({
+        method: "post",
+        url: SEND_MAIL_URL,
+        body: {
           challenge: data.challenge,
           company: data.company,
           email: data.email,
@@ -124,14 +121,8 @@ const ContactUs = () => {
           solutions: data.solutions,
           transactions: data.transactions,
           website: data.website,
-        }),
+        },
       });
-
-      const result = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(result?.message || "Failed to submit form");
-      }
 
       setSuccessMessage(result?.message || "Form submitted successfully");
       reset();

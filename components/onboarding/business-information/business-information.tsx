@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import { ArrowLeft, ArrowRight, BriefcaseBusiness, Save } from "lucide-react";
 import Select, { SingleValue, StylesConfig } from "react-select";
 import { Controller, useForm } from "react-hook-form";
@@ -14,13 +12,13 @@ import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
 import OnboardingInput from "../input-field";
 import { cn } from "@/lib/utils";
+import { BUSINESS_INFORMATION_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
 
 type SelectOption = {
   value: string;
   label: string;
 };
-const BUSINESS_INFORMATION_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/onboarding/business-info";
 
 const businessTypeOptions: SelectOption[] = [
   { value: "sole_proprietorship", label: "Sole Proprietorship" },
@@ -87,25 +85,12 @@ const BusinessInformation = () => {
         vat: data.taxVatNumber,
       };
 
-      const response = await fetch(BUSINESS_INFORMATION_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionId}`,
-        },
-        body: JSON.stringify(payload),
+      await apiRequest({
+        method: "post",
+        url: BUSINESS_INFORMATION_URL,
+        sessionId,
+        body: payload,
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          result?.message || "Failed to save business information",
-        );
-      }
-
-      console.log("Business information response:", result);
-      console.log("Business information payload:", payload);
 
       nextStep();
     } catch (error) {

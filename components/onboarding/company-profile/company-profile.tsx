@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,74 +11,28 @@ import {
 import Select, { SingleValue } from "react-select";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CompanyProfileFormData,
-  companyProfileSchema,
-  Country,
-} from "./schema";
+import { CompanyProfileFormData, companyProfileSchema } from "./schema";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
 import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
 import { cn } from "@/lib/utils";
 import OnboardingInput from "../input-field";
-
-const COUNTRIES_STATES_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/getCountriesStates";
-
-type SelectOption = {
-  value: string;
-  label: string;
-};
-
-const COUNTRY_PHONE: Record<string, { code: string; emoji: string }> = {
-  GB: { code: "+44", emoji: "🇬🇧" },
-  IN: { code: "+91", emoji: "🇮🇳" },
-  US: { code: "+1", emoji: "🇺🇸" },
-  AE: { code: "+971", emoji: "🇦🇪" },
-  SG: { code: "+65", emoji: "🇸🇬" },
-};
-
-const turnoverSelectOptions: SelectOption[] = [
-  { value: "Less than £100K", label: "Less than £100K" },
-  { value: "£100K - £500K", label: "£100K - £500K" },
-  { value: "£500K - £1M", label: "£500K - £1M" },
-  { value: "£1M - £10M", label: "£1M - £10M" },
-  { value: "More than £10M", label: "More than £10M" },
-];
-
-const productSelectOptions: SelectOption[] = [
-  { value: "Payments", label: "Payments" },
-  { value: "Consulting", label: "Consulting" },
-  { value: "Software", label: "Software" },
-  { value: "Retail", label: "Retail" },
-  { value: "Other", label: "Other" },
-];
-
-const industrySelectOptions: SelectOption[] = [
-  { value: "Finance", label: "Finance" },
-  { value: "Healthcare", label: "Healthcare" },
-  { value: "Education", label: "Education" },
-  { value: "Technology", label: "Technology" },
-  { value: "Retail", label: "Retail" },
-  { value: "Other", label: "Other" },
-];
-
-const selectClassNames = {
-  control: () =>
-    "!min-h-11 !rounded-lg !border-border !bg-white !text-sm !shadow-none hover:!border-border",
-  input: () => "!text-sm",
-  placeholder: () => "!text-text-muted/70 !text-sm",
-  singleValue: () => "!text-sm !text-text-normal",
-  menu: () => "!z-50 !rounded-lg !border !border-border !shadow-lg",
-  option: () => "!text-sm",
-};
+import { COMPANY_PROFILE_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
+import { useCountriesStates } from "@/hooks/use-countries-states";
+import {
+  COUNTRY_PHONE,
+  industrySelectOptions,
+  productSelectOptions,
+  selectClassNames,
+  SelectOption,
+  turnoverSelectOptions,
+} from ".";
 
 const CompanyProfile = () => {
   const { nextStep, prevStep } = useOnboardingStep();
   const { accountData, sessionId, setCompanyProfileData } = useOnboardingData();
-
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [isLoadingCountries, setIsLoadingCountries] = useState(false);
+  const { countries, isLoadingCountries } = useCountriesStates();
 
   const {
     register,
@@ -138,32 +91,6 @@ const CompanyProfile = () => {
   }, [selectedCountry]);
 
   const companyName = accountData?.companyName ?? "your company";
-
-  useEffect(() => {
-    const fetchCountriesStates = async () => {
-      try {
-        setIsLoadingCountries(true);
-
-        const response = await fetch(COUNTRIES_STATES_URL);
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result?.message || "Failed to fetch countries");
-        }
-
-        setCountries(result?.countries || []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoadingCountries(false);
-      }
-    };
-
-    fetchCountriesStates();
-  }, []);
-  const COMPANY_PROFILE_URL =
-    "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/onboarding/company-profile";
-
   const onSubmit = async (data: CompanyProfileFormData) => {
     try {
       if (!sessionId) {
@@ -175,7 +102,7 @@ const CompanyProfile = () => {
         address1: data.addressLine1,
         address2: data.addressLine2 || "",
         annual_turnover: data.annualTurnover,
-        application_id: "", // update when you have it
+        application_id: "",
         city: data.city,
         company_name: accountData?.companyName || "",
         country: data.country,
@@ -190,23 +117,12 @@ const CompanyProfile = () => {
         website: data.businessWebsite || "",
       };
 
-      const response = await fetch(COMPANY_PROFILE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionId}`,
-        },
-        body: JSON.stringify(payload),
+      await apiRequest({
+        method: "post",
+        url: COMPANY_PROFILE_URL,
+        sessionId,
+        body: payload,
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result?.message || "Failed to save company profile");
-      }
-
-      console.log("Company profile response:", result);
-      console.log("Company profile payload:", payload);
 
       setCompanyProfileData(data);
       nextStep();

@@ -184,7 +184,7 @@ export const TransactionFlow = () => {
           />
 
           <motion.div
-            className="absolute top-[7px] z-30 h-10 w-10 -translate-x-1/2 overflow-hidden rounded-full border-[3px] border-white bg-primary-soft shadow-[0_10px_28px_rgba(103,59,246,0.18)]"
+            className="absolute top-1.75 z-30 h-10 w-10 -translate-x-1/2 overflow-hidden rounded-full border-[3px] border-white bg-primary-soft shadow-[0_10px_28px_rgba(103,59,246,0.18)]"
             style={{ left: avatarLeft }}
           >
             <Image

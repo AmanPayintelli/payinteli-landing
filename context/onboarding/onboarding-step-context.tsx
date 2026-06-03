@@ -18,7 +18,7 @@ export const OnboardingStepProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(5);
 
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, 5));

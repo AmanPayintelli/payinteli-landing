@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
@@ -12,9 +11,8 @@ import SeparatorContainer from "@/components/separator-container";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-const SEND_MAIL_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/send-mail";
+import { SEND_MAIL_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
 
 const assessmentSchema = z.object({
   name: z.string().min(1, "Full name is required"),
@@ -53,26 +51,18 @@ const FreeAssesment = () => {
       setApiError("");
       setSuccessMessage("");
 
-      const response = await fetch(SEND_MAIL_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await apiRequest({
+        method: "post",
+        url: SEND_MAIL_URL,
+        body: {
           name: data.name,
           email: data.email,
           company: data.company,
           role: data.role,
           phone: data.phone || "",
           message: data.message,
-        }),
+        },
       });
-
-      const result = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(result?.message || "Failed to submit form");
-      }
 
       setSuccessMessage("Thanks! Our team will reach out within 24 hours.");
       reset();

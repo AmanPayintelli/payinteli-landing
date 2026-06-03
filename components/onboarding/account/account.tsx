@@ -17,12 +17,8 @@ import { cn } from "@/lib/utils";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
 import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 import OnboardingInput from "../input-field";
-
-const OTP_REQUEST_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/otp/request";
-
-const OTP_VERIFY_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/otp/verify";
+import { OTP_REQUEST_URL, OTP_VERIFY_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
 
 const OnboardingAccount = () => {
   const { nextStep } = useOnboardingStep();
@@ -64,19 +60,11 @@ const OnboardingAccount = () => {
   }, [resendTimer]);
 
   const requestOtp = async (email: string) => {
-    const response = await fetch(OTP_REQUEST_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
+    const result = await apiRequest({
+      method: "post",
+      url: OTP_REQUEST_URL,
+      body: { email },
     });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result?.message || "Failed to send OTP");
-    }
 
     setResendTimer(15);
 
@@ -110,36 +98,30 @@ const OnboardingAccount = () => {
       return;
     }
 
-    const response = await fetch(OTP_VERIFY_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: data.email,
-        otp: data.otp,
-        name: data.fullName,
-        company: data.companyName,
-        role: data.role,
-      }),
-    });
+    try {
+      const result = await apiRequest<{ session_id: string }>({
+        method: "post",
+        url: OTP_VERIFY_URL,
+        body: {
+          email: data.email,
+          otp: data.otp,
+          name: data.fullName,
+          company: data.companyName,
+          role: data.role,
+        },
+      });
 
-    const result = await response.json();
+      setSessionId(result.session_id);
+      setAccountData(data);
+      nextStep();
+    } catch (error) {
+      console.error(error);
 
-    if (!response.ok) {
       setError("otp", {
         type: "manual",
-        message: result?.message || "Invalid OTP",
+        message: error instanceof Error ? error.message : "Invalid OTP",
       });
-      return;
     }
-
-    console.log("OTP verified response:", result);
-    console.log("Account form values:", data);
-
-    setSessionId(result.session_id);
-    setAccountData(data);
-    nextStep();
   };
 
   const onSubmit = async (data: OnboardingFormData) => {

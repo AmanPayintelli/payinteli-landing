@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar/navbar";
-import Footer from "@/components/footer";
+import Footer from "@/components/footer/footer";
+import CookieConsent from "@/components/cookies/cookie-consent";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,19 +36,17 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "h-full",
-        "antialiased",
+        "h-full antialiased font-sans",
         interBody.variable,
         interHeading.variable,
-        "font-sans",
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
-        {" "}
+      <body className="flex min-h-full flex-col">
         <Navbar />
         {children}
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   );
