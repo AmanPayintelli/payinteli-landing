@@ -3,7 +3,7 @@
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
-import { APP_CONFIG } from "@/constants/ndex";
+import { APP_CONFIG } from "@/constants";
 import { useState } from "react";
 
 const transactionOptions = [

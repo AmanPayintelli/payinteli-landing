@@ -69,7 +69,7 @@ export const NavLinks = [
       },
       {
         title: "Documentation",
-        href: "https://docs.payintelli.com/docs",
+        href: "https://docs.payintelli.com",
         description: "Explore guides and setup docs.",
         icon: BookOpenText,
       },

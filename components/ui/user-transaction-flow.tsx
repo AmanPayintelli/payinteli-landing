@@ -14,7 +14,7 @@ import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 
 const users = [
   {
-    name: "Tarun",
+    name: "Jofra Archer",
     avatar: "/avatar-1.png",
     flow: [
       { title: "User", fraud: false, icon: User, note: "Session verified" },
@@ -39,7 +39,7 @@ const users = [
     ],
   },
   {
-    name: "Aman",
+    name: "Jos Butler",
     avatar: "/avatar-2.png",
     flow: [
       {
@@ -69,7 +69,7 @@ const users = [
     ],
   },
   {
-    name: "Aditya",
+    name: "Jenny",
     avatar: "/avatar-3.png",
     flow: [
       { title: "User", fraud: false, icon: User, note: "Session verified" },
