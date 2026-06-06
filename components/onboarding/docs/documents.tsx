@@ -18,11 +18,11 @@ import { cn } from "@/lib/utils";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
 import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 import { apiRequest } from "@/api/apiClient";
-const DOCUMENT_UPLOAD_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/partner-referral-lead/documents/upload";
-
-const DOCUMENT_CONFIRM_URL =
-  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/partner-referral-lead/documents/confirm";
+import {
+  DOCUMENT_CONFIRM_URL,
+  DOCUMENT_PRESIGNED_URL_URL,
+  DOCUMENT_UPLOAD_URL,
+} from "@/api";
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 const ALLOWED_TYPES = [
@@ -446,35 +446,25 @@ const Documents = () => {
     const normalizedType = file.type === "image/jpg" ? "image/jpeg" : file.type;
 
     const presignedResponse = await apiRequest<{
-      upload_url: string;
-      s3_key: string;
-      storage_target: string;
+      uploadUrl: string;
+      fileKey: string;
     }>({
       method: "post",
-      url: DOCUMENT_UPLOAD_URL,
+      url: DOCUMENT_PRESIGNED_URL_URL,
       sessionId,
       body: {
-        account_id: merchantId,
-        filename: file.name,
-        content_type: normalizedType,
+        merchantId,
+        fileName: file.name,
+        fileType: normalizedType,
       },
     });
 
-    await uploadFileToS3(file, presignedResponse.upload_url, field);
+    await uploadFileToS3(file, presignedResponse.uploadUrl, field);
 
-    await apiRequest({
-      method: "post",
-      url: DOCUMENT_CONFIRM_URL,
-      sessionId,
-      body: {
-        account_id: merchantId,
-        type: apiType,
-        document_name: file.name,
-        filename: file.name,
-        s3_key: presignedResponse.s3_key,
-        storage_target: presignedResponse.storage_target,
-      },
-    });
+    return {
+      type: apiType,
+      file_key: presignedResponse.fileKey,
+    };
   };
 
   const onSubmit = async (data: DocumentsFormData) => {
@@ -554,7 +544,32 @@ const Documents = () => {
           : []),
       ];
 
-      await Promise.all(uploadItems.map(uploadSingleDocument));
+      const uploadedDocuments = await Promise.all(
+        uploadItems.map(uploadSingleDocument),
+      );
+
+      await apiRequest({
+        method: "post",
+        url: DOCUMENT_UPLOAD_URL,
+        sessionId,
+        body: {
+          documents: uploadedDocuments,
+        },
+      });
+
+      await Promise.all(
+        uploadedDocuments.map((doc) =>
+          apiRequest({
+            method: "post",
+            url: DOCUMENT_CONFIRM_URL,
+            sessionId,
+            body: {
+              merchantId,
+              fileKey: doc.file_key,
+            },
+          }),
+        ),
+      );
 
       nextStep();
     } catch (error) {

@@ -17,3 +17,7 @@ export const COUNTRIES_STATES_URL = `${BASE_API_URL}/getCountriesStates`;
 export const COMPANY_PROFILE_URL = `${BASE_API_URL}/onboarding/company-profile`;
 
 export const BUSINESS_INFORMATION_URL = `${BASE_API_URL}/onboarding/business-info`;
+
+export const DOCUMENT_PRESIGNED_URL_URL = `${BASE_API_URL}/onboarding/generate-presigned-url`;
+export const DOCUMENT_UPLOAD_URL = `${BASE_API_URL}/onboarding/document-upload`;
+export const DOCUMENT_CONFIRM_URL = `${BASE_API_URL}/onboarding/confirm-upload-completion`;
