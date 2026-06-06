@@ -21,18 +21,18 @@ type SelectOption = {
 };
 
 const businessTypeOptions: SelectOption[] = [
-  { value: "sole_proprietorship", label: "Sole Proprietorship" },
-  { value: "partnership", label: "Partnership" },
-  { value: "llp", label: "LLP (Limited Liability Partnership)" },
-  { value: "llc", label: "LLC (Limited Liability Company)" },
-  { value: "corporation", label: "Corporation" },
-  { value: "nonprofit", label: "Nonprofit" },
-  { value: "trust", label: "Trust" },
+  { value: "SOLE_PROPRIETORSHIP", label: "Sole Proprietorship" },
+  { value: "PARTNERSHIP", label: "Partnership" },
+  { value: "LLP", label: "LLP (Limited Liability Partnership)" },
+  { value: "LLC", label: "LLC (Limited Liability Company)" },
+  { value: "CORPORATION", label: "Corporation" },
+  { value: "NONPROFIT", label: "Nonprofit" },
+  { value: "TRUST", label: "Trust" },
   {
-    value: "unincorporated_association",
-    label: "Unincorporated Association",
+    value: "UNINCORPORATED_PARTNERSHIP",
+    label: "Unincorporated Partnership",
   },
-  { value: "other", label: "Other" },
+  { value: "OTHER", label: "Other" },
 ];
 
 const selectClassNames = {
