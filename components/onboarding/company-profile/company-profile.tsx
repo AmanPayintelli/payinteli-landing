@@ -118,6 +118,11 @@ const CompanyProfile = () => {
         return;
       }
 
+      if (!accountData?.companyName?.trim()) {
+        console.error("Company name missing from account step");
+        return;
+      }
+
       const currentApplicationId = applicationId || generateApplicationId();
 
       if (!applicationId) {
@@ -126,11 +131,11 @@ const CompanyProfile = () => {
 
       const payload = {
         address1: data.addressLine1,
-        address2: data.addressLine2 || "",
+        address2: data.addressLine2?.trim() || "",
         annual_turnover: data.annualTurnover,
         application_id: currentApplicationId,
         city: data.city,
-        company_name: accountData?.companyName || "",
+        company_name: accountData.companyName.trim(),
         country: data.country,
         industry: data.industryCategory,
         phone: data.businessPhone,

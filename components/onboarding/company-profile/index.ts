@@ -11,11 +11,11 @@ export const COUNTRY_PHONE: Record<string, { code: string; emoji: string }> = {
 };
 
 export const turnoverSelectOptions: SelectOption[] = [
-  { value: "Less than £100K", label: "Less than £100K" },
+  { value: "LESS THAN £100K", label: "Less than £100K" },
   { value: "£100K - £500K", label: "£100K - £500K" },
   { value: "£500K - £1M", label: "£500K - £1M" },
   { value: "£1M - £10M", label: "£1M - £10M" },
-  { value: "More than £10M", label: "More than £10M" },
+  { value: "MORE THAN £10M", label: "More than £10M" },
 ];
 
 export const productSelectOptions: SelectOption[] = [
