@@ -131,7 +131,7 @@ const CompanyProfile = () => {
 
       const payload = {
         address1: data.addressLine1,
-        address2: data.addressLine2?.trim() || "",
+        address2: data.addressLine2?.trim() || data.addressLine1,
         annual_turnover: data.annualTurnover,
         application_id: currentApplicationId,
         city: data.city,
