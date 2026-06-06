@@ -21,3 +21,5 @@ export const BUSINESS_INFORMATION_URL = `${BASE_API_URL}/onboarding/business-inf
 export const DOCUMENT_PRESIGNED_URL_URL = `${BASE_API_URL}/onboarding/generate-presigned-url`;
 export const DOCUMENT_UPLOAD_URL = `${BASE_API_URL}/onboarding/document-upload`;
 export const DOCUMENT_CONFIRM_URL = `${BASE_API_URL}/onboarding/confirm-upload-completion`;
+export const ACTIVE_JOBS_API = `${BASE_API_URL}/active-jobs`;
+export const CONFIRM_SUBSCRIPTION_URL = `${BASE_API_URL}/newsletter/subscribe`;

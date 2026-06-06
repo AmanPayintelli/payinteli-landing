@@ -12,8 +12,13 @@ import {
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
 import { cn } from "@/lib/utils";
 import { useNewsletterSubscribe } from "@/hooks/use-newsletter-subscribe";
+import { generateApplicationPDF } from "@/lib/pdfGenerator";
+import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 
 const ApplicationComplete = () => {
+  const { applicationId, accountData, companyProfileData } =
+    useOnboardingData();
+
   const {
     email,
     setEmail,
@@ -29,8 +34,17 @@ const ApplicationComplete = () => {
     handleSubscribe,
   } = useNewsletterSubscribe();
 
+  const applicantName =
+    // @ts-ignore
+    accountData?.companyName || companyProfileData?.companyName || "Applicant";
+
   const handleDownload = () => {
-    console.log("Download application copy");
+    if (!applicationId) {
+      console.error("Application ID missing");
+      return;
+    }
+
+    generateApplicationPDF(applicationId, applicantName);
   };
 
   return (
@@ -50,6 +64,13 @@ const ApplicationComplete = () => {
           review. Once your details are verified and certified, you will receive
           a confirmation email with your account credentials.
         </p>
+
+        {applicationId && (
+          <p className="mt-3 text-sm font-medium text-text-brand">
+            Application ID:{" "}
+            <span className="font-semibold text-primary">{applicationId}</span>
+          </p>
+        )}
       </div>
 
       <div>
@@ -113,6 +134,7 @@ const ApplicationComplete = () => {
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
             <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+
             <input
               type="email"
               value={email}
@@ -181,8 +203,10 @@ const ApplicationComplete = () => {
         <button
           type="button"
           onClick={handleDownload}
+          disabled={!applicationId}
           className={cn(
             "mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-green-600 px-5 text-sm font-semibold text-white transition-all hover:bg-green-700",
+            !applicationId && "cursor-not-allowed opacity-60",
           )}
         >
           <Download className="size-4" />

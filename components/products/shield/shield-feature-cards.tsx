@@ -8,7 +8,7 @@ import { TransactionFlow } from "@/components/ui/user-transaction-flow";
 
 const shieldFeatures = [
   {
-    title: "Transactional Behaviour Intelligence.",
+    title: "Transactional Behavior Intelligence",
     description:
       "Detect suspicious activity by analyzing user behavior patterns like clicks, navigation, transaction habits, and anomalies in real time.",
     feature: (

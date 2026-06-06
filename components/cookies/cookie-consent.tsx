@@ -96,7 +96,7 @@ export default function CookieConsent() {
                     onClick={rejectAll}
                     className="h-10 rounded-lg border border-border bg-white/80 px-4 text-sm font-semibold text-heading shadow-sm backdrop-blur transition hover:bg-primary-soft/70"
                   >
-                    Reject All
+                    Accept Necessary Cookies
                   </button>
 
                   <button

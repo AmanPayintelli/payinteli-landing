@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ProductFeatureContainer from "../product-feature-container";
 import SeparatorContainer from "@/components/separator-container";
 import { FeatureImage } from "../feature-img";
@@ -20,7 +19,7 @@ const SymphonyProductFeatures = () => {
       <ProductFeatureContainer
         reverse
         title="Automatic Failover."
-        description="eamless fallback to backup providers ensures zero downtime and uninterrupted transactions."
+        description="Seamless fallback to backup providers ensures zero downtime and uninterrupted transactions."
         rightComponent={
           <FeatureImage
             src="/automatic.png"
@@ -30,7 +29,7 @@ const SymphonyProductFeatures = () => {
       />
       <SeparatorContainer />
       <ProductFeatureContainer
-        title="Contractual Fillfilment"
+        title="Contractual FullFilment"
         description="No manual adujustments or switchovers. Contractual obligation are handled intelligently by our algorithm without compromising on performance & conversions"
         rightComponent={
           <FeatureImage

@@ -34,7 +34,7 @@ export default function CookieSettingsDialog({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/45 px-4 py-5 backdrop-blur-sm"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/45 px-4 py-5 backdrop-blur-sm"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 16 }}

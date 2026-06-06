@@ -1,118 +1,187 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { useForm } from "react-hook-form";
+import { AnimatePresence, motion } from "motion/react";
 import {
   ArrowRight,
   BadgeCheck,
-  BrainCircuit,
   BriefcaseBusiness,
-  Clock,
-  Globe2,
-  HeartPulse,
-  Lightbulb,
+  CheckCircle2,
+  Loader2,
+  Mail,
   MapPin,
-  Rocket,
   Sparkles,
-  Trophy,
-  Users,
-  WalletCards,
+  Upload,
+  User,
+  X,
 } from "lucide-react";
 
+import { ACTIVE_JOBS_API, SEND_MAIL_URL } from "@/api";
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
+import OnboardingInput from "@/components/onboarding/input-field";
+import { apiRequest } from "@/api/apiClient";
+
+type Job = {
+  id: string;
+  title: string;
+  location: string;
+  type: string;
+  summary: string;
+  responsibilities: string[];
+  qualifications: string[];
+  department: string;
+  experience_level: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type JobsResponse = {
+  job_listings: Job[];
+  total: number;
+};
+
+type ApplicationFormData = {
+  name: string;
+  email: string;
+  coverLetter: string;
+  cvFile: FileList;
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
   visible: { opacity: 1, y: 0 },
 };
 
-const benefits = [
-  {
-    icon: Rocket,
-    title: "Impactful Work",
-    description:
-      "Shape AI-driven payment intelligence used by merchants across global markets.",
-  },
-  {
-    icon: BrainCircuit,
-    title: "Collaborative Innovation",
-    description:
-      "Build with AI engineers, data scientists, fintech operators, and product thinkers.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Autonomy & Ownership",
-    description:
-      "Own initiatives end-to-end and influence real product and business decisions.",
-  },
-  {
-    icon: Trophy,
-    title: "Competitive Rewards",
-    description:
-      "Get competitive compensation, early-stage incentives, and performance rewards.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Innovation Culture",
-    description:
-      "Work in a fast-moving environment that values creativity, clarity, and execution.",
-  },
-  {
-    icon: Users,
-    title: "High-Caliber Team",
-    description:
-      "Join people who care about product quality, speed, reliability, and impact.",
-  },
-];
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-const offers = [
-  { icon: WalletCards, title: "Competitive salary" },
-  { icon: Clock, title: "Flexible working hours" },
-  { icon: HeartPulse, title: "Health & wellness benefits" },
-  { icon: Lightbulb, title: "Learning & development budget" },
-  { icon: Globe2, title: "Remote-friendly culture" },
-  { icon: BadgeCheck, title: "Early-stage ownership" },
-];
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1]);
+    };
 
-const positions = [
-  {
-    title: "Growth Manager – Payments & AI Solutions",
-    location: "Amsterdam, Netherlands",
-    type: "Hybrid / Remote within EU",
-    department: "Growth",
-  },
-  {
-    title: "Business Development Manager",
-    location: "London, United Kingdom",
-    type: "Hybrid",
-    department: "Business",
-  },
-  {
-    title: "Quality Assurance – AI & ML Systems",
-    location: "Hyderabad / Remote",
-    type: "Full-time",
-    department: "AI / ML",
-  },
-  {
-    title: "Backend Engineer",
-    location: "Hyderabad / Remote",
-    type: "Full-time",
-    department: "Engineering",
-  },
-];
-
-const stats = [
-  { value: "AI-first", label: "Product culture" },
-  { value: "Global", label: "Payment infrastructure" },
-  { value: "0 → 1", label: "Ownership from day one" },
-];
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
 
 const CareersPage = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isApplying, setIsApplying] = useState(false);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [jobsError, setJobsError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<ApplicationFormData>();
+
+  const selectedCv = watch("cvFile")?.[0];
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchJobs = async () => {
+      try {
+        setLoadingJobs(true);
+        setJobsError(null);
+
+        const data = await apiRequest<JobsResponse>({
+          method: "get",
+          url: ACTIVE_JOBS_API,
+        });
+
+        setJobs(data.job_listings);
+      } catch {
+        setJobsError("Unable to load open roles right now.");
+      } finally {
+        setLoadingJobs(false);
+      }
+    };
+
+    fetchJobs();
+
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedJob) return;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedJob]);
+
+  const closeModal = () => {
+    setSelectedJob(null);
+    setIsApplying(false);
+    setFormError(null);
+    reset();
+  };
+
+  const onSubmitApplication = async (data: ApplicationFormData) => {
+    if (!selectedJob) return;
+
+    const cvFile = data.cvFile?.[0];
+
+    if (!cvFile) {
+      setFormError("Please upload your CV.");
+      return;
+    }
+
+    try {
+      setSubmitLoading(true);
+      setFormError(null);
+
+      const cvBase64 = await fileToBase64(cvFile);
+
+      const payload = {
+        name: data.name,
+        email: data.email,
+        subject: `Application – ${selectedJob.title}`,
+        coverLetter: data.coverLetter,
+        coverFile: null,
+        cvFile: {
+          filename: cvFile.name,
+          content: cvBase64,
+          contentType: cvFile.type,
+        },
+      };
+
+      await apiRequest({
+        method: "post",
+        url: SEND_MAIL_URL,
+        body: payload,
+      });
+
+      closeModal();
+    } catch (error) {
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   return (
     <>
       <section className="relative overflow-hidden bg-white pt-17">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:82px_82px]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-size-[82px_82px]" />
 
         <Container className="relative border-x border-border">
           <div className="px-4 py-20 md:px-8 md:py-28">
@@ -148,125 +217,14 @@ const CareersPage = () => {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
 
-                <a
+                <Link
                   href="mailto:careers@payintelli.com"
                   className="inline-flex h-12 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-semibold text-primary shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-soft"
                 >
                   Send Your CV
-                </a>
+                </Link>
               </div>
             </motion.div>
-          </div>
-
-          <div className="grid border-y border-border bg-white/70 md:grid-cols-3">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + index * 0.08 }}
-                className="border-b border-border p-8 text-center md:border-b-0 md:border-r last:md:border-r-0"
-              >
-                <p className="text-3xl font-semibold tracking-[-0.04em] text-primary">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-sm text-muted">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <SeparatorContainer height="h-16 md:h-20" />
-
-      <section>
-        <Container className="border-x border-border">
-          <div className="border-y border-border px-4 py-14 md:px-8 md:py-18">
-            <div className="max-w-2xl">
-              <p className="font-mono text-sm text-muted">[ Why PayIntelli ]</p>
-              <h2 className="mt-5 text-heading text-3xl font-semibold tracking-[-0.04em] md:text-5xl">
-                Do meaningful work with real ownership.
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid border-b border-border md:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((item, index) => {
-              const Icon = item.icon;
-
-              return (
-                <motion.div
-                  key={item.title}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-80px" }}
-                  variants={fadeUp}
-                  transition={{ delay: index * 0.05, duration: 0.45 }}
-                  className="group min-h-[260px] border-r border-t border-border p-7 transition hover:bg-primary-soft/35 lg:[&:nth-child(3n)]:border-r-0 md:[&:nth-child(2n)]:border-r-0 lg:md:[&:nth-child(2n)]:border-r"
-                >
-                  <div className="mb-8 flex items-center justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-white text-primary shadow-sm transition group-hover:scale-105">
-                      <Icon className="h-5 w-5" />
-                    </div>
-
-                    <span className="font-mono text-sm text-muted">
-                      0{index + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-semibold tracking-[-0.03em] text-text-heading">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-muted">
-                    {item.description}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
-
-      <SeparatorContainer height="h-16 md:h-20" />
-
-      <section>
-        <Container className="border-x border-border">
-          <div className="grid border-y border-border lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="border-border p-8 lg:border-r lg:p-12">
-              <p className="font-mono text-sm text-muted">[ What We Offer ]</p>
-
-              <h2 className="mt-5 text-heading text-3xl font-semibold tracking-[-0.04em] md:text-5xl">
-                Built for people who love building.
-              </h2>
-
-              <p className="mt-5 max-w-lg text-sm leading-7 text-muted md:text-base">
-                We give you the environment, trust, and support to do your best
-                work while solving hard fintech problems.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2">
-              {offers.map((item, index) => {
-                const Icon = item.icon;
-
-                return (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    className="group border-b border-border p-7 transition hover:bg-primary-soft/35 sm:border-r even:sm:border-r-0"
-                  >
-                    <Icon className="mb-5 h-5 w-5 text-primary transition group-hover:scale-110" />
-                    <p className="text-sm font-semibold text-text-heading">
-                      {item.title}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
           </div>
         </Container>
       </section>
@@ -275,7 +233,7 @@ const CareersPage = () => {
 
       <section id="open-positions">
         <Container className="border-x border-border">
-          <div className="border-t border-border px-4 py-14 md:px-8 md:py-18">
+          <div className="border-y border-border px-4 py-14 md:px-8 md:py-18">
             <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div>
                 <p className="font-mono text-sm text-muted">
@@ -291,85 +249,318 @@ const CareersPage = () => {
                 payment orchestration.
               </p>
             </div>
-          </div>
 
-          <div className="border-y border-border">
-            {positions.map((role, index) => (
-              <motion.div
-                key={role.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                variants={fadeUp}
-                transition={{ delay: index * 0.05 }}
-                className="group grid gap-6 border-b border-border p-6 transition last:border-b-0 hover:bg-primary-soft/35 md:grid-cols-[1fr_280px_140px] md:p-8"
-              >
-                <div>
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-1 text-xs font-medium text-primary">
-                    <BriefcaseBusiness className="h-3.5 w-3.5" />
-                    {role.department}
-                  </div>
-
-                  <h3 className="text-xl font-semibold tracking-[-0.03em] text-text-heading">
-                    {role.title}
-                  </h3>
+            <div className="mt-12">
+              {loadingJobs ? (
+                <div className="flex items-center justify-center gap-3 rounded-3xl border border-border bg-white p-10 text-sm text-muted">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  Loading open roles...
                 </div>
-
-                <div className="space-y-3 text-sm text-muted">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    {role.location}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-primary" />
-                    {role.type}
-                  </div>
+              ) : jobsError ? (
+                <div className="rounded-3xl border border-red-100 bg-red-50 p-10 text-center text-sm text-red-500">
+                  {jobsError}
                 </div>
+              ) : (
+                <div className="grid gap-5 md:grid-cols-2">
+                  {jobs.map((role, index) => (
+                    <motion.div
+                      key={role.id}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: "-80px" }}
+                      variants={fadeUp}
+                      transition={{ delay: index * 0.04 }}
+                      className="group flex h-80 flex-col rounded-3xl border border-border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/5"
+                    >
+                      <div className="mb-5 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-1 text-xs font-medium text-primary">
+                          <BriefcaseBusiness className="h-3.5 w-3.5" />
+                          {role.department}
+                        </span>
 
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-start gap-2 text-sm font-semibold text-primary md:justify-end"
-                >
-                  View Details
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
+                        <span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
+                          {role.type}
+                        </span>
 
-      <SeparatorContainer height="h-16 md:h-20" />
+                        <span className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted">
+                          {role.experience_level}
+                        </span>
+                      </div>
 
-      <section>
-        <Container className="border-x border-border">
-          <div className="relative overflow-hidden border-y border-border bg-white p-8 text-center md:p-16">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(103,59,246,0.12),transparent_45%)]" />
+                      <h3 className="text-xl font-semibold tracking-[-0.03em] text-text-heading">
+                        {role.title}
+                      </h3>
 
-            <div className="relative mx-auto max-w-2xl">
-              <p className="font-mono text-sm text-muted">[ Join Us ]</p>
+                      <div className="mt-3 max-h-24 overflow-y-auto pr-2 text-sm leading-6 text-muted">
+                        {role.summary}
+                      </div>
 
-              <h2 className="mt-5 text-heading text-3xl font-semibold tracking-[-0.04em] md:text-5xl">
-                Don&apos;t see the right role?
-              </h2>
+                      <div className="mt-auto pt-6">
+                        <div className="mb-5 flex items-center gap-2 text-sm text-muted">
+                          <MapPin className="h-4 w-4 shrink-0 text-primary" />
+                          {role.location}
+                        </div>
 
-              <p className="mt-4 text-base leading-7 text-muted">
-                Send us your CV — we&apos;re always looking for talented people
-                who want to build the future of fintech with us.
-              </p>
-
-              <a
-                href="mailto:careers@payintelli.com"
-                className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary-muted"
-              >
-                Send Your CV
-                <ArrowRight className="h-4 w-4" />
-              </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedJob(role);
+                            setIsApplying(false);
+                            setFormError(null);
+                            reset();
+                          }}
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
+                        >
+                          View Details
+                          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </Container>
       </section>
+
+      <AnimatePresence>
+        {selectedJob && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              onClick={(event) => event.stopPropagation()}
+              className="flex max-h-[82vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-2xl"
+            >
+              <div className="flex items-start justify-between gap-4 border-b border-border p-5">
+                <div>
+                  <div className="mb-2 flex flex-wrap gap-2">
+                    <span className="rounded-full bg-primary-soft px-2.5 py-1 text-[11px] font-medium text-primary">
+                      {selectedJob.department}
+                    </span>
+
+                    <span className="rounded-full border border-border px-2.5 py-1 text-[11px] font-medium text-muted">
+                      {selectedJob.type}
+                    </span>
+
+                    <span className="rounded-full border border-border px-2.5 py-1 text-[11px] font-medium text-muted">
+                      {selectedJob.experience_level}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-semibold tracking-[-0.03em] text-text-heading">
+                    {isApplying
+                      ? `Apply for ${selectedJob.title}`
+                      : selectedJob.title}
+                  </h3>
+
+                  <p className="mt-2 flex items-center gap-1.5 text-xs text-muted">
+                    <MapPin className="h-3.5 w-3.5 text-primary" />
+                    {selectedJob.location}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:bg-primary-soft hover:text-primary"
+                  aria-label="Close job details"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-5">
+                {!isApplying ? (
+                  <>
+                    <div className="mb-5 max-h-24 overflow-y-auto pr-2 text-sm leading-6 text-muted">
+                      {selectedJob.summary}
+                    </div>
+
+                    <div>
+                      <h4 className="mb-3 text-sm font-semibold text-text-heading">
+                        Responsibilities
+                      </h4>
+
+                      <ul className="grid gap-x-5 gap-y-2 md:grid-cols-2">
+                        {selectedJob.responsibilities.map((item, index) => (
+                          <li
+                            key={`${selectedJob.id}-responsibility-${index}`}
+                            className="flex gap-2 text-xs leading-5 text-muted"
+                          >
+                            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mt-5">
+                      <h4 className="mb-3 text-sm font-semibold text-text-heading">
+                        Qualifications
+                      </h4>
+
+                      <ul className="grid gap-x-5 gap-y-2 md:grid-cols-2">
+                        {selectedJob.qualifications.map((item, index) => (
+                          <li
+                            key={`${selectedJob.id}-qualification-${index}`}
+                            className="flex gap-2 text-xs leading-5 text-muted"
+                          >
+                            <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <form
+                    onSubmit={handleSubmit(onSubmitApplication)}
+                    className="space-y-4"
+                  >
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <OnboardingInput
+                        label="Full Name"
+                        placeholder="Full Name"
+                        icon={User}
+                        register={register("name", {
+                          required: "Full name is required",
+                        })}
+                        error={errors.name?.message}
+                      />
+
+                      <OnboardingInput
+                        label="Email Address"
+                        placeholder="Email Address"
+                        type="email"
+                        icon={Mail}
+                        register={register("email", {
+                          required: "Email is required",
+                          pattern: {
+                            value: /^\S+@\S+\.\S+$/,
+                            message: "Enter a valid email",
+                          },
+                        })}
+                        error={errors.email?.message}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-text-normal">
+                        Subject
+                      </label>
+                      <input
+                        readOnly
+                        value={`Application – ${selectedJob.title}`}
+                        className="h-11 w-full rounded-lg border border-border bg-white px-3 text-sm text-muted outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-text-normal">
+                        Cover Letter
+                      </label>
+
+                      <textarea
+                        placeholder="Write your cover letter here"
+                        {...register("coverLetter", {
+                          required: "Cover letter is required",
+                        })}
+                        className="min-h-30 w-full resize-none rounded-lg border border-border bg-white p-3 text-sm outline-none transition-all placeholder:text-text-muted/60 focus:border-primary focus:ring-4 focus:ring-primary-soft"
+                      />
+
+                      {errors.coverLetter?.message && (
+                        <p className="mt-1 text-xs font-medium text-red-500">
+                          {errors.coverLetter.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-text-normal">
+                        CV
+                      </label>
+
+                      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border p-4 text-center text-sm font-medium text-muted transition hover:border-primary hover:text-primary">
+                        <Upload className="h-4 w-4" />
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          className="hidden"
+                          {...register("cvFile", {
+                            required: "CV is required",
+                          })}
+                        />
+                        {selectedCv ? selectedCv.name : "Upload CV"}
+                      </label>
+
+                      {errors.cvFile?.message && (
+                        <p className="mt-1 text-xs font-medium text-red-500">
+                          {errors.cvFile.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {formError && (
+                      <p className="text-sm font-medium text-red-500">
+                        {formError}
+                      </p>
+                    )}
+
+                    <div className="flex gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsApplying(false)}
+                        className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-white px-4 text-xs font-semibold text-primary transition hover:bg-primary-soft"
+                      >
+                        Back
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={submitLoading}
+                        className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-xs font-semibold text-white transition hover:bg-primary-muted disabled:cursor-not-allowed disabled:opacity-70"
+                      >
+                        {submitLoading ? "Submitting..." : "Submit Application"}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+
+              {!isApplying && (
+                <div className="flex gap-2 border-t border-border p-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsApplying(true)}
+                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-xs font-semibold text-white transition hover:bg-primary-muted"
+                  >
+                    Apply Now
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-white px-4 text-xs font-semibold text-primary transition hover:bg-primary-soft"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

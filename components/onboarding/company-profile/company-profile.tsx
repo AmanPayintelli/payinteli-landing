@@ -29,6 +29,7 @@ import {
   SelectOption,
   turnoverSelectOptions,
 } from ".";
+import { setSessionItem } from "@/lib/storage";
 
 type CompanyProfileResponse = {
   application_id: string;
@@ -159,6 +160,25 @@ const CompanyProfile = () => {
         response?.application_id || currentApplicationId;
 
       setApplicationId(finalApplicationId);
+
+      setSessionItem("merchant_id", response?.merchant_id);
+
+      setSessionItem("companyProfileForm", {
+        address1: data.addressLine1,
+        address2: data.addressLine2,
+        city: data.city,
+        state: data.province,
+        postal: data.postalCode,
+        country: data.country,
+        phone: data.businessPhone,
+        turnover: data.annualTurnover,
+        website: data.businessWebsite,
+        product: data.productService,
+        industry: data.industryCategory,
+        socials: data.socialMediaLinks
+          .map((item) => item.value)
+          .filter(Boolean),
+      });
 
       if (response?.merchant_id) {
         setMerchantId(response.merchant_id);

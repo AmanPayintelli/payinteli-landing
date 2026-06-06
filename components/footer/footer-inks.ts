@@ -3,7 +3,7 @@ export const footerColumns = [
     title: "Company",
     links: [
       { label: "About Us", href: "/about" },
-      { label: "Careers", href: "/careers" },
+      // { label: "Careers", href: "/careers" },
       { label: "Partners", href: "/partners" },
       { label: "Cookie Policy", href: "/cookie-policy" },
     ],
@@ -30,7 +30,7 @@ export const footerColumns = [
   {
     title: "Contact",
     links: [
-      { label: "Netherlands", href: "/contact" },
+      { label: "Netherlands", href: "https://www.payintelli.com" },
       { label: "www.payintelli.com", href: "https://www.payintelli.com" },
     ],
   },

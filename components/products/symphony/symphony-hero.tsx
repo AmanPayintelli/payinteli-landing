@@ -34,7 +34,7 @@ const SymphonyHero = () => {
                 delay: 0.4,
               }}
             >
-              Pi Deepsearch
+              [ Pi Symphony ]
             </motion.span>
 
             <h1 className="text-[39px] font-bold leading-[1.08] tracking-tight text-text-brand sm:text-[46px] md:text-[48px] lg:text-[54px]">
