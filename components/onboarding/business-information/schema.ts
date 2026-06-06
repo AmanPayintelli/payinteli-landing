@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+export const businessStructureValues = [
+  "SOLE_PROPRIETORSHIP",
+  "PARTNERSHIP",
+  "LLP",
+  "LLC",
+  "CORPORATION",
+  "NONPROFIT",
+  "TRUST",
+  "UNINCORPORATED_PARTNERSHIP",
+  "OTHER",
+] as const;
+
 export const businessInformationSchema = z.object({
   registrationNumber: z
     .string()
@@ -7,7 +19,9 @@ export const businessInformationSchema = z.object({
 
   taxVatNumber: z.string().min(1, "Tax / VAT number is required"),
 
-  businessType: z.string().min(1, "Business type is required"),
+  businessType: z.enum(businessStructureValues, {
+    errorMap: () => ({ message: "Business type is required" }),
+  }),
 });
 
 export type BusinessInformationFormData = z.infer<
