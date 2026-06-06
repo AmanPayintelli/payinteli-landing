@@ -19,11 +19,17 @@ export const businessInformationSchema = z.object({
 
   taxVatNumber: z.string().min(1, "Tax / VAT number is required"),
 
-  businessType: z.enum(businessStructureValues, {
-    errorMap: () => ({ message: "Business type is required" }),
-  }),
+  businessType: z
+    .union([z.enum(businessStructureValues), z.literal("")])
+    .refine((value) => value !== "", {
+      message: "Business type is required",
+    }),
 });
 
-export type BusinessInformationFormData = z.infer<
+export type BusinessInformationFormInput = z.input<
+  typeof businessInformationSchema
+>;
+
+export type BusinessInformationFormData = z.output<
   typeof businessInformationSchema
 >;

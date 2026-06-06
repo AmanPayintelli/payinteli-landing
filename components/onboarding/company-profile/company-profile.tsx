@@ -32,10 +32,11 @@ import {
 
 type CompanyProfileResponse = {
   application_id: string;
-  business_structure: string;
-  company_name: string;
-  crn: string;
-  vat: string;
+  merchant_id: number;
+  business_structure?: string;
+  company_name?: string;
+  crn?: string;
+  vat?: string;
 };
 
 const CompanyProfile = () => {
@@ -46,6 +47,7 @@ const CompanyProfile = () => {
     sessionId,
     applicationId,
     setApplicationId,
+    setMerchantId,
     setCompanyProfileData,
   } = useOnboardingData();
 
@@ -116,6 +118,11 @@ const CompanyProfile = () => {
         return;
       }
 
+      if (!accountData?.companyName?.trim()) {
+        console.error("Company name missing from account step");
+        return;
+      }
+
       const currentApplicationId = applicationId || generateApplicationId();
 
       if (!applicationId) {
@@ -124,11 +131,11 @@ const CompanyProfile = () => {
 
       const payload = {
         address1: data.addressLine1,
-        address2: data.addressLine2 || "",
+        address2: data.addressLine2?.trim() || "",
         annual_turnover: data.annualTurnover,
         application_id: currentApplicationId,
         city: data.city,
-        company_name: accountData?.companyName || "",
+        company_name: accountData.companyName.trim(),
         country: data.country,
         industry: data.industryCategory,
         phone: data.businessPhone,
@@ -152,6 +159,10 @@ const CompanyProfile = () => {
         response?.application_id || currentApplicationId;
 
       setApplicationId(finalApplicationId);
+
+      if (response?.merchant_id) {
+        setMerchantId(response.merchant_id);
+      }
 
       setCompanyProfileData({
         ...data,

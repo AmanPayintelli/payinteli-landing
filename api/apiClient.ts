@@ -44,7 +44,9 @@ export const apiRequest = async <T = unknown>({
     const message =
       err.response?.data?.message ||
       err.response?.data?.error ||
-      "Request failed";
+      (err.response?.status
+        ? `Request failed (${err.response.status})`
+        : "Request failed");
 
     throw new Error(message);
   }
