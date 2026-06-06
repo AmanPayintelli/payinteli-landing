@@ -32,10 +32,11 @@ import {
 
 type CompanyProfileResponse = {
   application_id: string;
-  business_structure: string;
-  company_name: string;
-  crn: string;
-  vat: string;
+  merchant_id: number;
+  business_structure?: string;
+  company_name?: string;
+  crn?: string;
+  vat?: string;
 };
 
 const CompanyProfile = () => {
@@ -46,6 +47,7 @@ const CompanyProfile = () => {
     sessionId,
     applicationId,
     setApplicationId,
+    setMerchantId,
     setCompanyProfileData,
   } = useOnboardingData();
 
@@ -152,6 +154,10 @@ const CompanyProfile = () => {
         response?.application_id || currentApplicationId;
 
       setApplicationId(finalApplicationId);
+
+      if (response?.merchant_id) {
+        setMerchantId(response.merchant_id);
+      }
 
       setCompanyProfileData({
         ...data,
