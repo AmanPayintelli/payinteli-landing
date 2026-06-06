@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BusinessInformationFormData,
+  BusinessInformationFormInput,
   businessInformationSchema,
 } from "./schema";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
@@ -61,7 +62,7 @@ const BusinessInformation = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<BusinessInformationFormData>({
+  } = useForm<BusinessInformationFormInput, unknown, BusinessInformationFormData>({
     resolver: zodResolver(businessInformationSchema),
     defaultValues: {
       registrationNumber: "",
