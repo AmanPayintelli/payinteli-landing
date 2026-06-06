@@ -1,7 +1,5 @@
 "use client";
 import Container from "@/components/container";
-import { ButtonPrimary, ButtonSecondary } from "@/components/ui/buttonPrimary";
-import HeroContainer from "@/components/ui/hero-container";
 import { motion } from "framer-motion";
 
 const SymphonyHero = () => {
@@ -36,7 +34,7 @@ const SymphonyHero = () => {
                 delay: 0.4,
               }}
             >
-              {eyebrowText}
+              Pi Deepsearch
             </motion.span>
 
             <h1 className="text-[39px] font-bold leading-[1.08] tracking-tight text-text-brand sm:text-[46px] md:text-[48px] lg:text-[54px]">

@@ -2,45 +2,29 @@ import { z } from "zod";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-const allowedTypes = [
+const ALLOWED_TYPES = [
   "application/pdf",
   "image/jpeg",
-  "image/jpg",
   "image/png",
+  "image/jpg",
 ];
-
-const requiredFileSchema = z
-  .any()
-  .refine((files) => files?.length === 1, "File is required")
-  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-    message: "Maximum file size is 2MB",
-  })
-  .refine((files) => allowedTypes.includes(files?.[0]?.type), {
-    message: "Only PDF, JPG, and PNG files are allowed",
-  });
 
 const optionalFileSchema = z
   .any()
   .optional()
-  .refine(
-    (files) => {
-      if (!files || files.length === 0) return true;
-      return files[0]?.size <= MAX_FILE_SIZE;
-    },
-    { message: "Maximum file size is 2MB" },
-  )
-  .refine(
-    (files) => {
-      if (!files || files.length === 0) return true;
-      return allowedTypes.includes(files[0]?.type);
-    },
-    { message: "Only PDF, JPG, and PNG files are allowed" },
-  );
+  .refine((files) => {
+    if (!files?.[0]) return true;
+    return ALLOWED_TYPES.includes(files[0].type);
+  }, "File type not supported. Allowed formats: PDF, JPG, PNG.")
+  .refine((files) => {
+    if (!files?.[0]) return true;
+    return files[0].size <= MAX_FILE_SIZE;
+  }, "File is too large. Maximum file size is 2MB.");
 
 export const documentsSchema = z.object({
-  companyRegistrationCertificate: requiredFileSchema,
-  vatRegistration: requiredFileSchema,
-  directorVerification: requiredFileSchema,
+  documentOne: optionalFileSchema,
+  documentTwo: optionalFileSchema,
+  documentThree: optionalFileSchema,
   otherDocument: optionalFileSchema,
 });
 

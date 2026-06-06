@@ -7,8 +7,8 @@ const ReconHero = () => {
       titleLines={["Reconcile Smarter"]}
       bottomTitle="Close Books Faster."
       description="AI-powered reconciliation across banks, PSPs, and ledgers. Detect mismatches instantly, generate audit-ready reports, and reduce manual finance work."
-      secondaryButtonTitle="Get Started"
-      primaryButtonTitle="Book a Demo"
+      showSecondaryButton={false}
+      showPrimaryButton={false}
       imageSrc="/recon-hero.png"
       imageAlt="Pi Recon reconciliation visual"
     />

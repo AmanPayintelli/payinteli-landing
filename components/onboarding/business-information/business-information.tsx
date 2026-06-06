@@ -77,8 +77,13 @@ const BusinessInformation = () => {
         return;
       }
 
+      if (!applicationId) {
+        console.error("Application ID missing");
+        return;
+      }
+
       const payload = {
-        application_id: applicationId || "",
+        application_id: applicationId,
         business_structure: data.businessType,
         company_name: accountData?.companyName || "",
         crn: data.registrationNumber,

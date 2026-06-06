@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import Container from "@/components/container";
 import SeparatorContainer from "@/components/separator-container";
+import OnboardingInput from "@/components/onboarding/input-field";
+import { SEND_MAIL_URL } from "@/api";
+import { apiRequest } from "@/api/apiClient";
+import { useForm } from "react-hook-form";
 import {
   ArrowRight,
   BadgeCheck,
@@ -16,11 +20,47 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
+import { useCountriesStates } from "@/hooks/use-countries-states";
+
+type PartnerFormValues = {
+  companyName: string;
+  contactName: string;
+  businessEmail: string;
+  phone: string;
+  website: string;
+  country: string;
+  companySize: string;
+  interestText: string;
+  monthlyRevenue: string;
+  volumeTargetMarket: string;
+  existingIntegrations: string;
+};
 
 const Partners = () => {
   const [step, setStep] = useState(1);
   const [partnerType, setPartnerType] = useState("reseller");
   const [productSlide, setProductSlide] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const { countries, isLoadingCountries } = useCountriesStates();
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<PartnerFormValues>({
+    defaultValues: {
+      companySize: "1–50 employees",
+      monthlyRevenue: "$10K – $100K/month",
+      interestText: "",
+    },
+  });
+
+  const formValues = watch();
 
   const stats = [
     ["500+", "Active Merchants"],
@@ -105,6 +145,69 @@ const Partners = () => {
     },
   ];
 
+  const goToStep3 = async () => {
+    const isValid = await trigger([
+      "companyName",
+      "contactName",
+      "businessEmail",
+      "country",
+      "companySize",
+      "interestText",
+    ]);
+
+    if (isValid) setStep(3);
+  };
+
+  const onSubmit = async (values: PartnerFormValues) => {
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
+    const payload = {
+      type: "partner-application",
+      data: {
+        partnerType,
+        company: {
+          name: values.companyName,
+          website: values.website,
+          size: values.companySize,
+          country: values.country,
+          monthlyRevenue: values.monthlyRevenue,
+        },
+        contact: {
+          name: values.contactName,
+          email: values.businessEmail,
+          phone: values.phone,
+        },
+        partnershipDetails: {
+          interestText: values.interestText,
+          volumeTargetMarket: values.volumeTargetMarket,
+          existingIntegrations: values.existingIntegrations,
+        },
+      },
+    };
+
+    try {
+      await apiRequest({
+        method: "post",
+        url: SEND_MAIL_URL,
+        body: payload,
+      });
+
+      setSubmitMessage("Application submitted successfully.");
+      reset();
+      setPartnerType("reseller");
+      setStep(1);
+    } catch (error) {
+      setSubmitMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="w-full bg-background pt-10">
       {/* Hero */}
@@ -156,7 +259,7 @@ const Partners = () => {
           <div className="relative overflow-hidden rounded-lg border border-border bg-white p-6 md:p-10">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(96,181,255,0.16),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(103,59,246,0.12),transparent_35%)]" />
 
-            <div className="relative min-h-[470px] pb-14">
+            <div className="relative min-h-117.5 pb-14">
               {productSlide === 0 && (
                 <div>
                   <div className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide text-text-brand">
@@ -237,6 +340,7 @@ const Partners = () => {
 
               <div className="absolute bottom-0 left-0 flex items-center gap-6">
                 <button
+                  type="button"
                   onClick={() => setProductSlide(0)}
                   className={`h-1 rounded-full transition-all ${
                     productSlide === 0
@@ -247,6 +351,7 @@ const Partners = () => {
                 />
 
                 <button
+                  type="button"
                   onClick={() => setProductSlide(1)}
                   className={`size-2 rounded-full transition-all ${
                     productSlide === 1 ? "bg-primary" : "bg-primary-soft"
@@ -257,6 +362,7 @@ const Partners = () => {
 
               <div className="absolute bottom-0 right-0 flex gap-4 text-text-brand">
                 <button
+                  type="button"
                   onClick={() =>
                     setProductSlide((prev) => (prev === 0 ? 1 : 0))
                   }
@@ -266,6 +372,7 @@ const Partners = () => {
                 </button>
 
                 <button
+                  type="button"
                   onClick={() =>
                     setProductSlide((prev) => (prev === 0 ? 1 : 0))
                   }
@@ -329,7 +436,10 @@ const Partners = () => {
             </p>
           </div>
 
-          <div className="mx-auto mt-12 max-w-4xl rounded-lg border border-border bg-white p-6 shadow-[0_20px_60px_rgba(8,40,50,0.08)] md:p-10">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mx-auto mt-12 max-w-4xl rounded-lg border border-border bg-white p-6 shadow-[0_20px_60px_rgba(8,40,50,0.08)] md:p-10"
+          >
             <div className="flex justify-center gap-8 md:gap-16">
               {[
                 [1, "Partner Type"],
@@ -337,6 +447,7 @@ const Partners = () => {
                 [3, "Summary"],
               ].map(([number, label]) => (
                 <button
+                  type="button"
                   key={number}
                   onClick={() => setStep(Number(number))}
                   className="flex flex-col items-center gap-2"
@@ -370,6 +481,7 @@ const Partners = () => {
                 <div className="mt-8 grid gap-5 md:grid-cols-3">
                   {partnerModels.map((model) => (
                     <button
+                      type="button"
                       key={model.id}
                       onClick={() => setPartnerType(model.id)}
                       className={`rounded-lg border p-5 text-left transition ${
@@ -414,6 +526,7 @@ const Partners = () => {
 
                 <div className="mt-8 flex justify-end">
                   <button
+                    type="button"
                     onClick={() => setStep(2)}
                     className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-semibold text-white transition hover:bg-primary-muted"
                   >
@@ -431,26 +544,84 @@ const Partners = () => {
                 </h3>
 
                 <div className="mt-8 grid gap-5 md:grid-cols-2">
-                  {[
-                    "Company Name *",
-                    "Contact Name *",
-                    "Business Email *",
-                    "Phone Number",
-                    "Company Website",
-                    "Country *",
-                  ].map((label) => (
-                    <label key={label} className="text-sm text-text-brand">
-                      {label}
-                      <input
-                        className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
-                        placeholder={label.replace(" *", "")}
-                      />
-                    </label>
-                  ))}
+                  <OnboardingInput
+                    label="Company Name *"
+                    placeholder="Company Name"
+                    register={register("companyName", {
+                      required: "Company name is required",
+                    })}
+                    error={errors.companyName?.message}
+                  />
 
-                  <label className="text-sm text-text-brand">
+                  <OnboardingInput
+                    label="Contact Name *"
+                    placeholder="Contact Name"
+                    register={register("contactName", {
+                      required: "Contact name is required",
+                    })}
+                    error={errors.contactName?.message}
+                  />
+
+                  <OnboardingInput
+                    label="Business Email *"
+                    placeholder="Business Email"
+                    type="email"
+                    register={register("businessEmail", {
+                      required: "Business email is required",
+                    })}
+                    error={errors.businessEmail?.message}
+                  />
+
+                  <OnboardingInput
+                    label="Phone Number"
+                    placeholder="Phone Number"
+                    register={register("phone")}
+                    error={errors.phone?.message}
+                  />
+
+                  <OnboardingInput
+                    label="Company Website"
+                    placeholder="Company Website"
+                    register={register("website")}
+                    error={errors.website?.message}
+                  />
+
+                  <label className="text-sm font-medium text-text-normal">
+                    Country *
+                    <select
+                      {...register("country", {
+                        required: "Country is required",
+                      })}
+                      disabled={isLoadingCountries}
+                      className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <option value="">
+                        {isLoadingCountries
+                          ? "Loading countries..."
+                          : "Select Country"}
+                      </option>
+
+                      {countries.map((country) => (
+                        <option key={country.code} value={country.code}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.country?.message && (
+                      <p className="mt-1 text-xs font-medium text-red-500">
+                        {errors.country.message}
+                      </p>
+                    )}
+                  </label>
+
+                  <label className="text-sm font-medium text-text-normal">
                     Company Size *
-                    <select className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary">
+                    <select
+                      {...register("companySize", {
+                        required: "Company size is required",
+                      })}
+                      className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary-soft"
+                    >
                       <option>1–50 employees</option>
                       <option>51–200 employees</option>
                       <option>201–500 employees</option>
@@ -458,25 +629,35 @@ const Partners = () => {
                     </select>
                   </label>
 
-                  <label className="text-sm text-text-brand md:col-span-2">
+                  <label className="text-sm font-medium text-text-normal md:col-span-2">
                     Partnership Interest *
                     <textarea
                       rows={4}
-                      className="mt-2 w-full resize-none rounded-lg border border-border bg-white px-4 py-3 text-sm outline-none transition focus:border-primary"
+                      {...register("interestText", {
+                        required: "Partnership interest is required",
+                      })}
+                      className="mt-2 w-full resize-none rounded-lg border border-border bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary-soft"
                       placeholder="Tell us what you’re interested in..."
                     />
+                    {errors.interestText?.message && (
+                      <p className="mt-1 text-xs font-medium text-red-500">
+                        {errors.interestText.message}
+                      </p>
+                    )}
                   </label>
                 </div>
 
                 <div className="mt-8 flex justify-end gap-3">
                   <button
+                    type="button"
                     onClick={() => setStep(1)}
                     className="h-11 rounded-lg border border-border px-5 font-medium text-text-brand"
                   >
                     Back
                   </button>
                   <button
-                    onClick={() => setStep(3)}
+                    type="button"
+                    onClick={goToStep3}
                     className="h-11 rounded-lg bg-primary px-5 font-semibold text-white transition hover:bg-primary-muted"
                   >
                     Next
@@ -491,70 +672,120 @@ const Partners = () => {
                   Partnership Details
                 </h3>
 
-                <div className="mt-8 space-y-5">
-                  <label className="text-sm text-text-brand">
+                <div className="mt-8 grid gap-5 md:grid-cols-2">
+                  <label className="text-sm font-medium text-text-normal md:col-span-2">
                     Monthly Revenue *
-                    <select className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary">
+                    <select
+                      {...register("monthlyRevenue", {
+                        required: "Monthly revenue is required",
+                      })}
+                      className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary-soft"
+                    >
                       <option>$10K – $100K/month</option>
                       <option>$100K – $500K/month</option>
-                      <option>$500K+/month</option>
+                      <option>$500K – $1M/month</option>
+                      <option>$1M+/month</option>
                     </select>
                   </label>
 
-                  <label className="text-sm text-text-brand">
-                    Volume Target / Market / Industry *
-                    <input className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary" />
-                  </label>
+                  <OnboardingInput
+                    label="Volume Target / Market / Industry *"
+                    placeholder="Target market or industry"
+                    register={register("volumeTargetMarket", {
+                      required: "Target market is required",
+                    })}
+                    error={errors.volumeTargetMarket?.message}
+                  />
 
-                  <label className="text-sm text-text-brand">
-                    Existing Payment Integrations *
-                    <input
-                      className="mt-2 h-11 w-full rounded-lg border border-border bg-white px-4 text-sm outline-none transition focus:border-primary"
-                      placeholder="e.g. Stripe, Adyen, Worldpay"
-                    />
-                  </label>
+                  <OnboardingInput
+                    label="Existing Payment Integrations *"
+                    placeholder="e.g. Stripe, Adyen, Worldpay"
+                    register={register("existingIntegrations", {
+                      required: "Existing integrations are required",
+                    })}
+                    error={errors.existingIntegrations?.message}
+                  />
                 </div>
 
-                <div className="mt-8 rounded-lg border border-border bg-primary-soft/40 p-5">
-                  <h4 className="font-semibold text-text-brand">Summary</h4>
-                  <div className="mt-4 grid gap-4 text-sm text-text-muted md:grid-cols-2">
-                    <p>
-                      <span className="font-medium text-text-brand">
-                        Partnership Model:
-                      </span>{" "}
-                      {partnerType}
-                    </p>
-                    <p>
-                      <span className="font-medium text-text-brand">
-                        Company:
-                      </span>{" "}
-                      Your company details
-                    </p>
-                    <p>
-                      <span className="font-medium text-text-brand">
-                        Primary Contact:
-                      </span>{" "}
-                      Contact information
-                    </p>
+                <div className="mt-8 rounded-2xl border border-border bg-primary-soft/40 p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-white text-primary shadow-sm">
+                      <Check className="size-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-text-brand">
+                        Application Summary
+                      </h4>
+                      <p className="mt-1 text-sm text-text-muted">
+                        Review your partner application before submitting.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid gap-4 md:grid-cols-2">
+                    {[
+                      ["Partnership Model", partnerType],
+                      [
+                        "Company",
+                        formValues.companyName || "Your company details",
+                      ],
+                      [
+                        "Primary Contact",
+                        formValues.contactName || "Contact information",
+                      ],
+                      [
+                        "Business Email",
+                        formValues.businessEmail || "Email address",
+                      ],
+                      ["Country", formValues.country || "Selected country"],
+                      [
+                        "Monthly Revenue",
+                        formValues.monthlyRevenue || "Monthly revenue",
+                      ],
+                    ].map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="rounded-xl border border-border bg-white px-4 py-3"
+                      >
+                        <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
+                          {label}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-text-brand">
+                          {value}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
+                {submitMessage && (
+                  <div className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+                    {submitMessage}
+                  </div>
+                )}
+
                 <div className="mt-8 flex justify-end gap-3">
                   <button
+                    type="button"
                     onClick={() => setStep(2)}
                     className="h-11 rounded-lg border border-border px-5 font-medium text-text-brand"
                   >
                     Back
                   </button>
-                  <button className="h-11 rounded-lg bg-primary px-5 font-semibold text-white transition hover:bg-primary-muted">
-                    Submit Application
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="h-11 rounded-lg bg-primary px-5 font-semibold text-white transition hover:bg-primary-muted disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Application"}
                   </button>
                 </div>
               </div>
             )}
-          </div>
+          </form>
         </Container>
       </section>
+
       <SeparatorContainer />
     </main>
   );

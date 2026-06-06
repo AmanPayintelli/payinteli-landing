@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import Container from "../container";
-import { ButtonPrimary, ButtonSecondary } from "../ui/buttonPrimary";
+import { ButtonSecondary } from "../ui/buttonPrimary";
+import { useRouter } from "next/navigation";
 
 interface ProductFeatureContainerProps {
   eyebrow?: string;
@@ -14,15 +16,14 @@ interface ProductFeatureContainerProps {
 }
 
 const ProductFeatureContainer = ({
-  eyebrow = "[ competitors ]",
   title,
   description,
   features,
-  primaryButtonTitle = "Get Started",
   secondaryButtonTitle = "Book a Demo",
   rightComponent,
   reverse = false,
 }: ProductFeatureContainerProps) => {
+  const router = useRouter();
   return (
     <Container
       className={`grid min-h-120 w-full overflow-hidden border-x border-border bg-background ${
@@ -43,10 +44,6 @@ const ProductFeatureContainer = ({
           }`}
         >
           <div className="max-w-xl">
-            {/* <span className="mb-5 inline-block font-mono text-sm font-light tracking-normal text-text-muted md:text-[11px]">
-              {eyebrow}
-            </span> */}
-
             <h2 className="text-[32px] font-medium leading-[1.12] tracking-tighter text-text-brand sm:text-[38px] md:text-[42px]">
               {title}
             </h2>
@@ -77,13 +74,7 @@ const ProductFeatureContainer = ({
                 textSize="text-sm font-semibold"
                 height="h-11"
                 className="w-full rounded-lg px-5 shadow-sm hover:shadow-md sm:w-auto"
-              />
-
-              <ButtonPrimary
-                title={primaryButtonTitle}
-                textSize="text-sm font-semibold"
-                height="h-11"
-                className="w-full rounded-lg bg-white px-5 shadow-sm hover:bg-primary-soft hover:shadow-md sm:w-auto"
+                onClick={() => router.push("/talk-to-us")}
               />
             </div>
           </div>
@@ -100,7 +91,7 @@ const ProductFeatureContainer = ({
 
         <div className="absolute inset-0 opacity-[0.14] bg-[radial-gradient(hsl(var(--text-brand))_1px,transparent_1px)] bg-size-[4px_4px]" />
 
-        <div className="relative flex h-full min-h-105 items-center justify-center p-6 sm:p-10">
+        <div className="relative flex h-full min-h-105 items-center justify-center ">
           {rightComponent}
         </div>
       </section>

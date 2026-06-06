@@ -1,4 +1,5 @@
 "use client";
+
 import { useMemo } from "react";
 import {
   ArrowLeft,
@@ -15,7 +16,7 @@ import { CompanyProfileFormData, companyProfileSchema } from "./schema";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
 import { useOnboardingData } from "@/context/onboarding/onboarding-context";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
-import { cn } from "@/lib/utils";
+import { cn, generateApplicationId } from "@/lib/utils";
 import OnboardingInput from "../input-field";
 import { COMPANY_PROFILE_URL } from "@/api";
 import { apiRequest } from "@/api/apiClient";
@@ -29,9 +30,25 @@ import {
   turnoverSelectOptions,
 } from ".";
 
+type CompanyProfileResponse = {
+  application_id: string;
+  business_structure: string;
+  company_name: string;
+  crn: string;
+  vat: string;
+};
+
 const CompanyProfile = () => {
   const { nextStep, prevStep } = useOnboardingStep();
-  const { accountData, sessionId, setCompanyProfileData } = useOnboardingData();
+
+  const {
+    accountData,
+    sessionId,
+    applicationId,
+    setApplicationId,
+    setCompanyProfileData,
+  } = useOnboardingData();
+
   const { countries, isLoadingCountries } = useCountriesStates();
 
   const {
@@ -91,6 +108,7 @@ const CompanyProfile = () => {
   }, [selectedCountry]);
 
   const companyName = accountData?.companyName ?? "your company";
+
   const onSubmit = async (data: CompanyProfileFormData) => {
     try {
       if (!sessionId) {
@@ -98,11 +116,17 @@ const CompanyProfile = () => {
         return;
       }
 
+      const currentApplicationId = applicationId || generateApplicationId();
+
+      if (!applicationId) {
+        setApplicationId(currentApplicationId);
+      }
+
       const payload = {
         address1: data.addressLine1,
         address2: data.addressLine2 || "",
         annual_turnover: data.annualTurnover,
-        application_id: "",
+        application_id: currentApplicationId,
         city: data.city,
         company_name: accountData?.companyName || "",
         country: data.country,
@@ -117,14 +141,26 @@ const CompanyProfile = () => {
         website: data.businessWebsite || "",
       };
 
-      await apiRequest({
+      const response = await apiRequest<CompanyProfileResponse>({
         method: "post",
         url: COMPANY_PROFILE_URL,
         sessionId,
         body: payload,
       });
 
-      setCompanyProfileData(data);
+      const finalApplicationId =
+        response?.application_id || currentApplicationId;
+
+      setApplicationId(finalApplicationId);
+
+      setCompanyProfileData({
+        ...data,
+        companyName: response?.company_name || accountData?.companyName || "",
+        businessStructure: response?.business_structure || "",
+        crn: response?.crn || "",
+        vat: response?.vat || "",
+      } as CompanyProfileFormData);
+
       nextStep();
     } catch (error) {
       console.error(error);

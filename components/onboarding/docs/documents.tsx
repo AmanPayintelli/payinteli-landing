@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -16,6 +16,222 @@ import { documentsSchema, DocumentsFormData } from "./schema";
 import { ButtonSecondary } from "@/components/ui/buttonPrimary";
 import { cn } from "@/lib/utils";
 import { useOnboardingStep } from "@/context/onboarding/onboarding-step-context";
+import { useOnboardingData } from "@/context/onboarding/onboarding-context";
+import { apiRequest } from "@/api/apiClient";
+const DOCUMENT_UPLOAD_URL =
+  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/partner-referral-lead/documents/upload";
+
+const DOCUMENT_CONFIRM_URL =
+  "https://xx1ulrq8s3.execute-api.ap-south-1.amazonaws.com/api/partner-referral-lead/documents/confirm";
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+const ALLOWED_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+];
+
+type DocumentFieldName =
+  | "documentOne"
+  | "documentTwo"
+  | "documentThree"
+  | "otherDocument";
+
+type CountryDocument = {
+  field: DocumentFieldName;
+  value: string;
+  label: string;
+  description: string;
+  apiType: string;
+  required: boolean;
+};
+
+const DOCUMENT_CONFIG: Record<string, CountryDocument[]> = {
+  IND: [
+    {
+      field: "documentOne",
+      value: "company_pan_card",
+      label: "Company PAN Card",
+      description: "Upload your company PAN card for business verification.",
+      apiType: "COMPANY_PAN_CARD",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "gst_certificate",
+      label: "GST Certificate",
+      description: "Upload your GST certificate or GST registration proof.",
+      apiType: "GST_CERTIFICATE",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "cin_document",
+      label: "CIN Document",
+      description: "Upload your Corporate Identification Number document.",
+      apiType: "CIN_DOCUMENT",
+      required: true,
+    },
+  ],
+
+  USA: [
+    {
+      field: "documentOne",
+      value: "ein_letter",
+      label: "EIN Letter",
+      description: "Upload your EIN confirmation letter.",
+      apiType: "EIN_LETTER",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "state_registration_certificate",
+      label: "State Registration Certificate",
+      description: "Upload your company state registration certificate.",
+      apiType: "STATE_REGISTRATION_CERTIFICATE",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "irs_tax_id_certificate",
+      label: "IRS Tax ID Certificate",
+      description: "Upload your IRS tax identification certificate.",
+      apiType: "IRS_TAX_ID_CERTIFICATE",
+      required: true,
+    },
+  ],
+
+  UK: [
+    {
+      field: "documentOne",
+      value: "company_registration_certificate",
+      label: "Company Registration Certificate",
+      description:
+        "Official registration certificate issued by your authority.",
+      apiType: "CERTIFICATE_OF_INCORPORATION",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "vat_registration",
+      label: "VAT Registration",
+      description: "VAT registration document or tax registration proof.",
+      apiType: "TAX_REGISTRATION",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "director_verification",
+      label: "Director Verification",
+      description: "Director identity or verification document.",
+      apiType: "OTHER",
+      required: true,
+    },
+  ],
+
+  UAE: [
+    {
+      field: "documentOne",
+      value: "trade_license",
+      label: "Trade License",
+      description: "Upload your UAE trade license document.",
+      apiType: "TRADE_LICENSE",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "trn_certificate",
+      label: "Tax Registration Number (TRN)",
+      description: "Upload your TRN certificate or tax registration proof.",
+      apiType: "TRN_CERTIFICATE",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "emirates_id",
+      label: "Emirates ID of Representative",
+      description: "Upload Emirates ID of the authorized representative.",
+      apiType: "EMIRATES_ID",
+      required: true,
+    },
+  ],
+
+  SGP: [
+    {
+      field: "documentOne",
+      value: "acra_bizfile",
+      label: "ACRA BizFile",
+      description: "Upload your ACRA BizFile document.",
+      apiType: "ACRA_BIZFILE",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "gst_registration",
+      label: "GST Registration",
+      description: "Upload GST registration or tax registration proof.",
+      apiType: "GST_REGISTRATION",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "uen_proof",
+      label: "UEN Proof",
+      description: "Upload your Unique Entity Number proof.",
+      apiType: "UEN_PROOF",
+      required: true,
+    },
+  ],
+
+  OTH: [
+    {
+      field: "documentOne",
+      value: "company_registration_document",
+      label: "Company Registration Document",
+      description: "Upload official company registration document.",
+      apiType: "COMPANY_REGISTRATION_DOCUMENT",
+      required: true,
+    },
+    {
+      field: "documentTwo",
+      value: "national_tax_id",
+      label: "National Tax ID",
+      description: "Upload your national tax identification document.",
+      apiType: "NATIONAL_TAX_ID",
+      required: true,
+    },
+    {
+      field: "documentThree",
+      value: "proof_of_legal_entity",
+      label: "Proof of Legal Entity",
+      description: "Upload proof confirming your legal business entity.",
+      apiType: "PROOF_OF_LEGAL_ENTITY",
+      required: true,
+    },
+  ],
+};
+
+const normalizeCountryForDocs = (country?: string) => {
+  const value = country?.toUpperCase();
+
+  if (value === "IN" || value === "IND") return "IND";
+  if (value === "US" || value === "USA") return "USA";
+  if (value === "GB" || value === "UK") return "UK";
+  if (value === "AE" || value === "UAE") return "UAE";
+  if (value === "SG" || value === "SGP") return "SGP";
+
+  return "OTH";
+};
+
+const getDocumentFile = (value?: FileList | File[]) => {
+  return value?.[0];
+};
+
+const isValidFile = (file?: File) => {
+  if (!file) return false;
+  return ALLOWED_TYPES.includes(file.type) && file.size <= MAX_FILE_SIZE;
+};
 
 interface UploadCardProps {
   title: string;
@@ -24,6 +240,7 @@ interface UploadCardProps {
   file?: File;
   error?: string;
   register: UseFormRegisterReturn;
+  progress?: number;
 }
 
 const UploadCard = ({
@@ -33,6 +250,7 @@ const UploadCard = ({
   file,
   error,
   register,
+  progress,
 }: UploadCardProps) => {
   return (
     <motion.label
@@ -85,7 +303,7 @@ const UploadCard = ({
 
             {file && (
               <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-                Uploaded
+                Selected
               </span>
             )}
           </div>
@@ -120,6 +338,15 @@ const UploadCard = ({
             )}
           </div>
 
+          {typeof progress === "number" && progress > 0 && (
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-primary-soft">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
+
           <p className="mt-2 text-[11px] text-text-muted">
             PDF, JPG or PNG · Max 2MB
           </p>
@@ -136,6 +363,19 @@ const UploadCard = ({
 const Documents = () => {
   const { nextStep } = useOnboardingStep();
 
+  const { sessionId, merchantId, companyProfileData } = useOnboardingData();
+
+  const [formError, setFormError] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
+    {},
+  );
+
+  const countryKey = normalizeCountryForDocs(companyProfileData?.country);
+
+  const documents = useMemo(() => {
+    return DOCUMENT_CONFIG[countryKey] || DOCUMENT_CONFIG.OTH;
+  }, [countryKey]);
+
   const {
     register,
     handleSubmit,
@@ -145,20 +385,186 @@ const Documents = () => {
     resolver: zodResolver(documentsSchema),
   });
 
-  const companyFile = watch("companyRegistrationCertificate")?.[0];
-  const vatFile = watch("vatRegistration")?.[0];
-  const directorFile = watch("directorVerification")?.[0];
-  const otherFile = watch("otherDocument")?.[0];
+  const otherFile = getDocumentFile(watch("otherDocument"));
 
-  const onSubmit = async (data: DocumentsFormData) => {
-    console.log("Documents:", {
-      companyRegistrationCertificate: data.companyRegistrationCertificate?.[0],
-      vatRegistration: data.vatRegistration?.[0],
-      directorVerification: data.directorVerification?.[0],
-      otherDocument: data.otherDocument?.[0],
+  const uploadFileToS3 = async (
+    file: File,
+    uploadUrl: string,
+    field: string,
+  ) => {
+    return new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("PUT", uploadUrl);
+
+      xhr.upload.onprogress = (event) => {
+        if (!event.lengthComputable) return;
+
+        setUploadProgress((prev) => ({
+          ...prev,
+          [field]: Math.round((event.loaded / event.total) * 100),
+        }));
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          resolve();
+        } else {
+          reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText}`));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error("Network error while uploading document"));
+      };
+
+      const normalizedType =
+        file.type === "image/jpg" ? "image/jpeg" : file.type;
+
+      xhr.setRequestHeader("Content-Type", normalizedType);
+      xhr.send(file);
+    });
+  };
+
+  const uploadSingleDocument = async ({
+    file,
+    apiType,
+    field,
+  }: {
+    file: File;
+    apiType: string;
+    field: string;
+  }) => {
+    if (!sessionId) {
+      throw new Error("Session ID missing. Please restart onboarding.");
+    }
+
+    if (!merchantId) {
+      throw new Error("Merchant ID missing. Please complete company profile.");
+    }
+
+    const normalizedType = file.type === "image/jpg" ? "image/jpeg" : file.type;
+
+    const presignedResponse = await apiRequest<{
+      upload_url: string;
+      s3_key: string;
+      storage_target: string;
+    }>({
+      method: "post",
+      url: DOCUMENT_UPLOAD_URL,
+      sessionId,
+      body: {
+        account_id: merchantId,
+        filename: file.name,
+        content_type: normalizedType,
+      },
     });
 
-    nextStep();
+    await uploadFileToS3(file, presignedResponse.upload_url, field);
+
+    await apiRequest({
+      method: "post",
+      url: DOCUMENT_CONFIRM_URL,
+      sessionId,
+      body: {
+        account_id: merchantId,
+        type: apiType,
+        document_name: file.name,
+        filename: file.name,
+        s3_key: presignedResponse.s3_key,
+        storage_target: presignedResponse.storage_target,
+      },
+    });
+  };
+
+  const onSubmit = async (data: DocumentsFormData) => {
+    try {
+      setFormError(null);
+      setUploadProgress({});
+
+      if (!sessionId) {
+        setFormError("Session ID missing. Please restart onboarding.");
+        return;
+      }
+
+      if (!merchantId) {
+        setFormError("Merchant ID missing. Please complete company profile.");
+        return;
+      }
+
+      const filesToUpload = documents.map((doc) => {
+        const file = getDocumentFile(data[doc.field]);
+
+        return {
+          ...doc,
+          file,
+        };
+      });
+
+      const missingDocuments = filesToUpload.filter(
+        (doc) => doc.required && !doc.file,
+      );
+
+      if (missingDocuments.length > 0) {
+        setFormError(
+          `Please upload all required documents: ${missingDocuments
+            .map((doc) => doc.label)
+            .join(", ")}.`,
+        );
+        return;
+      }
+
+      const invalidDocument = filesToUpload.find(
+        (doc) => doc.file && !isValidFile(doc.file),
+      );
+
+      if (invalidDocument) {
+        setFormError(
+          `${invalidDocument.label} must be PDF, JPG or PNG and less than 2MB.`,
+        );
+        return;
+      }
+
+      if (otherFile && !isValidFile(otherFile)) {
+        setFormError(
+          "Other document must be PDF, JPG or PNG and less than 2MB.",
+        );
+        return;
+      }
+
+      const uploadItems = [
+        ...filesToUpload
+          .filter((doc): doc is typeof doc & { file: File } =>
+            Boolean(doc.file),
+          )
+          .map((doc) => ({
+            file: doc.file,
+            apiType: doc.apiType,
+            field: doc.field,
+          })),
+
+        ...(otherFile
+          ? [
+              {
+                file: otherFile,
+                apiType: "OTHER",
+                field: "otherDocument",
+              },
+            ]
+          : []),
+      ];
+
+      await Promise.all(uploadItems.map(uploadSingleDocument));
+
+      nextStep();
+    } catch (error) {
+      console.error(error);
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while uploading documents.",
+      );
+    }
   };
 
   return (
@@ -177,9 +583,9 @@ const Documents = () => {
         <p className="font-medium">Required documents</p>
 
         <div className="mt-3 grid gap-2 text-xs text-text-muted sm:grid-cols-2">
-          <p>• Company Registration Certificate</p>
-          <p>• VAT Registration</p>
-          <p>• Director Verification</p>
+          {documents.map((doc) => (
+            <p key={doc.value}>• {doc.label}</p>
+          ))}
           <p>• Other Supporting Document optional</p>
         </div>
 
@@ -189,33 +595,29 @@ const Documents = () => {
         </p>
       </div>
 
+      {formError && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          {formError}
+        </div>
+      )}
+
       <div className="grid gap-3">
-        <UploadCard
-          title="Company Registration Certificate"
-          description="Official registration certificate issued by your authority."
-          required
-          file={companyFile}
-          error={errors.companyRegistrationCertificate?.message as string}
-          register={register("companyRegistrationCertificate")}
-        />
+        {documents.map((doc) => {
+          const file = getDocumentFile(watch(doc.field));
 
-        <UploadCard
-          title="VAT Registration"
-          description="VAT registration document or tax registration proof."
-          required
-          file={vatFile}
-          error={errors.vatRegistration?.message as string}
-          register={register("vatRegistration")}
-        />
-
-        <UploadCard
-          title="Director Verification"
-          description="Director identity or verification document."
-          required
-          file={directorFile}
-          error={errors.directorVerification?.message as string}
-          register={register("directorVerification")}
-        />
+          return (
+            <UploadCard
+              key={doc.value}
+              title={doc.label}
+              description={doc.description}
+              required={doc.required}
+              file={file}
+              error={errors[doc.field]?.message as string}
+              register={register(doc.field)}
+              progress={uploadProgress[doc.field]}
+            />
+          );
+        })}
 
         <UploadCard
           title="Other Supporting Document"
@@ -223,6 +625,7 @@ const Documents = () => {
           file={otherFile}
           error={errors.otherDocument?.message as string}
           register={register("otherDocument")}
+          progress={uploadProgress.otherDocument}
         />
       </div>
 
@@ -236,7 +639,7 @@ const Documents = () => {
         </button>
 
         <ButtonSecondary
-          title={isSubmitting ? "Saving..." : "Save & Continue"}
+          title={isSubmitting ? "Uploading..." : "Save & Continue"}
           icon={!isSubmitting && <ArrowRight className="size-4" />}
           height="h-11"
           className={cn(

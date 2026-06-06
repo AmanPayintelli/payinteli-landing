@@ -1,10 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Activity, AlertTriangle, BarChart3, ShieldCheck } from "lucide-react";
 
 import Container from "../../container";
-import SectionHeader from "../../section-header";
 import DeepSearchChat from "./deepsearchChat";
 import { deepSearchData } from "./deepsearchChatData";
 
@@ -37,21 +37,35 @@ const PiDeepsearch = () => {
   return (
     <section className="w-full">
       <Container className="border-x">
-        <SectionHeader
-          label="[ Pi Deepsearch ]"
-          title={
-            <>
-              Conversational Analytics for
-              <span className="text-primary"> Smarter Payment</span> Decisions.
-            </>
-          }
-          description="Ask questions in plain English and turn raw payment data into instant insights, predictions, and visualizations—without waiting on analysts."
-        />
+        <div className="mx-auto max-w-4xl px-5 py-20 text-center">
+          <motion.span
+            className="mb-5 inline-block overflow-hidden whitespace-nowrap font-mono text-sm font-bold tracking-normal md:text-[14px]"
+            initial={{ width: 0 }}
+            animate={{ width: "fit-content" }}
+            transition={{
+              duration: 3.5,
+              ease: "easeInOut",
+              delay: 0.4,
+            }}
+          >
+            [ Pi DeepSearch ]
+          </motion.span>
+
+          <h2 className="text-[34px] font-bold leading-[1.08] tracking-tight text-text-brand sm:text-[42px] md:text-[48px]">
+            Conversational Analytics for
+            <span className="text-primary"> Smarter Payment</span> Decisions.
+          </h2>
+
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-6 tracking-tight text-text-muted sm:text-base sm:leading-7 md:text-[16px]">
+            Ask questions in plain English and turn raw payment data into
+            instant insights, predictions, and visualizations—without waiting on
+            analysts.
+          </p>
+        </div>
       </Container>
 
-      <Container className="grid h-[60vh] w-full grid-cols-1 border-x md:grid-cols-[35%_65%] bg-neutral-100">
-        {/* Questions */}
-        <div className="hidden h-full min-w-0 overflow-hidden border-r md:block ">
+      <Container className="grid h-[60vh] w-full grid-cols-1 border-x bg-neutral-100 md:grid-cols-[35%_65%]">
+        <div className="hidden h-full min-w-0 overflow-hidden border-r md:block">
           <div className="grid h-full w-full grid-rows-4">
             {chatData.slice(0, 4).map((item, index) => {
               const isActive = index === activeQuestionIndex;
@@ -65,12 +79,12 @@ const PiDeepsearch = () => {
                   className={[
                     "group relative flex h-full w-full items-center overflow-hidden border-b px-5 text-left transition-all duration-300 last:border-b-0",
                     isActive
-                      ? "border-primary/30 "
+                      ? "border-primary/30"
                       : "border-neutral-200 bg-white hover:bg-neutral-50",
                   ].join(" ")}
                 >
                   {isActive && (
-                    <div className="absolute inset-y-0 left-0 w-1 " />
+                    <div className="absolute inset-y-0 left-0 w-1 bg-primary" />
                   )}
 
                   <div className="flex w-full items-start gap-4">
@@ -106,7 +120,6 @@ const PiDeepsearch = () => {
           </div>
         </div>
 
-        {/* Chat */}
         <div className="min-w-0 overflow-hidden">
           <DeepSearchChat
             chatData={chatData}

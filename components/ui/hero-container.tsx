@@ -1,5 +1,7 @@
 "use client";
+
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import Container from "../container";
 import AnimatedWords from "./animated-words";
 import { ButtonPrimary, ButtonSecondary } from "./buttonPrimary";
@@ -44,9 +46,18 @@ export default function HeroContainer({
       <section className="relative flex h-full border-border px-5 py-16 md:border-r md:px-0 md:py-0 md:pl-12">
         <div className="flex h-full w-full flex-col items-start justify-center border-border md:border-l md:border-dashed">
           <div className="max-w-2xl">
-            <span className="mb-5 inline-block font-mono text-sm font-light tracking-normal text-text-muted md:text-[11px]">
+            <motion.span
+              className="mb-5 inline-block overflow-hidden whitespace-nowrap font-mono text-sm font-bold tracking-normal text-text-brand md:text-[14px]"
+              initial={{ width: 0 }}
+              animate={{ width: "fit-content" }}
+              transition={{
+                duration: 3.5,
+                ease: "easeInOut",
+                delay: 0.4,
+              }}
+            >
               {eyebrow}
-            </span>
+            </motion.span>
 
             <h1 className="text-[39px] font-bold leading-[1.08] tracking-tight text-text-brand sm:text-[46px] md:text-[48px] lg:text-[54px]">
               {titleLines.map((line) => (

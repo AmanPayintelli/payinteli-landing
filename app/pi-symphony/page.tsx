@@ -14,8 +14,6 @@ export default function PiSymphonyHero() {
       <SeparatorContainer height="h-16 md:h-20" />
       <SymphonyProductFeatures />
       <SeparatorContainer height="h-16 md:h-20" />
-      {/* <Testimonials /> */}
-      <SeparatorContainer height="h-16 md:h-20" />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SeparatorContainer from "@/components/separator-container";
 import {
   BookOpen,
@@ -16,6 +17,7 @@ const resources = [
     description:
       "Complete guide to modern payment orchestration, multi-acquirer integration, and best practices for scaling your payment infrastructure.",
     button: "Coming Soon",
+    href: "#",
     disabled: true,
   },
   {
@@ -25,6 +27,7 @@ const resources = [
     description:
       "AI-powered fraud detection strategies, industry benchmarks, and real-world case studies on reducing fraud by 40%+.",
     button: "Coming Soon",
+    href: "#",
     disabled: true,
   },
   {
@@ -34,6 +37,7 @@ const resources = [
     description:
       "Comprehensive integration guides, code samples, SDKs, and developer resources for seamless PayIntelli implementation.",
     button: "View Docs →",
+    href: "https://docs.payintelli.com/",
     disabled: false,
   },
   {
@@ -43,6 +47,7 @@ const resources = [
     description:
       "Global payment processing insights, emerging trends, and data-driven predictions for the future of digital payments.",
     button: "Coming Soon",
+    href: "#",
     disabled: true,
   },
   {
@@ -52,6 +57,7 @@ const resources = [
     description:
       "Step-by-step video guides covering everything from initial setup to advanced configuration and optimization techniques.",
     button: "Coming Soon",
+    href: "#",
     disabled: true,
   },
   {
@@ -61,6 +67,7 @@ const resources = [
     description:
       "Latest payment industry news, technical deep-dives, best practices, and thought leadership from our experts.",
     button: "Coming Soon",
+    href: "#",
     disabled: true,
   },
 ];
@@ -120,16 +127,21 @@ const ResourceHub = () => {
                 </p>
 
                 <div className="pt-10">
-                  <button
-                    disabled={item.disabled}
-                    className={`h-11 px-5 text-sm font-semibold transition cursor-pointer ${
-                      item.disabled
-                        ? "cursor-not-allowed bg-neutral-400 text-white"
-                        : "bg-text-brand text-white bg-primary hover:text-text-brand"
-                    }`}
-                  >
-                    {item.button}
-                  </button>
+                  {item.disabled ? (
+                    <button
+                      disabled
+                      className="h-11 cursor-not-allowed bg-neutral-400 px-5 text-sm font-semibold text-white"
+                    >
+                      {item.button}
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="inline-flex h-11 items-center bg-primary px-5 text-sm font-semibold text-white transition hover:bg-primary-soft hover:text-text-brand"
+                    >
+                      {item.button}
+                    </Link>
+                  )}
                 </div>
               </article>
             );
@@ -143,14 +155,3 @@ const ResourceHub = () => {
 };
 
 export default ResourceHub;
-
-const CornerMarks = () => {
-  return (
-    <>
-      <span className="absolute left-0 top-0 h-4 w-4 border-l border-t border-border" />
-      <span className="absolute right-0 top-0 h-4 w-4 border-r border-t border-border" />
-      <span className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-border" />
-      <span className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-border" />
-    </>
-  );
-};
